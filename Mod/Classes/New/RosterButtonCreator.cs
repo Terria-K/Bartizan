@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Mod
 {
-  class RosterButtonCreator
+  public class RosterButtonCreator
   {
     public static List<RosterPlayerButton> Create(TrackerApiClient trackerClient)
     {
