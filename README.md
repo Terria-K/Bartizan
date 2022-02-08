@@ -56,6 +56,16 @@ Ghosts can kill other ghosts by dashing into them.
 
 Enemies other than bats and green slimes will come out of dark portals.
 
+# How to Patch your game
+
+## Mac
+
+1. Download the release for the version of TowerFall you wish to patch
+1. Make a copy of the TowerFall.app file and call it something like TowerFall-Mods.app or whatever you want (but keep the .app extension).
+1. Open a terminal window and navigate where you downloaded and
+extracted the patcher release.
+1. Run `./patch-tf <path to TowerFall-Mods.app>`
+
 # Original Readme
 
 A mod framework for [TowerFall Ascension](http://www.towerfall-game.com/) (copyright 2013 Matt Thorson, obviously).
