@@ -23,10 +23,11 @@ namespace Mod
         string[] trackerApiSettings = File.ReadAllLines(trackerApiSettingsFile);
         if (trackerApiSettings.Length < 2) {
           TFGame.Log(new Exception("Invalid tf-tracker-api.txt contents"), false);
+        } else {
+          this.isSetup = true;
+          this.apiUrl = trackerApiSettings[0];
+          this.apiKey = trackerApiSettings[1];
         }
-        this.isSetup = true;
-        this.apiUrl = trackerApiSettings[0];
-        this.apiKey = trackerApiSettings[1];
       }
     }
 
