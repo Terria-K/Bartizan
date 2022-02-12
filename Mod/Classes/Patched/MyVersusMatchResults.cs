@@ -1,6 +1,5 @@
 using Patcher;
 using TowerFall;
-using SDL2;
 using System;
 using System.Diagnostics;
 using System.IO;

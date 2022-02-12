@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
-using SDL2;
 using System;
 using System.Collections;
 using System.Collections.Generic;

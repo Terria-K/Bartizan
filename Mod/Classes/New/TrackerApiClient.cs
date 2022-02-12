@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
-using SDL2;
 #if (STAT_TRACKING)
   using Newtonsoft.Json.Linq;
 #endif
@@ -37,12 +36,42 @@ namespace Mod
       #endif
     }
 
+    public enum Platform
+    {
+        Windows,
+        Linux,
+        Mac
+    }
+
+    public static Platform GetRunningPlatform()
+    {
+        switch (Environment.OSVersion.Platform)
+        {
+            case PlatformID.Unix:
+                // Well, there are chances MacOSX is reported as Unix instead of MacOSX.
+                // Instead of platform check, we'll do a feature checks (Mac specific root folders)
+                if (Directory.Exists("/Applications")
+                    & Directory.Exists("/System")
+                    & Directory.Exists("/Users")
+                    & Directory.Exists("/Volumes"))
+                    return Platform.Mac;
+                else
+                    return Platform.Linux;
+
+            case PlatformID.MacOSX:
+                return Platform.Mac;
+
+            default:
+                return Platform.Windows;
+        }
+    }
+
     // This SHOULD be accessible from TFGame but isn't so I copy/pasted it
     public static string GetSavePath ()
     {
-      string text = SDL.SDL_GetPlatform ();
+      Platform platform = GetRunningPlatform();
       string result;
-      if (text.Equals ("Linux")) {
+      if (platform == Platform.Linux) {
         string text2 = Environment.GetEnvironmentVariable ("XDG_DATA_HOME");
         if (string.IsNullOrEmpty (text2)) {
           text2 = Environment.GetEnvironmentVariable ("HOME");
@@ -57,7 +86,7 @@ namespace Mod
           Directory.CreateDirectory (text2);
         }
         result = text2;
-      } else if (text.Equals ("Mac OS X")) {
+      } else if (platform == Platform.Mac) {
         string text2 = Environment.GetEnvironmentVariable ("HOME");
         if (string.IsNullOrEmpty (text2)) {
           result = ".";
@@ -69,8 +98,8 @@ namespace Mod
           result = text2;
         }
       } else {
-        if (!text.Equals ("Windows")) {
-          throw new Exception ("SDL2 platform not handled!");
+        if (platform != Platform.Windows) {
+          throw new Exception ("Can't tell what platform you're on!");
         }
         result = AppDomain.CurrentDomain.BaseDirectory;
       }
