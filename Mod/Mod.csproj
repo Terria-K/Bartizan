@@ -19,28 +19,26 @@
     <DefineConstants>DEBUG;EIGHT_PLAYER;</DefineConstants>
     <DebugType>full</DebugType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugWindows|AnyCPU' ">
-    <OutputPath>..\bin</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <ConsolePause>false</ConsolePause>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player|AnyCPU' ">
     <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;EIGHT_PLAYER;</DefineConstants>
-    <DebugType>full</DebugType>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants>EIGHT_PLAYER</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Steam|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants></DefineConstants>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="TowerFall">
       <HintPath>..\bin\BaseTowerFall.exe</HintPath>
     </Reference>
-    <Reference Condition=" '$(Configuration)' == 'DebugLinux' " Include="FNA">
+    <Reference Include="FNA">
       <HintPath>..\bin\Original\FNA.dll</HintPath>
     </Reference>
-    <Reference Condition=" '$(Configuration)' == 'DebugWindows' " Include="Microsoft.Xna.Framework" />
-    <Reference Condition=" '$(Configuration)' == 'DebugWindows' " Include="Microsoft.Xna.Framework.Game" />
-    <Reference Condition=" '$(Configuration)' == 'DebugWindows' " Include="Microsoft.Xna.Framework.Graphics" />
-    <Reference Condition=" '$(Configuration)' == 'DebugWindows' " Include="Microsoft.Xna.Framework.Net" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Web" />
     <Reference Include="Newtonsoft.Json">
@@ -181,6 +179,6 @@
     </ProjectReference>
   </ItemGroup>
   <Target Name="AfterBuild">
-    <Exec Command="../bin/Patcher.exe patch Mod.dll" WorkingDirectory="../bin" />
+    <Exec Command="..\bin\Patcher.exe patch Mod.dll" WorkingDirectory="..\bin" />
   </Target>
 </Project>
