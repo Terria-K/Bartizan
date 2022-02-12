@@ -1,3 +1,4 @@
+#if (STAT_TRACKING)
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,3 +29,4 @@ namespace Mod
     }
   }
 }
+#endif

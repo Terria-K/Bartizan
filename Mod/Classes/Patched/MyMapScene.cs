@@ -12,8 +12,10 @@ namespace Mod
 
     public MyMapScene(MainMenu.RollcallModes mode) : base(mode)
     {
-      TrackerApiClient client = new TrackerApiClient();
-      client.GetPlayerNames();
+      #if (STAT_TRACKING)
+        TrackerApiClient client = new TrackerApiClient();
+        client.GetPlayerNames();
+      #endif
     }
 
     static MyMapScene()

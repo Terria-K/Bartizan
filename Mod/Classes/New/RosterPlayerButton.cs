@@ -1,3 +1,4 @@
+#if (STAT_TRACKING)
 using TowerFall;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -171,3 +172,4 @@ namespace Mod
     }
   }
 }
+#endif

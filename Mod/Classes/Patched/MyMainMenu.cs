@@ -1,3 +1,5 @@
+// Currently the whole file is dedicated to adding the roster button, so skip if no stat tracking
+#if (STAT_TRACKING)
 using TowerFall;
 using Patcher;
 using Microsoft.Xna.Framework;
@@ -160,3 +162,4 @@ namespace Mod
     }
   }
 }
+#endif
