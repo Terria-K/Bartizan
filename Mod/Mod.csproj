@@ -29,8 +29,14 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-Player With Stat Tracking|AnyCPU' ">
     <Optimize>false</Optimize>
-    <OutputPath>bin\4-Player With Stat Tracking</OutputPath>
+    <OutputPath>..\bin</OutputPath>
     <DefineConstants>STAT_TRACKING</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player Windows|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants>EIGHT_PLAYER;WINDOWS</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>

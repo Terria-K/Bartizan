@@ -23,8 +23,11 @@ namespace Mod
     public override void Initialize ()
     {
       base.Initialize();
-      // Fix bug where rumble always initializes to enabled
-      MInput.GamepadVibration = SaveData.Instance.Options.GamepadVibration;
+      // MInput.GamepadVibration does not exist in 8-Player Windows
+      #if (!(EIGHT_PLAYER && WINDOWS))
+        // Fix bug where rumble always initializes to enabled
+        MInput.GamepadVibration = SaveData.Instance.Options.GamepadVibration;
+      #endif
     }
   }
 }
