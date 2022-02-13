@@ -1,4 +1,6 @@
-using Newtonsoft.Json.Linq;
+#if (STAT_TRACKING)
+  using Newtonsoft.Json.Linq;
+#endif
 
 namespace Mod
 {
@@ -6,7 +8,9 @@ namespace Mod
   {
     public static PlayerNames playerNames;
 
-    public static JArray roster;
+    #if (STAT_TRACKING)
+      public static JArray roster;
+    #endif
 
     #if (EIGHT_PLAYER)
       public const int MAX_PLAYERS = 8;

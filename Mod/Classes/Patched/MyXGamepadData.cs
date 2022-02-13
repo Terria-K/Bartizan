@@ -12,10 +12,14 @@ namespace Monocle
 
     public override void StopRumble ()
     {
-      // Prevent MacOS freeze with rumble off.
-      if (MInput.GamepadVibration) {
+      #if (!(EIGHT_PLAYER && WINDOWS))
+        // Prevent MacOS freeze with rumble off.
+        if (MInput.GamepadVibration) {
+          base.StopRumble();
+        }
+      #else
         base.StopRumble();
-      }
+      #endif
     }
   }
 }

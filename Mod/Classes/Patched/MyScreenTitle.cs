@@ -8,7 +8,9 @@ namespace Mod
   {
     public MyScreenTitle(MainMenu.MenuState state) : base(state)
     {
-      this.textures [(MainMenu.MenuState)MyMainMenu.ROSTER] = TFGame.MenuAtlas ["menuTitles/roster"];
+      #if (STAT_TRACKING)
+        this.textures [(MainMenu.MenuState)MyMainMenu.ROSTER] = TFGame.MenuAtlas ["menuTitles/roster"];
+      #endif
     }
   }
 }

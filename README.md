@@ -1,4 +1,4 @@
-# Bartizan TowerFall Modding Framework
+# Bartizan (Plus) TowerFall Modding Framework
 
 This is a fork of Bartizan, the mod framework for TowerFall. The additions
 I've made are listed below. The original README stated that the patcher
@@ -55,6 +55,11 @@ Ghosts can kill other ghosts by dashing into them.
 ### Meaner Monsters
 
 Enemies other than bats and green slimes will come out of dark portals.
+
+## How to Patch your game
+
+1. Download the release for the version of TowerFall you wish to patch
+1. Follow the instructions in the README
 
 # Original Readme
 

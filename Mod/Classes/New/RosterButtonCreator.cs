@@ -1,10 +1,11 @@
+#if (STAT_TRACKING)
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Mod
 {
-  class RosterButtonCreator
+  public class RosterButtonCreator
   {
     public static List<RosterPlayerButton> Create(TrackerApiClient trackerClient)
     {
@@ -28,3 +29,4 @@ namespace Mod
     }
   }
 }
+#endif

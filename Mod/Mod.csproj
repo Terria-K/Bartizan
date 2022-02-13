@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">DebugLinux</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <DefineConstants>EIGHT_PLAYER;</DefineConstants>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5C1AA190-DD28-41A1-8DD2-FEF3A9DEE28A}</ProjectGuid>
@@ -9,38 +9,44 @@
     <RootNamespace>Mod</RootNamespace>
     <AssemblyName>Mod</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugLinux|AnyCPU' ">
-    <OutputPath>..\bin</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <ConsolePause>false</ConsolePause>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player|AnyCPU' ">
     <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;EIGHT_PLAYER;</DefineConstants>
-    <DebugType>full</DebugType>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants>EIGHT_PLAYER</DefineConstants>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugWindows|AnyCPU' ">
-    <OutputPath>..\bin</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <ConsolePause>false</ConsolePause>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player With Stat Tracking|AnyCPU' ">
     <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;EIGHT_PLAYER;</DefineConstants>
-    <DebugType>full</DebugType>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants>EIGHT_PLAYER;STAT_TRACKING</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-Player|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants></DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-Player With Stat Tracking|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants>STAT_TRACKING</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player Windows|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants>EIGHT_PLAYER;WINDOWS</DefineConstants>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="TowerFall">
       <HintPath>..\bin\BaseTowerFall.exe</HintPath>
     </Reference>
-    <Reference Condition=" '$(Configuration)' == 'DebugLinux' " Include="FNA">
+    <Reference Include="FNA">
       <HintPath>..\bin\Original\FNA.dll</HintPath>
     </Reference>
-    <Reference Condition=" '$(Configuration)' == 'DebugWindows' " Include="Microsoft.Xna.Framework" />
-    <Reference Condition=" '$(Configuration)' == 'DebugWindows' " Include="Microsoft.Xna.Framework.Game" />
-    <Reference Condition=" '$(Configuration)' == 'DebugWindows' " Include="Microsoft.Xna.Framework.Graphics" />
-    <Reference Condition=" '$(Configuration)' == 'DebugWindows' " Include="Microsoft.Xna.Framework.Net" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Web" />
     <Reference Include="Newtonsoft.Json">
@@ -48,6 +54,9 @@
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq">
+      <HintPath>..\packages\System.Xml.Linq.3.5.21022.801\lib\net20\System.Xml.Linq.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\New\ArcherColor.cs" />
@@ -178,6 +187,6 @@
     </ProjectReference>
   </ItemGroup>
   <Target Name="AfterBuild">
-    <Exec Command="../bin/Patcher.exe patch Mod.dll" WorkingDirectory="../bin" />
+    <Exec Command="..\bin\Patcher.exe patch Mod.dll" WorkingDirectory="..\bin" />
   </Target>
 </Project>

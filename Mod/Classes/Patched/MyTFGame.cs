@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
-using SDL2;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,8 +23,11 @@ namespace Mod
     public override void Initialize ()
     {
       base.Initialize();
-      // Fix bug where rumble always initializes to enabled
-      MInput.GamepadVibration = SaveData.Instance.Options.GamepadVibration;
+      // MInput.GamepadVibration does not exist in 8-Player Windows
+      #if (!(EIGHT_PLAYER && WINDOWS))
+        // Fix bug where rumble always initializes to enabled
+        MInput.GamepadVibration = SaveData.Instance.Options.GamepadVibration;
+      #endif
     }
   }
 }
