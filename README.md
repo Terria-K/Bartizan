@@ -1,4 +1,4 @@
-# Bartizan TowerFall Modding Framework
+# Bartizan (Plus) TowerFall Modding Framework
 
 This is a fork of Bartizan, the mod framework for TowerFall. The additions
 I've made are listed below. The original README stated that the patcher
