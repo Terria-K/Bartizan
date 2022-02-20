@@ -61,6 +61,52 @@ Enemies other than bats and green slimes will come out of dark portals.
 1. Download the release for the version of TowerFall you wish to patch
 1. Follow the instructions in the README
 
+## How to work on your own mods
+
+This is a little different than the original Bartizan, and it differs between Windows and Mac.
+
+Note: you may need to use Visual Studio 2019, since later versions can't target .NET 4.0
+
+In `bin` you'll need a directory `Original` that contains select files from unpatched TowerFall.
+In the process of making a release I will switch back and forth between 4 and 8 player, so what I do is
+create `Original-4-player` and `Original-8-player` and create a symbolic link at `Original` pointing
+to whichever one I'm working on.
+
+On both OSes, `Original` should contain `TowerFall.exe` and `Content/Atlas/` which should contain the
+full contents of `Content/Atlas`. On Mac, also inclue `FNA.dll`.
+
+There are multiple build configs for the Mod project that you can use depending on which version you
+are patching and whether you are including certain features in the build.
+
+After building, a releasable build will be output at `/bin/builds/4-player` or `/bin/builds/8-player`.
+Also, a copy of the patched `TowerFall.exe` will be copied to `TowerFall-4-player.exe` or `TowerFall-8-player.exe`.
+
+In order to work without patching the game after every build, create a copy of TF that replaces the
+following files with symlinks (I'll use 8-player as an example. Replace 8 with 4 as needed):
+
+`TowerFall.exe -> <BartizanPath>/bin/TowerFall-8-player.exe`
+`Mod.dll -> <BartizanPath>/bin/builds/8-player/Mod.dll` (this one you won't have to replace. It's new)
+`Content/Atlas/menuAtlas.png -> <BartizanPath>/bin/builds/8-player/Content/Atlas/menuAtlas.png`
+`Content/Atlas/menuAtlas.xml -> <BartizanPath>/bin/builds/8-player/Content/Atlas/menuAtlas.xml`
+
+Then any time you build the Mod project, just run that copy of TowerFall and it will have the latest changes.
+
+### Windows Specific Things
+
+Check out the `windows-build` branch of the repo.
+
+You'll need to copy the following dll files to `bin`.
+
+Microsoft.Xna.Framework.dll
+Microsoft.Xna.Framework.Game.dll
+Microsoft.Xna.Framework.Graphics.dll
+Microsoft.Xna.Framework.Net.dll
+Microsoft.Xna.Framework.Xact.dll
+
+These files can be found in `c:\Windows\Microsoft.NET\assembly\GAC_32` and `c:\Windows\Microsoft.NET\assembly\GAC_MSIL`.
+
+Make sure to select the build configs with the `-windows` suffix
+
 # Original Readme
 
 A mod framework for [TowerFall Ascension](http://www.towerfall-game.com/) (copyright 2013 Matt Thorson, obviously).
