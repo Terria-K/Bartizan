@@ -1,0 +1,11 @@
+#! /usr/bin/env bash
+mkdir -p ../bin/builds/4-player
+mkdir -p ../bin/builds/4-player/Content/Atlas/menuAtlas
+cp ../bin/Patcher.exe ../bin/builds/4-player/
+cp ../bin/Wizard.exe ../bin/builds/4-player/
+cp ../bin/Mod.dll ../bin/builds/4-player/
+cp ../bin/System.Xml.Linq.dll ../bin/builds/4-player/
+cp -r ../bin/Content/Atlas/menuAtlas/* ../bin/builds/4-player/Content/Atlas/menuAtlas/
+cp ./PatchScripts/patch-tf-4-player-mac ../bin/builds/4-player/patch-tf
+cp ./Readmes/readme-4-player-mac.txt ../bin/builds/4-player/README.txt
+cp ../bin/TowerFall.exe ../bin/TowerFall-4-player-patched.exe
