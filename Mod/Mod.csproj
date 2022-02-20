@@ -9,33 +9,33 @@
     <RootNamespace>Mod</RootNamespace>
     <AssemblyName>Mod</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-player|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player|AnyCPU' ">
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\$(Configuration)</OutputPath>
+    <OutputPath>..\bin</OutputPath>
     <DefineConstants>EIGHT_PLAYER</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-player-with-stat-tracking|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player With Stat Tracking|AnyCPU' ">
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\$(Configuration)</OutputPath>
+    <OutputPath>..\bin</OutputPath>
     <DefineConstants>EIGHT_PLAYER;STAT_TRACKING</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-player|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-Player|AnyCPU' ">
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\$(Configuration)</OutputPath>
+    <OutputPath>..\bin</OutputPath>
     <DefineConstants></DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-player-with-stat-tracking|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-Player With Stat Tracking|AnyCPU' ">
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\$(Configuration)</OutputPath>
+    <OutputPath>..\bin</OutputPath>
     <DefineConstants>STAT_TRACKING</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-player-windows|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player Windows|AnyCPU' ">
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\$(Configuration)</OutputPath>
+    <OutputPath>..\bin</OutputPath>
     <DefineConstants>EIGHT_PLAYER;WINDOWS</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -187,6 +187,6 @@
     </ProjectReference>
   </ItemGroup>
   <Target Name="AfterBuild">
-    <Exec Command="..\bin\$(Configuration)\Patcher.exe patch Mod.dll" WorkingDirectory="..\bin\$(Configuration)" />
+    <Exec Command="..\bin\Patcher.exe patch Mod.dll" WorkingDirectory="..\bin" />
   </Target>
 </Project>
