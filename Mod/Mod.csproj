@@ -9,34 +9,40 @@
     <RootNamespace>Mod</RootNamespace>
     <AssemblyName>Mod</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-player|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>..\bin</OutputPath>
     <DefineConstants>EIGHT_PLAYER</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player With Stat Tracking|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-player-stat-tracking|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>..\bin</OutputPath>
     <DefineConstants>EIGHT_PLAYER;STAT_TRACKING</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-Player|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-player|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>..\bin</OutputPath>
     <DefineConstants></DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-Player With Stat Tracking|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-player-stat-tracking|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>..\bin</OutputPath>
     <DefineConstants>STAT_TRACKING</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-Player Windows|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '8-player-windows|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>..\bin</OutputPath>
     <DefineConstants>EIGHT_PLAYER;WINDOWS</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-player-windows|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants>WINDOWS</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
@@ -188,5 +194,6 @@
   </ItemGroup>
   <Target Name="AfterBuild">
     <Exec Command="..\bin\Patcher.exe patch Mod.dll" WorkingDirectory="..\bin" />
+    <Exec Command="..\BuildScripts\prepare-build-$(Configuration)" WorkingDirectory="..\BuildScripts" />
   </Target>
 </Project>

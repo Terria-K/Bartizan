@@ -1,0 +1,2 @@
+#! /usr/bin/env bash
+mono ./Wizard.exe "$1/Contents/MacOS"
