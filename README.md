@@ -84,10 +84,10 @@ Also, a copy of the patched `TowerFall.exe` will be copied to `TowerFall-4-playe
 In order to work without patching the game after every build, create a copy of TF that replaces the
 following files with symlinks (I'll use 8-player as an example. Replace 8 with 4 as needed):
 
-`TowerFall.exe -> <BartizanPath>/bin/TowerFall-8-player.exe`
-`Mod.dll -> <BartizanPath>/bin/builds/8-player/Mod.dll` (this one you won't have to replace. It's new)
-`Content/Atlas/menuAtlas.png -> <BartizanPath>/bin/builds/8-player/Content/Atlas/menuAtlas.png`
-`Content/Atlas/menuAtlas.xml -> <BartizanPath>/bin/builds/8-player/Content/Atlas/menuAtlas.xml`
+- `TowerFall.exe -> <BartizanPath>/bin/TowerFall-8-player.exe`
+- `Mod.dll -> <BartizanPath>/bin/builds/8-player/Mod.dll` (this one you won't have to replace. It's new)
+- `Content/Atlas/menuAtlas.png -> <BartizanPath>/bin/builds/8-player/Content/Atlas/menuAtlas.png`
+- `Content/Atlas/menuAtlas.xml -> <BartizanPath>/bin/builds/8-player/Content/Atlas/menuAtlas.xml`
 
 Then any time you build the Mod project, just run that copy of TowerFall and it will have the latest changes.
 
@@ -97,11 +97,11 @@ Check out the `windows-build` branch of the repo.
 
 You'll need to copy the following dll files to `bin`.
 
-Microsoft.Xna.Framework.dll
-Microsoft.Xna.Framework.Game.dll
-Microsoft.Xna.Framework.Graphics.dll
-Microsoft.Xna.Framework.Net.dll
-Microsoft.Xna.Framework.Xact.dll
+- Microsoft.Xna.Framework.dll
+- Microsoft.Xna.Framework.Game.dll
+- Microsoft.Xna.Framework.Graphics.dll
+- Microsoft.Xna.Framework.Net.dll
+- Microsoft.Xna.Framework.Xact.dll
 
 These files can be found in `c:\Windows\Microsoft.NET\assembly\GAC_32` and `c:\Windows\Microsoft.NET\assembly\GAC_MSIL`.
 
