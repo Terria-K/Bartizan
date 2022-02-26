@@ -86,8 +86,8 @@ following files with symlinks (I'll use 8-player as an example. Replace 8 with 4
 
 - `TowerFall.exe -> <BartizanPath>/bin/TowerFall-8-player.exe`
 - `Mod.dll -> <BartizanPath>/bin/builds/8-player/Mod.dll` (this one you won't have to replace. It's new)
-- `Content/Atlas/menuAtlas.png -> <BartizanPath>/bin/builds/8-player/Content/Atlas/menuAtlas.png`
-- `Content/Atlas/menuAtlas.xml -> <BartizanPath>/bin/builds/8-player/Content/Atlas/menuAtlas.xml`
+- `Content/Atlas/modAtlas.png -> <BartizanPath>/bin/Content/Atlas/modAtlas-8-player.png` (also new)
+- `Content/Atlas/modAtlas.xml -> <BartizanPath>/bin/Content/Atlas/modAtlas-8-player.xml` (also new)
 
 Then any time you build the Mod project, just run that copy of TowerFall and it will have the latest changes.
 
@@ -152,29 +152,29 @@ This may be our most ambitious mod yet, and therefore not quite yet balanced. To
 
 ## Variants
 
-### No Head Bounce ![](Mod/Content/Atlas/menuAtlas/variants/noHeadBounce.png?raw=true)
+### No Head Bounce ![](Mod/Content/Atlas/modAtlas/variants/noHeadBounce.png?raw=true)
 
 ![](img/noHeadBounce.gif?raw=true)
 
-### No Ledge Grab ![](Mod/Content/Atlas/menuAtlas/variants/noLedgeGrab.png?raw=true)
+### No Ledge Grab ![](Mod/Content/Atlas/modAtlas/variants/noLedgeGrab.png?raw=true)
 
 Koala hunters no more.
 
-### Awfully Slow Arrows ![](Mod/Content/Atlas/menuAtlas/variants/awfullySlowArrows.png?raw=true)
+### Awfully Slow Arrows ![](Mod/Content/Atlas/modAtlas/variants/awfullySlowArrows.png?raw=true)
 
 ![](img/awfullySlowArrows2.gif?raw=true)
 ![](img/awfullySlowArrows.gif?raw=true)
 
-### Awfully Fast Arrows ![](Mod/Content/Atlas/menuAtlas/variants/awfullyFastArrows.png?raw=true)
+### Awfully Fast Arrows ![](Mod/Content/Atlas/modAtlas/variants/awfullyFastArrows.png?raw=true)
 
 ![](img/awfullyFastArrows.gif?raw=true)
 
-### Infinite Arrows ![](Mod/Content/Atlas/menuAtlas/variants/infiniteArrows.png?raw=true)
+### Infinite Arrows ![](Mod/Content/Atlas/modAtlas/variants/infiniteArrows.png?raw=true)
 
 ![](img/infiniteArrows.gif?raw=true)
 ![](img/infiniteArrows2.gif?raw=true)
 
-### No Dodge Cooldowns ![](Mod/Content/Atlas/menuAtlas/variants/noDodgeCooldowns.png?raw=true)
+### No Dodge Cooldowns ![](Mod/Content/Atlas/modAtlas/variants/noDodgeCooldowns.png?raw=true)
 
 ![](img/noDodgeCooldown.gif?raw=true)
 

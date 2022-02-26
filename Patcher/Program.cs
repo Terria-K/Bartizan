@@ -208,8 +208,8 @@ namespace Patcher
 				var xml = XElement.Load(Path.Combine("Original", atlasPath + ".xml"));
 
 				string[] files = Directory.GetFiles(atlasPath, "*.png", SearchOption.AllDirectories);
-				int x = 1800;
-				int y = 1200;
+				int x = 0;
+				int y = 0;
 
 				using (var baseImage = Bitmap.FromFile(Path.Combine("Original", atlasPath + ".png"))) {
 					using (var g = Graphics.FromImage(baseImage))

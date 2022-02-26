@@ -1,11 +1,34 @@
 using TowerFall;
 using Patcher;
+using Monocle;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace Mod
 {
     [Patch]
     public class MyMatchVariants : MatchVariants
     {
+        public static List<string> ModVariants = new List<string> {
+            "NoHeadBounce",
+            "NoLedgeGrab",
+            "AwfullySlowArrows",
+            "AwfullyFastArrows",
+            "InfiniteArrows",
+            "NoDodgeCooldowns",
+            "VarietyPack",
+            "GottaBustGhosts",
+            "CrownSummonsChaliceGhost",
+            "ChaliceGhostsHuntGhosts",
+            "FastGhosts",
+            "GhostRevives",
+            "GhostItems",
+            "GhostJoust",
+            "CalvinFall",
+            "MeanerMonsters"
+        };
+
         [Header("MODS")]
         [PerPlayer, CanRandom]
         public Variant NoHeadBounce;
@@ -56,6 +79,17 @@ namespace Mod
             this.CreateLinks(NoHeadBounce, NoTimeLimit);
             this.CreateLinks(NoDodgeCooldowns, ShowDodgeCooldown);
             this.CreateLinks(AwfullyFastArrows, AwfullySlowArrows);
+        }
+
+        new public static Subtexture GetVariantIconFromName (string variantName)
+        {
+            bool isModVariant = MyMatchVariants.ModVariants.Contains(variantName);
+
+            if (isModVariant) {
+                return MyTFGame.ModAtlas ["variants/" + variantName [0].ToString ().ToLower (CultureInfo.InvariantCulture) + variantName.Substring (1)];
+            } else {
+                return TFGame.MenuAtlas ["variants/" + variantName [0].ToString ().ToLower (CultureInfo.InvariantCulture) + variantName.Substring (1)];
+            }
         }
     }
 }
