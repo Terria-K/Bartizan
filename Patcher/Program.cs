@@ -204,6 +204,10 @@ namespace Patcher
 		/// </summary>
 		public static void PatchResources()
 		{
+			// Copy base files for modAtlas, since it won't exist on unpatched TowerFall
+			File.Copy("modAtlas.xml", Path.Combine("Original", "Content", "Atlas", "modAtlas.xml"), true);
+			File.Copy("modAtlas.png", Path.Combine("Original", "Content", "Atlas", "modAtlas.png"), true);
+
 			foreach (var atlasPath in Directory.EnumerateDirectories(Path.Combine("Content", "Atlas"))) {
 				var xml = XElement.Load(Path.Combine("Original", atlasPath + ".xml"));
 

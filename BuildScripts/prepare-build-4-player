@@ -8,6 +8,9 @@ cp ../bin/System.Xml.Linq.dll ../bin/builds/4-player/
 cp -r ../bin/Content/Atlas/modAtlas/* ../bin/builds/4-player/Content/Atlas/modAtlas/
 cp ./PatchScripts/patch-tf-4-player-mac ../bin/builds/4-player/patch-tf
 cp ./Readmes/readme-4-player-mac.txt ../bin/builds/4-player/README.txt
+cp ../Mod/Atlas/modAtlas.xml ../bin/builds/4-player/
+cp ../Mod/Atlas/modAtlas.png ../bin/builds/4-player/
+# Files to symlink for easier dev
 cp ../bin/TowerFall.exe ../bin/TowerFall-4-player-patched.exe
 cp ../bin/Content/Atlas/modAtlas.png ../bin/Content/Atlas/modAtlas-4-player.png
 cp ../bin/Content/Atlas/modAtlas.xml ../bin/Content/Atlas/modAtlas-4-player.xml

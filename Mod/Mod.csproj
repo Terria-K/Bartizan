@@ -193,6 +193,8 @@
     </ProjectReference>
   </ItemGroup>
   <Target Name="AfterBuild">
+    <Copy SourceFiles=".\Atlas\modAtlas.png" DestinationFolder="..\bin" />
+    <Copy SourceFiles=".\Atlas\modAtlas.xml" DestinationFolder="..\bin" />
     <Exec Command="..\bin\Patcher.exe patch Mod.dll" WorkingDirectory="..\bin" />
     <Exec Command="..\BuildScripts\prepare-build-$(Configuration)" WorkingDirectory="..\BuildScripts" />
   </Target>
