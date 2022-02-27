@@ -119,69 +119,69 @@
   <ItemGroup>
     <Folder Include="Content\" />
     <Folder Include="Content\Atlas\" />
-    <Folder Include="Content\Atlas\menuAtlas\" />
-    <Folder Include="Content\Atlas\menuAtlas\variants\" />
-    <Folder Include="Content\Atlas\menuAtlas\gameModes\" />
+    <Folder Include="Content\Atlas\modAtlas\" />
+    <Folder Include="Content\Atlas\modAtlas\variants\" />
+    <Folder Include="Content\Atlas\modAtlas\gameModes\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Atlas\menuAtlas\variants\noHeadBounce.png">
+    <None Include="Content\Atlas\modAtlas\variants\noHeadBounce.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\noLedgeGrab.png">
+    <None Include="Content\Atlas\modAtlas\variants\noLedgeGrab.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\infiniteArrows.png">
+    <None Include="Content\Atlas\modAtlas\variants\infiniteArrows.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\noDodgeCooldowns.png">
+    <None Include="Content\Atlas\modAtlas\variants\noDodgeCooldowns.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\awfullySlowArrows.png">
+    <None Include="Content\Atlas\modAtlas\variants\awfullySlowArrows.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\awfullyFastArrows.png">
+    <None Include="Content\Atlas\modAtlas\variants\awfullyFastArrows.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\varietyPack.png">
+    <None Include="Content\Atlas\modAtlas\variants\varietyPack.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\gottaBustGhosts.png">
+    <None Include="Content\Atlas\modAtlas\variants\gottaBustGhosts.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\crownSummonsChaliceGhost.png">
+    <None Include="Content\Atlas\modAtlas\variants\crownSummonsChaliceGhost.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\chaliceGhostsHuntGhosts.png">
+    <None Include="Content\Atlas\modAtlas\variants\chaliceGhostsHuntGhosts.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\fastGhosts.png">
+    <None Include="Content\Atlas\modAtlas\variants\fastGhosts.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\gottaGoFast.png">
+    <None Include="Content\Atlas\modAtlas\variants\gottaGoFast.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\ghostRevives.png">
+    <None Include="Content\Atlas\modAtlas\variants\ghostRevives.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\gameModes\crawl.png">
+    <None Include="Content\Atlas\modAtlas\gameModes\crawl.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\gameModes\respawn.png">
+    <None Include="Content\Atlas\modAtlas\gameModes\respawn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\calvinFall.png">
+    <None Include="Content\Atlas\modAtlas\variants\calvinFall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\ghostItems.png">
+    <None Include="Content\Atlas\modAtlas\variants\ghostItems.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\ghostJoust.png">
+    <None Include="Content\Atlas\modAtlas\variants\ghostJoust.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\variants\meanerMonsters.png">
+    <None Include="Content\Atlas\modAtlas\variants\meanerMonsters.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\menuAtlas\menuTitles\roster.png">
+    <None Include="Content\Atlas\modAtlas\menuTitles\roster.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -193,6 +193,8 @@
     </ProjectReference>
   </ItemGroup>
   <Target Name="AfterBuild">
+    <Copy SourceFiles=".\Atlas\modAtlas.png" DestinationFolder="..\bin" />
+    <Copy SourceFiles=".\Atlas\modAtlas.xml" DestinationFolder="..\bin" />
     <Exec Command="..\bin\Patcher.exe patch Mod.dll" WorkingDirectory="..\bin" />
     <Exec Command="..\BuildScripts\prepare-build-$(Configuration)" WorkingDirectory="..\BuildScripts" />
   </Target>

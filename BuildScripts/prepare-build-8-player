@@ -1,11 +1,2 @@
 #! /usr/bin/env bash
-mkdir -p ../bin/builds/8-player
-mkdir -p ../bin/builds/8-player/Content/Atlas/menuAtlas
-cp ../bin/Patcher.exe ../bin/builds/8-player/
-cp ../bin/Wizard.exe ../bin/builds/8-player/
-cp ../bin/Mod.dll ../bin/builds/8-player/
-cp ../bin/System.Xml.Linq.dll ../bin/builds/8-player/
-cp -r ../bin/Content/Atlas/menuAtlas/* ../bin/builds/8-player/Content/Atlas/menuAtlas/
-cp ./PatchScripts/patch-tf-8-player-mac ../bin/builds/8-player/patch-tf
-cp ./Readmes/readme-8-player-mac.txt ../bin/builds/8-player/README.txt
-cp ../bin/TowerFall.exe ../bin/TowerFall-8-player-patched.exe
+./prepare-build-mac 8-player

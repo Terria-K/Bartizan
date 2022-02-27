@@ -16,6 +16,11 @@ namespace Mod
   [Patch]
   public class MyTFGame : TFGame
   {
+    public static Atlas ModAtlas {
+      get;
+      set;
+    }
+
     public MyTFGame(bool noIntro) : base(noIntro)
     {
     }
@@ -28,6 +33,17 @@ namespace Mod
         // Fix bug where rumble always initializes to enabled
         MInput.GamepadVibration = SaveData.Instance.Options.GamepadVibration;
       #endif
+    }
+
+    public override void LoadContent ()
+    {
+      base.LoadContent();
+
+      if (MyTFGame.ModAtlas == null) {
+          MyTFGame.ModAtlas = new Atlas ("Atlas/modAtlas.xml", "Atlas/modAtlas.png", true);
+      } else {
+          MyTFGame.ModAtlas.Load ();
+      }
     }
   }
 }

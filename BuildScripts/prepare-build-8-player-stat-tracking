@@ -1,0 +1,2 @@
+#! /usr/bin/env bash
+./prepare-build-mac-with-stat-tracking 8-player-stat-tracking

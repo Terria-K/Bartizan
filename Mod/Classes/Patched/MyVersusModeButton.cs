@@ -38,9 +38,9 @@ namespace Mod
     {
       switch (mode) {
         case RespawnRoundLogic.Mode:
-          return TFGame.MenuAtlas["gameModes/respawn"];
+          return MyTFGame.ModAtlas["gameModes/respawn"];
         case MobRoundLogic.Mode:
-          return TFGame.MenuAtlas["gameModes/crawl"];
+          return MyTFGame.ModAtlas["gameModes/crawl"];
         default:
           return VersusModeButton.GetModeIcon(mode);
       }

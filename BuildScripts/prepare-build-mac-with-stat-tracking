@@ -1,0 +1,7 @@
+#! /usr/bin/env bash
+./prepare-build-mac $1
+cp ../bin/System.IO.dll ../bin/builds/$1/
+cp ../bin/System.Numerics.dll ../bin/builds/$1/
+cp ../bin/System.Runtime.Serialization.dll ../bin/builds/$1/
+cp ../bin/System.Xml.Linq.dll ../bin/builds/$1/
+cp ../bin/Newtonsoft.Json.dll ../bin/builds/$1/
