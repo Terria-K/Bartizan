@@ -70,6 +70,8 @@ namespace Wizard
 
 				File.Copy(Path.Combine("TowerFall.exe"), Path.Combine(destPath, "TowerFall.exe"), overwrite: true);
 				File.Copy(Path.Combine("Mod.dll"), Path.Combine(destPath, "Mod.dll"), overwrite: true);
+				File.Copy(Path.Combine("Content", "Atlas", "modAtlas.xml"), Path.Combine(destPath, "Content", "Atlas", "modAtlas.xml"));
+				File.Copy(Path.Combine("Content", "Atlas", "modAtlas.png"), Path.Combine(destPath, "Content", "Atlas", "modAtlas.png"));
 				foreach (string file in RelativeEnumerateFiles(Path.Combine(destPath, "Content", "Atlas"))) {
 					if (File.Exists(Path.Combine("Content", "Atlas", file))) {
 						File.Copy(Path.Combine("Content", "Atlas", file), Path.Combine(destPath, "Content", "Atlas", file), overwrite: true);
