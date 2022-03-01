@@ -90,6 +90,7 @@
     <Compile Include="Classes\Patched\MyReplayFrame.cs" />
     <Compile Include="Classes\Patched\MyRollcallElement.cs" />
     <Compile Include="Classes\Patched\MyRoundLogic.cs" />
+    <Compile Include="Classes\Patched\MyScene.cs" />
     <Compile Include="Classes\Patched\MyScreenTitle.cs" />
     <Compile Include="Classes\Patched\MySession.cs" />
     <Compile Include="Classes\Patched\MyTFGame.cs" />

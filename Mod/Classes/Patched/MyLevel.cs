@@ -20,7 +20,7 @@ namespace Mod
     public override void Update ()
     {
       base.Update();
-      List<Entity> teamRevivers = base[GameTags.Dummy]; // Using Dummy tag for MyTeamReviver
+      List<Entity> teamRevivers = base[(GameTags)MyGlobals.GameTags.MyTeamReviver];
       for (int i = 0; i < teamRevivers.Count; i++) {
         MyTeamReviver teamReviver = (MyTeamReviver)(teamRevivers[i]);
         if (teamReviver.Active) {

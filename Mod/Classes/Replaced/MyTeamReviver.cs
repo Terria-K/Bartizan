@@ -121,7 +121,7 @@ namespace TowerFall
             this.ScreenWrap = true;
             base.Tag (new GameTags[] {
                 GameTags.LightSource,
-                GameTags.Dummy // Using this tag because it doesn't appear in 8-player
+                (GameTags)MyGlobals.GameTags.MyTeamReviver
             });
             this.LightRadius = 60f;
             this.LightAlpha = 1f;
