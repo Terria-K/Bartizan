@@ -13,7 +13,7 @@ namespace Mod
     {
       base.BatchedRender();
 
-      List<Entity> teamRevivers = base.Scene[GameTags.Dummy]; // Using Dummy tag for MyTeamReviver
+      List<Entity> teamRevivers = base.Scene[(GameTags)MyGlobals.GameTags.MyTeamReviver];
       for (int i = 0; i < teamRevivers.Count; i++) {
         MyTeamReviver teamReviver = (MyTeamReviver)teamRevivers[i];
         teamReviver.HUDRender ();

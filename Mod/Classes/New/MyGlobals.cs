@@ -8,6 +8,10 @@ namespace Mod
   {
     public static PlayerNames playerNames;
 
+    public enum GameTags {
+      MyTeamReviver = 38 // Pick up where Monocle.GameTags leaves off
+    }
+
     #if (STAT_TRACKING)
       public static JArray roster;
     #endif
