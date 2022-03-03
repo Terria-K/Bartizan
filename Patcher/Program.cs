@@ -77,9 +77,9 @@ namespace Patcher
     /// As you can probably guess from the code, this is wholly incomplete and will certainly break and have to be
     /// extended in the future.
     /// </summary>
-    public static void Patch(string modModulePath)
+    public static void Patch(string modModulePath, string targetDir, string output)
     {
-      var baseModule = ModuleDefinition.ReadModule("TowerFall.exe");
+      var baseModule = ModuleDefinition.ReadModule(Path.Combine(targetDir, "TowerFall.exe"));
       var modModule = ModuleDefinition.ReadModule(modModulePath);
 
       Func<TypeReference, bool> patchType = (type) => {
@@ -196,26 +196,26 @@ namespace Patcher
             }
         }
 
-      baseModule.Write("TowerFall.exe");
+      baseModule.Write(output);
     }
 
     /// <summary>
     /// Insert new sprites into Atlas.
     /// </summary>
-    public static void PatchResources()
+    public static void PatchResources(string targetDir)
     {
-      // Copy base files for modAtlas, since it won't exist on unpatched TowerFall
-      File.Copy("modAtlas.xml", Path.Combine("Original", "Content", "Atlas", "modAtlas.xml"), true);
-      File.Copy("modAtlas.png", Path.Combine("Original", "Content", "Atlas", "modAtlas.png"), true);
+      // // Copy base files for modAtlas, since it won't exist on unpatched TowerFall
+      File.Copy("modAtlas.xml", Path.Combine(targetDir, "Content", "Atlas", "modAtlas.xml"), true);
+      File.Copy("modAtlas.png", Path.Combine(targetDir, "Content", "Atlas", "modAtlas.png"), true);
 
       foreach (var atlasPath in Directory.EnumerateDirectories(Path.Combine("Content", "Atlas"))) {
-        var xml = XElement.Load(Path.Combine("Original", atlasPath + ".xml"));
+        var xml = XElement.Load(Path.Combine(targetDir, atlasPath + ".xml"));
 
         string[] files = Directory.GetFiles(atlasPath, "*.png", SearchOption.AllDirectories);
         int x = 0;
         int y = 0;
 
-        using (var baseImage = Bitmap.FromFile(Path.Combine("Original", atlasPath + ".png"))) {
+        using (var baseImage = Bitmap.FromFile(Path.Combine(targetDir, atlasPath + ".png"))) {
           using (var g = Graphics.FromImage(baseImage))
             foreach (string file in files)
               using (var image = Bitmap.FromFile(file)) {
@@ -251,11 +251,14 @@ namespace Patcher
         string destination = args[2];
         MakeBaseImage(source, destination);
       } else if (args[0] == "patch") {
-        File.Copy("Original/TowerFall.exe", "TowerFall.exe", overwrite: true);
-        foreach (var modModulePath in args.Skip(1)) {
-          Patch(modModulePath);
+        if (args.Length < 3) {
+          Console.WriteLine("Patcher.exe patch <mod-files> <targetDir> <output>");
         }
-        PatchResources();
+        string modModulePath = args[1];
+        string targetDir = args[2];
+        string output = args[3];
+        Patch(modModulePath, targetDir, output);
+        PatchResources(targetDir);
       }
       return 0;
     }

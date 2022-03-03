@@ -12,5 +12,3 @@ cp ../Mod/Atlas/modAtlas.xml ../bin/builds/$1/
 cp ../Mod/Atlas/modAtlas.png ../bin/builds/$1/
 # Files to symlink for easier dev
 cp ../bin/TowerFall.exe ../bin/TowerFall-$1-patched.exe
-cp ../bin/Content/Atlas/modAtlas.png ../bin/Content/Atlas/modAtlas-$1.png
-cp ../bin/Content/Atlas/modAtlas.xml ../bin/Content/Atlas/modAtlas-$1.xml
