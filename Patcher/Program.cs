@@ -44,9 +44,9 @@ namespace Patcher
     /// <summary>
     /// Unseal, publicize, virtualize.
     /// </summary>
-    static void MakeBaseImage()
+    static void MakeBaseImage(string source, string destination)
     {
-      var module = ModuleDefinition.ReadModule("Original/TowerFall.exe");
+      var module = ModuleDefinition.ReadModule(source);
       foreach (var type in module.AllNestedTypes()) {
         if (!type.FullName.StartsWith("TowerFall.") && !type.FullName.StartsWith("Monocle")) {
           continue;
@@ -69,7 +69,7 @@ namespace Patcher
             method.IsVirtual = true;
         }
       }
-      module.Write("BaseTowerFall.exe");
+      module.Write(destination);
     }
 
     /// <summary>
@@ -244,7 +244,12 @@ namespace Patcher
         return -1;
       }
       if (args[0] == "makeBaseImage") {
-        MakeBaseImage();
+        if (args.Length < 3) {
+          Console.WriteLine("Patcher.exe makeBaseImage <source> <destination>");
+        }
+        string source = args[1];
+        string destination = args[2];
+        MakeBaseImage(source, destination);
       } else if (args[0] == "patch") {
         File.Copy("Original/TowerFall.exe", "TowerFall.exe", overwrite: true);
         foreach (var modModulePath in args.Skip(1)) {

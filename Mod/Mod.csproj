@@ -48,10 +48,11 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="TowerFall">
-      <HintPath>..\bin\BaseTowerFall.exe</HintPath>
+      <HintPath>..\bin\BaseTowerFall-4-player.exe</HintPath>
+      <HintPath>..\bin\BaseTowerFall-8-player.exe</HintPath>
     </Reference>
     <Reference Include="FNA">
-      <HintPath>..\bin\Original\FNA.dll</HintPath>
+      <HintPath>..\bin\FNA.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Web" />
@@ -62,6 +63,12 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq">
       <HintPath>..\packages\System.Xml.Linq.3.5.21022.801\lib\net20\System.Xml.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="BaseTowerFall-4-player">
+      <HintPath>..\bin\BaseTowerFall-4-player.exe</HintPath>
+    </Reference>
+    <Reference Include="BaseTowerFall-8-player">
+      <HintPath>..\bin\BaseTowerFall-8-player.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
