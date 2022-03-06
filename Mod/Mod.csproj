@@ -201,8 +201,8 @@
     </ProjectReference>
   </ItemGroup>
   <Target Name="AfterBuild">
-    <Copy SourceFiles=".\Atlas\modAtlas.png" DestinationFolder="..\bin" />
-    <Copy SourceFiles=".\Atlas\modAtlas.xml" DestinationFolder="..\bin" />
+    <Copy SourceFiles=".\Atlas\modAtlas.png" DestinationFolder="..\bin\originals\$(Configuration)\Content\Atlas" />
+    <Copy SourceFiles=".\Atlas\modAtlas.xml" DestinationFolder="..\bin\originals\$(Configuration)\Content\Atlas" />
     <Exec Command="..\bin\Patcher.exe patch-exe Mod.dll originals\$(Configuration) TowerFall.exe" WorkingDirectory="..\bin" />
     <Exec Command="..\bin\Patcher.exe patch-resources originals\$(Configuration)" WorkingDirectory="..\bin" />
     <Exec Command="..\BuildScripts\prepare-build-$(Configuration)" WorkingDirectory="..\BuildScripts" />
