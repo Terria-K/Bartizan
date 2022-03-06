@@ -240,24 +240,32 @@ namespace Patcher
     public static int Main (string[] args)
     {
       if (args.Length == 0) {
-        Console.WriteLine("Usage: Patcher.exe makeBaseImage | patch <patch DLLs>*");
+        Console.WriteLine("Usage: Patcher.exe makeBaseImage <source> <destination>| patch <patch DLLs>*");
         return -1;
       }
       if (args[0] == "makeBaseImage") {
         if (args.Length < 3) {
           Console.WriteLine("Patcher.exe makeBaseImage <source> <destination>");
+          return -1;
         }
         string source = args[1];
         string destination = args[2];
         MakeBaseImage(source, destination);
-      } else if (args[0] == "patch") {
-        if (args.Length < 3) {
-          Console.WriteLine("Patcher.exe patch <mod-files> <targetDir> <output>");
+      } else if (args[0] == "patch-exe") {
+        if (args.Length < 4) {
+          Console.WriteLine("Patcher.exe patch-exe <patch DLL> <targetDir> <output>");
+          return -1;
         }
         string modModulePath = args[1];
         string targetDir = args[2];
         string output = args[3];
         Patch(modModulePath, targetDir, output);
+      } else if (args[0] == "patch-resources") {
+        if (args.Length < 2) {
+          Console.WriteLine("Patcher.exe patch-resources <targetDir>");
+          return -1;
+        }
+        string targetDir = args[1];
         PatchResources(targetDir);
       }
       return 0;

@@ -203,7 +203,8 @@
   <Target Name="AfterBuild">
     <Copy SourceFiles=".\Atlas\modAtlas.png" DestinationFolder="..\bin" />
     <Copy SourceFiles=".\Atlas\modAtlas.xml" DestinationFolder="..\bin" />
-    <Exec Command="..\bin\Patcher.exe patch Mod.dll originals\$(Configuration) TowerFall.exe" WorkingDirectory="..\bin" />
+    <Exec Command="..\bin\Patcher.exe patch-exe Mod.dll originals\$(Configuration) TowerFall.exe" WorkingDirectory="..\bin" />
+    <Exec Command="..\bin\Patcher.exe patch-resources originals\$(Configuration)" WorkingDirectory="..\bin" />
     <Exec Command="..\BuildScripts\prepare-build-$(Configuration)" WorkingDirectory="..\BuildScripts" />
   </Target>
 </Project>
