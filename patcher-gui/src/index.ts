@@ -36,11 +36,12 @@ const createWindow = (): BrowserWindow => {
 app.on('ready', () => {
   const window = createWindow();
 
-  ipcMain.on(ipcEvents.CHECK_FOR_DEFAULT_INSTALLATION, (event) => {
-    console.log(event);
-  });
+  ipcMain.handle(
+    ipcEvents.CHECK_FOR_DEFAULT_INSTALLATION,
+    handlers.checkForDefaultInstallation
+  );
 
-  ipcMain.handle(ipcEvents.BROWSE_FILES, handlers.handleBrowseFiles(window));
+  ipcMain.handle(ipcEvents.BROWSE_FILES, handlers.browseFiles(window));
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

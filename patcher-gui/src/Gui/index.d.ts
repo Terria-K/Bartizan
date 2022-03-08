@@ -1,5 +1,5 @@
 export interface API {
-  checkForDefaultInstallation: () => Promise<void>;
+  checkForDefaultInstallation: () => Promise<string>;
   browseFiles: () => Promise<string>;
 }
 
