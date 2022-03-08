@@ -16,7 +16,7 @@ const VersionSelector: React.FC<VersionSelectorProps> = ({ onChange }) => {
           onChange(event.target.value as Version);
         }}
       >
-        <option>(Select One)</option>
+        <option value={""}>(Select One)</option>
         <option value="4-player">4-Player (version 1.3.3.3)</option>
         <option value="8-player">8-Player (version 1.3.2.0)</option>
       </select>
