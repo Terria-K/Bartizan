@@ -1,14 +1,54 @@
-import { dialog, BrowserWindow } from 'electron';
+import { dialog, BrowserWindow, OpenDialogOptions } from 'electron';
 import fs from 'fs';
 import { isMac } from './utils';
 
+const isTowerFallPathValid = (path: string) => {
+  if (isMac()) {
+    if (fs.existsSync(`${path}/Contents/Resources/TowerFall.exe`)) {
+      return true;
+    } else if (fs.existsSync(`${path}/Contents/MacOS/TowerFall.exe`)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  return fs.existsSync(String.raw`${path}\TowerFall.exe`);
+};
+
 export const browseFiles = (window: BrowserWindow) => {
+  const dialogOptions = isMac()
+    ? {
+        filters: [
+          {
+            name: 'App',
+            extensions: ['app'],
+          },
+        ],
+        message: 'Locate TowerFall.app',
+        properties: [
+          'openFile',
+          'showHiddenFiles',
+        ] as OpenDialogOptions['properties'],
+      }
+    : {
+        message: 'Locate TowerFall directory',
+        properties: ['openDirectory'] as OpenDialogOptions['properties'],
+      };
+
   return async () => {
-    const { canceled, filePaths } = await dialog.showOpenDialog(window);
+    const { canceled, filePaths } = await dialog.showOpenDialog(
+      window,
+      dialogOptions
+    );
     if (canceled) {
       return;
     } else {
-      return filePaths[0];
+      if (isTowerFallPathValid(filePaths[0])) {
+        return filePaths[0];
+      } else {
+        dialog.showErrorBox('Error', `Can't find TowerFall there`);
+      }
     }
   };
 };

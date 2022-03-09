@@ -44,7 +44,8 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ version }) => {
         </div>
       )}
       {version === '8-player' ||
-      (version === '4-player' && installation === 'other') ? (
+      (version === '4-player' && installation === 'other') ||
+      (version === '4-player' && defaultInstallationPath === null) ? (
         <div>
           <p>Locate the TowerFall installation you wish to patch:</p>
           <button
