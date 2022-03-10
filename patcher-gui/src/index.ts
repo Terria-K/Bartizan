@@ -42,6 +42,8 @@ app.on('ready', () => {
   );
 
   ipcMain.handle(ipcEvents.BROWSE_FILES, handlers.browseFiles(window));
+
+  ipcMain.handle(ipcEvents.CHECK_PATCHABILITY, handlers.checkPatchability);
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

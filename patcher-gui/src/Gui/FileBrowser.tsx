@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import type { Version } from './VersionSelector';
-import RadioButtons from './RadioButtons';
+import RadioButtons from './general/RadioButtons';
 
 type FileBrowserProps = {
   version: Version;
+  onChange: (towerfallPath: string) => void;
 };
 
 type Installation = 'default' | 'other';
 
-const FileBrowser: React.FC<FileBrowserProps> = ({ version }) => {
+const FileBrowser: React.FC<FileBrowserProps> = ({ version, onChange }) => {
   const [defaultInstallationPath, setDefaultInstallationPath] = useState<
     string | boolean
   >(null);
+  const [otherInstallationPath, setOtherInstallationPath] =
+    useState<string>(null);
   const [installation, setInstallation] = useState<Installation>('default');
 
   useEffect(() => {
@@ -20,9 +23,12 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ version }) => {
         .checkForDefaultInstallation()
         .then((path: string | boolean) => {
           setDefaultInstallationPath(path);
+          if (typeof path === 'string') {
+            onChange(path);
+          }
         });
     }
-  }, [version]);
+  }, [version, installation]);
 
   if (!version) {
     return null;
@@ -32,14 +38,24 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ version }) => {
     <div>
       {version === '4-player' && !!defaultInstallationPath && (
         <div>
-          <p>Found TowerFall installed at "{defaultInstallationPath}"</p>
+          <p>Found TowerFall installed at {defaultInstallationPath}</p>
           <RadioButtons<Installation>
             options={[
               { label: 'Select this installation', value: 'default' },
-              { label: 'Find other installation', value: 'other' },
+              { label: 'Locate other installation', value: 'other' },
             ]}
             value={installation}
-            onChange={setInstallation}
+            onChange={(installation: Installation) => {
+              setInstallation(installation);
+              if (
+                installation === 'default' &&
+                typeof defaultInstallationPath === 'string'
+              ) {
+                onChange(defaultInstallationPath);
+              } else {
+                onChange(otherInstallationPath);
+              }
+            }}
           />
         </div>
       )}
@@ -51,7 +67,8 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ version }) => {
           <button
             onClick={async () => {
               const file = await window.api.browseFiles();
-              console.log(file);
+              onChange(file);
+              setOtherInstallationPath(file);
             }}
           >
             Browse

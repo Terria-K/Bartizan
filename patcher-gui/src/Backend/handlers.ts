@@ -1,16 +1,20 @@
 import { dialog, BrowserWindow, OpenDialogOptions } from 'electron';
 import fs from 'fs';
+import path from 'path';
 import { isMac } from './utils';
 
-const isTowerFallPathValid = (path: string) => {
+const getPathToTowerfallExeInMacPackage = (towerfallPath: string) => {
+  if (fs.existsSync(`${towerfallPath}/Contents/Resources/TowerFall.exe`)) {
+    return `${towerfallPath}/Contents/Resources/`;
+  } else if (fs.existsSync(`${towerfallPath}/Contents/MacOS/TowerFall.exe`)) {
+    return `${towerfallPath}/Contents/MacOS/`;
+  }
+  return '';
+};
+
+const isTowerFallPathValid = (towerfallPath: string) => {
   if (isMac()) {
-    if (fs.existsSync(`${path}/Contents/Resources/TowerFall.exe`)) {
-      return true;
-    } else if (fs.existsSync(`${path}/Contents/MacOS/TowerFall.exe`)) {
-      return true;
-    } else {
-      return false;
-    }
+    return !!getPathToTowerfallExeInMacPackage(towerfallPath);
   }
 
   return fs.existsSync(String.raw`${path}\TowerFall.exe`);
@@ -70,4 +74,17 @@ export const checkForDefaultInstallation = () => {
     }
   }
   return null;
+};
+
+export const checkPatchability = (
+  event: Electron.IpcMainInvokeEvent,
+  towerfallPath: string
+) => {
+  const pathToExe = isMac()
+    ? getPathToTowerfallExeInMacPackage(towerfallPath)
+    : towerfallPath;
+  return {
+    canPatch: fs.existsSync(path.join(pathToExe, 'Towerfall.exe')),
+    canUnpatch: fs.existsSync(path.join(pathToExe, 'TowerFall-Original.exe')),
+  };
 };
