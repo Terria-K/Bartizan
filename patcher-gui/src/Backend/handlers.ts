@@ -73,7 +73,7 @@ export const checkForDefaultInstallation = () => {
       return defaultPath;
     }
   }
-  return null;
+  return '';
 };
 
 export const checkPatchability = (

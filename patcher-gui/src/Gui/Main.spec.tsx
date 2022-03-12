@@ -11,7 +11,24 @@ window.api = {
 };
 
 describe('Main', () => {
-  it('displays custom path when user switches back to 4-player having selecting one earlier and deselecting 4-player', async () => {
+  it('shows browse button if 4-player selected and no default installation found', async () => {
+    (window.api.checkForDefaultInstallation as jest.Mock).mockImplementation(
+      () => Promise.resolve('')
+    );
+
+    render(<Main />);
+
+    // Select 4-player
+    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
+      '4-player',
+    ]);
+
+    expect(
+      await screen.findByTestId(testIds.BROWSE_FOR_OTHER_INSTALLATION_BUTTON)
+    ).toBeTruthy();
+  });
+
+  it('shows custom path when user switches back to 4-player having selecting one earlier and deselecting 4-player', async () => {
     const pathToGame = `/Path/To/Game`;
     (window.api.checkForDefaultInstallation as jest.Mock).mockImplementation(
       () => Promise.resolve(pathToGame)
