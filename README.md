@@ -67,17 +67,19 @@ This is a little different than the original Bartizan, and it differs between Wi
 
 Note: you may need to use Visual Studio 2019, since later versions can't target .NET 4.0
 
-In `bin`, create a directory called `originals`. Inside that directory create directories `4-player`
-and/or `8-player` (depending on which you want to work with). Finally, copy the corresponding TowerFall.exe
-files into those directories.
+In `bin`, create a directory called `originals`. Inside that directory create directories for
+the versions of TowerFall you'll be working with. For the Steam version name it `4-player`. For
+the 4-player Itch version name it `4-player-itch`. For 8-player name it `8-player`.  Finally,
+copy the corresponding TowerFall.exe files into those directories.
 
 On Mac, copy `FNA.dll` into `bin`.
 
-There are multiple build configs for the Mod project that you can use depending on which version you
-are patching and whether you are including certain features in the build.
+There are multiple build configs for the Mod project that you can use depending on which version
+you are patching and whether you are including certain features in the build.
 
-After building, a releasable build will be output at `/bin/builds/4-player` or `/bin/builds/8-player`.
-Also, a copy of the patched `TowerFall.exe` will be copied to `TowerFall-4-player.exe` or `TowerFall-8-player.exe`.
+After building, a releasable build will be output at `/bin/builds` whose directory will match
+the name of the one in `/bin/originals`.
+Also, a copy of the patched `TowerFall.exe` will be copied to `TowerFall-4-player.exe` or `TowerFall-8-player.exe`, etc.
 
 In order to work without patching the game after every build, create a copy of TF that includes the following
 symlinks (I'll use 8-player as an example. Replace 8 with 4 as needed):
@@ -88,6 +90,10 @@ symlinks (I'll use 8-player as an example. Replace 8 with 4 as needed):
 - `Content/Atlas/modAtlas.xml -> <BartizanPath>/bin/builds/8-player/modAtlas.xml`
 
 Then any time you build the Mod project, just run that copy of TowerFall and it will have the latest changes.
+
+Note that when you change build configurations, you may need to manually switch which
+BaseTowerFall.exe you include in your references for the Mod project. If you see a compile error
+about the number of arguments not matching, this is likely the issue.
 
 ### Windows Specific Things
 

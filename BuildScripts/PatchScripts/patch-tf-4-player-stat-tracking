@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
 mono ./Wizard.exe "$1/Contents/Resources"
-cp ./Newtonsoft.Json.dll "$1/Contents/MacOS"
-cp ./System.Numerics.dll "$1/Contents/MacOS"
-cp ./System.Runtime.Serialization.dll "$1/Contents/MacOS"
+cp ./Newtonsoft.Json.dll "$1/Contents/Resources"
+cp ./System.Numerics.dll "$1/Contents/Resources"
+cp ./System.Runtime.Serialization.dll "$1/Contents/Resources"

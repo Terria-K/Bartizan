@@ -45,12 +45,14 @@
     <DefineConstants>WINDOWS</DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-player-itch|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants></DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="TowerFall">
-      <HintPath>..\bin\BaseTowerFall-4-player.exe</HintPath>
-      <HintPath>..\bin\BaseTowerFall-8-player.exe</HintPath>
-    </Reference>
     <Reference Include="FNA">
       <HintPath>..\bin\FNA.dll</HintPath>
     </Reference>
@@ -64,11 +66,8 @@
     <Reference Include="System.Xml.Linq">
       <HintPath>..\packages\System.Xml.Linq.3.5.21022.801\lib\net20\System.Xml.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="BaseTowerFall-4-player">
-      <HintPath>..\bin\BaseTowerFall-4-player.exe</HintPath>
-    </Reference>
-    <Reference Include="BaseTowerFall-8-player">
-      <HintPath>..\bin\BaseTowerFall-8-player.exe</HintPath>
+    <Reference Include="BaseTowerFall-4-player-itch">
+      <HintPath>..\bin\BaseTowerFall-4-player-itch.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
