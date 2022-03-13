@@ -13,7 +13,7 @@ type FileBrowserProps = {
 type Installation = 'default' | 'other';
 
 const FileBrowser: React.FC<FileBrowserProps> = ({ version, onChange }) => {
-  const [installation, setInstallation] = useState<Installation>('default');
+  const [installation, setInstallation] = useState<Installation>(null);
   const [defaultInstallationPath, setDefaultInstallationPath] =
     useState<string>(null);
   const [otherInstallationPath, setOtherInstallationPath] =

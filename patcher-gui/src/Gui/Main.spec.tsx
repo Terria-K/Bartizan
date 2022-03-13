@@ -60,7 +60,7 @@ describe('Main', () => {
     expect(await screen.findByText('Patch'));
   });
 
-  it('shows patch button if default installation found', async () => {
+  it('shows patch button if default installation found and default installation selected', async () => {
     const pathToGame = `/Path/To/Game`;
     withCheckForDefaultInstallationReturning(pathToGame);
 
@@ -73,8 +73,11 @@ describe('Main', () => {
 
     selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
 
-    const patchButton = await screen.findByText('Patch');
-    expect(patchButton).toBeTruthy();
+    userEvent.click(
+      await screen.findByTestId(testIds.DEFAULT_INSTALLATION_BUTTON)
+    );
+
+    expect(await screen.findByText('Patch')).toBeTruthy();
   });
 
   it('shows browse button if 4-player selected and no default installation found', async () => {
@@ -98,7 +101,7 @@ describe('Main', () => {
 
     selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
 
-    expect((await screen.findAllByText(pathToGame)).length).toEqual(2);
+    expect(await screen.findByText(pathToGame)).toBeTruthy();
   });
 
   it('shows enabled patch and unpatch buttons if patchability check returns true values', async () => {
@@ -109,6 +112,10 @@ describe('Main', () => {
     render(<Main />);
 
     selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
+
+    userEvent.click(
+      await screen.findByTestId(testIds.DEFAULT_INSTALLATION_BUTTON)
+    );
 
     const patchButton = await screen.findByText('Patch');
     const unpatchButton = screen.getByText('Unpatch');
@@ -125,6 +132,10 @@ describe('Main', () => {
     render(<Main />);
 
     selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
+
+    userEvent.click(
+      await screen.findByTestId(testIds.DEFAULT_INSTALLATION_BUTTON)
+    );
 
     const patchButton = await screen.findByText('Patch');
     const unpatchButton = screen.getByText('Unpatch');
