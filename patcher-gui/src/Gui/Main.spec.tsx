@@ -11,6 +11,7 @@ window.api = {
   browseFiles: jest.fn(),
   checkForDefaultInstallation: jest.fn(),
   checkPatchability: jest.fn(),
+  patch: jest.fn(),
 };
 
 describe('Main', () => {

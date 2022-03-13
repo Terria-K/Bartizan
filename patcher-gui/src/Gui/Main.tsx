@@ -21,7 +21,10 @@ const Main: React.FC = () => {
         onChange={setTowerfallVersion}
       />
       <FileBrowser version={towerfallVersion} onChange={setTowerfallPath} />
-      <ActionButtons towerfallPath={towerfallPath} />
+      <ActionButtons
+        towerfallPath={towerfallPath}
+        towerfallVersion={towerfallVersion}
+      />
     </div>
   );
 };

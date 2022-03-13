@@ -9,9 +9,13 @@ export type ButtonStatuses = {
 
 type ActionButtonsProps = {
   towerfallPath: string;
+  towerfallVersion: string;
 };
 
-const ActionButtons: React.FC<ActionButtonsProps> = ({ towerfallPath }) => {
+const ActionButtons: React.FC<ActionButtonsProps> = ({
+  towerfallPath,
+  towerfallVersion,
+}) => {
   const [buttonStatuses, setButtonStatuses] = useState<ButtonStatuses>({
     canPatch: false,
     canUnpatch: false,
@@ -35,7 +39,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ towerfallPath }) => {
       <FilePath path={towerfallPath} />
       <Button
         disabled={!buttonStatuses.canPatch}
-        onClick={() => console.log('patch')}
+        onClick={() => window.api.patch(towerfallPath, towerfallVersion)}
       >
         Patch
       </Button>

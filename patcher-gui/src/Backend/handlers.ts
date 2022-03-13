@@ -1,7 +1,7 @@
 import { dialog, BrowserWindow, OpenDialogOptions } from 'electron';
 import fs from 'fs';
 import path from 'path';
-import { isMac } from './utils';
+import { execShellCommand, isMac } from './utils';
 
 const getPathToTowerfallExeInMacPackage = (towerfallPath: string) => {
   if (fs.existsSync(`${towerfallPath}/Contents/Resources/TowerFall.exe`)) {
@@ -87,4 +87,14 @@ export const checkPatchability = (
     canPatch: fs.existsSync(path.join(pathToExe, 'Towerfall.exe')),
     canUnpatch: fs.existsSync(path.join(pathToExe, 'TowerFall-Original.exe')),
   };
+};
+
+export const patch = (
+  event: Electron.IpcMainInvokeEvent,
+  towerfallPath: string,
+  towerfallVersion: string
+) => {
+  console.log('PATCHING', { towerfallPath, towerfallVersion });
+  // Code here
+  execShellCommand('ls');
 };
