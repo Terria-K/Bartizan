@@ -8,6 +8,7 @@ module.exports = {
   setupFiles: [],
   setupFilesAfterEnv: [],
   testRegex: '.spec.[tj]sx?$',
+  testPathIgnorePatterns: ['dist/'],
   transformIgnorePatterns: [
     `node_modules/(?!(${transformIgnoreModules.join('|')})/)`,
   ],

@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import Main from './Main';
 import { ButtonStatuses } from './ActionButtons';
 import testIds from './test-helpers/testIds';
+import { selectOption } from './test-helpers';
 
 window.api = {
   browseFiles: jest.fn(),
@@ -34,9 +35,7 @@ describe('Main', () => {
   it('does not check for default installation if 8-player selected and shows browse button', async () => {
     render(<Main />);
 
-    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
-      '8-player',
-    ]);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /8-player/i);
 
     expect(window.api.checkForDefaultInstallation).not.toBeCalled();
 
@@ -52,9 +51,7 @@ describe('Main', () => {
 
     render(<Main />);
 
-    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
-      '8-player',
-    ]);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /8-player/i);
 
     userEvent.click(
       screen.getByTestId(testIds.BROWSE_FOR_OTHER_INSTALLATION_BUTTON)
@@ -74,9 +71,7 @@ describe('Main', () => {
 
     render(<Main />);
 
-    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
-      '4-player',
-    ]);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
 
     const patchButton = await screen.findByText('Patch');
     expect(patchButton).toBeTruthy();
@@ -87,9 +82,7 @@ describe('Main', () => {
 
     render(<Main />);
 
-    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
-      '4-player',
-    ]);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
 
     expect(
       await screen.findByTestId(testIds.BROWSE_FOR_OTHER_INSTALLATION_BUTTON)
@@ -103,9 +96,7 @@ describe('Main', () => {
 
     render(<Main />);
 
-    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
-      '4-player',
-    ]);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
 
     expect(await screen.findByText(pathToGame)).toBeTruthy();
   });
@@ -117,9 +108,7 @@ describe('Main', () => {
 
     render(<Main />);
 
-    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
-      '4-player',
-    ]);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
 
     const patchButton = await screen.findByText('Patch');
     const unpatchButton = screen.getByText('Unpatch');
@@ -135,9 +124,7 @@ describe('Main', () => {
 
     render(<Main />);
 
-    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
-      '4-player',
-    ]);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
 
     const patchButton = await screen.findByText('Patch');
     const unpatchButton = screen.getByText('Unpatch');
@@ -154,9 +141,7 @@ describe('Main', () => {
     render(<Main />);
 
     // Select 4-player
-    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
-      '4-player',
-    ]);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
 
     // Select other installation
     userEvent.click(
@@ -176,17 +161,16 @@ describe('Main', () => {
     expect(await screen.findByText(otherPathToGame)).toBeTruthy();
 
     // De-select 4-player
-    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
-      '',
-    ]);
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      /Select One/i
+    );
 
     // Select path appears on the screen
     await expect(screen.findByText(otherPathToGame)).rejects.toThrow();
 
     // Re-select 4-player
-    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
-      '4-player',
-    ]);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
 
     // Select path reappears on the screen
     expect(await screen.findByText(otherPathToGame)).toBeTruthy();

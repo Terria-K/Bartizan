@@ -16,7 +16,10 @@ const Main: React.FC = () => {
     <div>
       <h1>Bartizan (Plus) Patcher</h1>
       <h4>Version: {appVersion}</h4>
-      <VersionSelector onChange={setTowerfallVersion} />
+      <VersionSelector
+        version={towerfallVersion}
+        onChange={setTowerfallVersion}
+      />
       <FileBrowser version={towerfallVersion} onChange={setTowerfallPath} />
       <ActionButtons towerfallPath={towerfallPath} />
     </div>
