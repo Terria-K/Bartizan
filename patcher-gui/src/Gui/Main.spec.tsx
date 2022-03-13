@@ -98,7 +98,7 @@ describe('Main', () => {
 
     selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
 
-    expect(await screen.findByText(pathToGame)).toBeTruthy();
+    expect((await screen.findAllByText(pathToGame)).length).toEqual(2);
   });
 
   it('shows enabled patch and unpatch buttons if patchability check returns true values', async () => {

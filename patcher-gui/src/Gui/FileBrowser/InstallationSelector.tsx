@@ -1,6 +1,7 @@
 import React from 'react';
 import { Version } from '../VersionSelector';
 import RadioButtons from '../general/RadioButtons';
+import FilePath from '../general/FilePath';
 import testIds from '../test-helpers/testIds';
 
 type Installation = 'default' | 'other';
@@ -24,7 +25,8 @@ const InstallationSelector: React.FC<InstallationSelectorProps> = ({
 
   return (
     <div>
-      <p>Found TowerFall installed at {defaultInstallationPath}</p>
+      <h3>Found TowerFall installed at:</h3>
+      <FilePath path={defaultInstallationPath} />
       <RadioButtons<Installation>
         options={[
           {

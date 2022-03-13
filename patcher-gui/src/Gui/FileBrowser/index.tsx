@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { Version } from '../VersionSelector';
 import InstallationSelector from './InstallationSelector';
 import { usePrevious } from '../utils';
+import Button from '../general/Button';
 import testIds from '../test-helpers/testIds';
 
 type FileBrowserProps = {
@@ -59,8 +60,8 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ version, onChange }) => {
       (version === '4-player' && installation === 'other') ||
       (version === '4-player' && defaultInstallationPath === null) ? (
         <div>
-          <p>Locate the TowerFall installation you wish to patch:</p>
-          <button
+          <h3>Locate the TowerFall installation you wish to patch:</h3>
+          <Button
             onClick={async () => {
               const file = await window.api.browseFiles();
               onChange(file);
@@ -69,7 +70,7 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ version, onChange }) => {
             data-testid={testIds.BROWSE_FOR_OTHER_INSTALLATION_BUTTON}
           >
             Browse
-          </button>
+          </Button>
         </div>
       ) : null}
     </div>

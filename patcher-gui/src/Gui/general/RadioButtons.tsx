@@ -1,4 +1,10 @@
 import React from 'react';
+import {
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from '@mui/material';
 
 type RadioButtonsProps<T> = {
   options: { label: string; value: T; testID?: string }[];
@@ -12,20 +18,21 @@ const RadioButtons = function <T extends string | number>({
   onChange,
 }: RadioButtonsProps<T>) {
   return (
-    <div>
-      {options.map((option) => (
-        <label key={option.value}>
-          {option.label}
-          <input
-            type="radio"
+    <FormControl>
+      <RadioGroup
+        value={value}
+        onChange={(event, value) => onChange(value as T)}
+      >
+        {options.map((option) => (
+          <FormControlLabel
+            key={option.value}
             value={option.value}
-            checked={value === option.value}
-            onChange={(event) => onChange(event.target.value as T)}
-            data-testid={option.testID}
+            control={<Radio data-testid={option.testID} />}
+            label={option.label}
           />
-        </label>
-      ))}
-    </div>
+        ))}
+      </RadioGroup>
+    </FormControl>
   );
 };
 

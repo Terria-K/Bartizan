@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Button from './general/Button';
+import FilePath from './general/FilePath';
 
 export type ButtonStatuses = {
   canPatch: boolean;
@@ -30,9 +31,8 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ towerfallPath }) => {
 
   return (
     <div>
-      <p>
-        <strong>Selected Path:</strong> {towerfallPath}
-      </p>
+      <h3>Selected Path:</h3>
+      <FilePath path={towerfallPath} />
       <Button
         disabled={!buttonStatuses.canPatch}
         onClick={() => console.log('patch')}

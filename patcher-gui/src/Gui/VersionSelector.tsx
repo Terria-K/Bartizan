@@ -15,7 +15,7 @@ const VersionSelector: React.FC<VersionSelectorProps> = ({
 }) => {
   return (
     <div>
-      <p>Select the version of TowerFall you wish to patch:</p>
+      <h3>Select the version of TowerFall you wish to patch:</h3>
       <FormControl sx={{ minWidth: 200 }}>
         <InputLabel id="version-selector">Version</InputLabel>
         <Select

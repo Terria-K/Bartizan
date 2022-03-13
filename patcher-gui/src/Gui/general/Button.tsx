@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button as MuiButton } from '@mui/material';
 
 type ButtonProps = {
   onClick: () => void;
@@ -6,11 +7,21 @@ type ButtonProps = {
   disabled?: boolean;
 };
 
-const Button: React.FC<ButtonProps> = ({ onClick, children, disabled }) => {
+const Button: React.FC<ButtonProps> = ({
+  onClick,
+  children,
+  disabled,
+  ...rest
+}) => {
   return (
-    <button onClick={onClick} disabled={disabled}>
+    <MuiButton
+      variant="outlined"
+      onClick={onClick}
+      disabled={disabled}
+      {...rest}
+    >
       {children}
-    </button>
+    </MuiButton>
   );
 };
 
