@@ -1,7 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import Main from './Main';
+import { ButtonStatuses } from './ActionButtons';
 import testIds from './test-helpers/testIds';
 
 window.api = {
@@ -11,14 +13,80 @@ window.api = {
 };
 
 describe('Main', () => {
-  it('shows browse button if 4-player selected and no default installation found', async () => {
+  const withCheckForDefaultInstallationReturning = (path: string) => {
     (window.api.checkForDefaultInstallation as jest.Mock).mockImplementation(
-      () => Promise.resolve('')
+      () => Promise.resolve(path)
     );
+  };
+
+  const withBrowseFilesReturning = (path: string) => {
+    (window.api.browseFiles as jest.Mock).mockImplementation(() =>
+      Promise.resolve(path)
+    );
+  };
+
+  const withCheckPatchabilityReturning = (patchability: ButtonStatuses) => {
+    (window.api.checkPatchability as jest.Mock).mockImplementation(() =>
+      Promise.resolve(patchability)
+    );
+  };
+
+  it('does not check for default installation if 8-player selected and shows browse button', async () => {
+    render(<Main />);
+
+    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
+      '8-player',
+    ]);
+
+    expect(window.api.checkForDefaultInstallation).not.toBeCalled();
+
+    expect(
+      screen.getByTestId(testIds.BROWSE_FOR_OTHER_INSTALLATION_BUTTON)
+    ).toBeTruthy();
+  });
+
+  it('shows patch button after valid path selected', async () => {
+    withCheckPatchabilityReturning({ canPatch: true, canUnpatch: false });
+    const selectedPath = `/Other/Path`;
+    withBrowseFilesReturning(selectedPath);
 
     render(<Main />);
 
-    // Select 4-player
+    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
+      '8-player',
+    ]);
+
+    userEvent.click(
+      screen.getByTestId(testIds.BROWSE_FOR_OTHER_INSTALLATION_BUTTON)
+    );
+
+    expect(await screen.findByText('Patch'));
+  });
+
+  it('shows patch button if default installation found', async () => {
+    const pathToGame = `/Path/To/Game`;
+    withCheckForDefaultInstallationReturning(pathToGame);
+
+    withCheckPatchabilityReturning({
+      canPatch: true,
+      canUnpatch: true,
+    });
+
+    render(<Main />);
+
+    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
+      '4-player',
+    ]);
+
+    const patchButton = await screen.findByText('Patch');
+    expect(patchButton).toBeTruthy();
+  });
+
+  it('shows browse button if 4-player selected and no default installation found', async () => {
+    withCheckForDefaultInstallationReturning('');
+
+    render(<Main />);
+
     userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
       '4-player',
     ]);
@@ -28,17 +96,60 @@ describe('Main', () => {
     ).toBeTruthy();
   });
 
+  it('shows default path if 4-player selected and default installation is found', async () => {
+    const pathToGame = `/Path/To/Game`;
+    withCheckForDefaultInstallationReturning(pathToGame);
+    withCheckPatchabilityReturning({ canPatch: true, canUnpatch: true });
+
+    render(<Main />);
+
+    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
+      '4-player',
+    ]);
+
+    expect(await screen.findByText(pathToGame)).toBeTruthy();
+  });
+
+  it('shows enabled patch and unpatch buttons if patchability check returns true values', async () => {
+    const pathToGame = `/Path/To/Game`;
+    withCheckForDefaultInstallationReturning(pathToGame);
+    withCheckPatchabilityReturning({ canPatch: true, canUnpatch: true });
+
+    render(<Main />);
+
+    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
+      '4-player',
+    ]);
+
+    const patchButton = await screen.findByText('Patch');
+    const unpatchButton = screen.getByText('Unpatch');
+
+    expect(patchButton).not.toHaveAttribute('disabled');
+    expect(unpatchButton).not.toHaveAttribute('disabled');
+  });
+
+  it('shows disabled patch and unpatch buttons if patchability check returns false values', async () => {
+    const pathToGame = `/Path/To/Game`;
+    withCheckForDefaultInstallationReturning(pathToGame);
+    withCheckPatchabilityReturning({ canPatch: false, canUnpatch: false });
+
+    render(<Main />);
+
+    userEvent.selectOptions(screen.getByTestId(testIds.VERSION_SELECT_INPUT), [
+      '4-player',
+    ]);
+
+    const patchButton = await screen.findByText('Patch');
+    const unpatchButton = screen.getByText('Unpatch');
+
+    expect(patchButton).toHaveAttribute('disabled');
+    expect(unpatchButton).toHaveAttribute('disabled');
+  });
+
   it('shows custom path when user switches back to 4-player having selecting one earlier and deselecting 4-player', async () => {
     const pathToGame = `/Path/To/Game`;
-    (window.api.checkForDefaultInstallation as jest.Mock).mockImplementation(
-      () => Promise.resolve(pathToGame)
-    );
-    (window.api.checkPatchability as jest.Mock).mockImplementation(() =>
-      Promise.resolve({
-        canPatch: true,
-        canUnpatch: true,
-      })
-    );
+    withCheckForDefaultInstallationReturning(pathToGame);
+    withCheckPatchabilityReturning({ canPatch: true, canUnpatch: true });
 
     render(<Main />);
 
@@ -53,7 +164,7 @@ describe('Main', () => {
     );
 
     // Browse and select path
-    const otherPathToGame = `/Other/Patch`;
+    const otherPathToGame = `/Other/Path`;
     (window.api.browseFiles as jest.Mock).mockImplementation(() =>
       Promise.resolve(otherPathToGame)
     );
