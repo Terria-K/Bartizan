@@ -16,7 +16,11 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "extraResource": [
+          "patchFiles"
+        ]
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
