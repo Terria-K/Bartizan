@@ -1,0 +1,2 @@
+#! /usr/bin/env bash
+./prepare-build-mac 4-player-itch
