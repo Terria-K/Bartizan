@@ -10,7 +10,8 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "test": "jest --config jest.config.js --verbose --forceExit --runInBand --coverage=false --env=jsdom"
+    "test": "jest --config jest.config.js --verbose --forceExit --runInBand --coverage=false --env=jsdom",
+    "copy-patch-files": "./bin/copy-patch-files $PWD/../bin $PWD/patchFiles"
   },
   "keywords": [],
   "license": "MIT",

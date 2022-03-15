@@ -1,4 +1,5 @@
-bin/
+/bin/
+/Mod/bin
 *.userprefs
 DebugLinux
 Debug
