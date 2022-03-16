@@ -1,5 +1,5 @@
 import React from 'react';
-import { Version } from '../VersionSelector';
+import { Version } from '../../types';
 import RadioButtons from '../general/RadioButtons';
 import FilePath from '../general/FilePath';
 import testIds from '../test-helpers/testIds';
@@ -7,19 +7,19 @@ import testIds from '../test-helpers/testIds';
 type Installation = 'default' | 'other';
 
 type InstallationSelectorProps = {
-  version: Version;
+  towerfallVersion: Version;
   defaultInstallationPath: string;
   installation: Installation;
   onChange: (value: Installation) => void;
 };
 
 const InstallationSelector: React.FC<InstallationSelectorProps> = ({
-  version,
+  towerfallVersion,
   defaultInstallationPath,
   installation,
   onChange,
 }) => {
-  if (version !== '4-player' || !defaultInstallationPath) {
+  if (!towerfallVersion.startsWith('4-player') || !defaultInstallationPath) {
     return null;
   }
 

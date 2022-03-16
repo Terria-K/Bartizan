@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import Main from './Main';
-import { ButtonStatuses } from './ActionButtons';
+import { ButtonStatuses } from '../types';
 import testIds from './test-helpers/testIds';
 import { selectOption } from './test-helpers';
 
@@ -72,7 +72,10 @@ describe('Main', () => {
 
     render(<Main />);
 
-    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      /Steam 4-player/i
+    );
 
     userEvent.click(
       await screen.findByTestId(testIds.DEFAULT_INSTALLATION_BUTTON)
@@ -81,26 +84,32 @@ describe('Main', () => {
     expect(await screen.findByText('Patch')).toBeTruthy();
   });
 
-  it('shows browse button if 4-player selected and no default installation found', async () => {
+  it('shows browse button if 4-player-steam selected and no default installation found', async () => {
     withCheckForDefaultInstallationReturning('');
 
     render(<Main />);
 
-    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      /Steam 4-player/i
+    );
 
     expect(
       await screen.findByTestId(testIds.BROWSE_FOR_OTHER_INSTALLATION_BUTTON)
     ).toBeTruthy();
   });
 
-  it('shows default path if 4-player selected and default installation is found', async () => {
+  it('shows default path if 4-player-steam selected and default installation is found', async () => {
     const pathToGame = `/Path/To/Game`;
     withCheckForDefaultInstallationReturning(pathToGame);
     withCheckPatchabilityReturning({ canPatch: true, canUnpatch: true });
 
     render(<Main />);
 
-    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      /Steam 4-player/i
+    );
 
     expect(await screen.findByText(pathToGame)).toBeTruthy();
   });
@@ -112,7 +121,10 @@ describe('Main', () => {
 
     render(<Main />);
 
-    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      /Steam 4-player/i
+    );
 
     userEvent.click(
       await screen.findByTestId(testIds.DEFAULT_INSTALLATION_BUTTON)
@@ -132,7 +144,10 @@ describe('Main', () => {
 
     render(<Main />);
 
-    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      /Steam 4-player/i
+    );
 
     userEvent.click(
       await screen.findByTestId(testIds.DEFAULT_INSTALLATION_BUTTON)
@@ -145,15 +160,18 @@ describe('Main', () => {
     expect(unpatchButton).toHaveAttribute('disabled');
   });
 
-  it('shows custom path when user switches back to 4-player having selecting one earlier and deselecting 4-player', async () => {
+  it('shows custom path when user switches back to 4-player-steam having selecting one earlier and deselecting 4-player-steam', async () => {
     const pathToGame = `/Path/To/Game`;
     withCheckForDefaultInstallationReturning(pathToGame);
     withCheckPatchabilityReturning({ canPatch: true, canUnpatch: true });
 
     render(<Main />);
 
-    // Select 4-player
-    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
+    // Select 4-player-steam
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      /Steam 4-player/i
+    );
 
     // Select other installation
     userEvent.click(
@@ -172,7 +190,7 @@ describe('Main', () => {
     // Select path appears on the screen
     expect(await screen.findByText(otherPathToGame)).toBeTruthy();
 
-    // De-select 4-player
+    // De-select 4-player-steam
     selectOption(
       screen.getByTestId(testIds.VERSION_SELECT_INPUT),
       /Select One/i
@@ -181,10 +199,23 @@ describe('Main', () => {
     // Select path appears on the screen
     await expect(screen.findByText(otherPathToGame)).rejects.toThrow();
 
-    // Re-select 4-player
-    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), /4-player/i);
+    // Re-select 4-player-steam
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      /Steam 4-player/i
+    );
 
     // Select path reappears on the screen
     expect(await screen.findByText(otherPathToGame)).toBeTruthy();
   });
+
+  it.skip('shows file browse button if Itch version selected and no path is returned', () => {});
+
+  it.skip('shows file browse button if Steam version selected and no path is returned', () => {});
+
+  it.skip('shows browse button if Steam with default found selected but then Itch selected with no default', () => {});
+
+  it.skip('shows installation selector if Itch with no default selected but then Steam selected with default', () => {});
+
+  it.skip('shows Itch path if Steam with default selected and then Itch with default selected', () => {});
 });

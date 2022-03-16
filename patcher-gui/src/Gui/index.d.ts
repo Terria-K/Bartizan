@@ -1,10 +1,11 @@
 import { ButtonStatuses } from './ActionButtons';
+import { Version } from './VersionSelector';
 
 export interface API {
-  checkForDefaultInstallation: () => Promise<string>;
+  checkForDefaultInstallation: (towerfallVersion: Version) => Promise<string>;
   browseFiles: () => Promise<string>;
   checkPatchability: (towerfallPath: string) => Promise<ButtonStatuses>;
-  patch: (towerfallPath: string, towerfallVersion: string) => Promise<boolean>;
+  patch: (towerfallPath: string, towerfallVersion: Version) => Promise<boolean>;
 }
 
 declare global {

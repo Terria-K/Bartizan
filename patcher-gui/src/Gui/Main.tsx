@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { version as appVersion } from '../../package.json';
-import VersionSelector, { Version } from './VersionSelector';
+import VersionSelector from './VersionSelector';
 import FileBrowser from './FileBrowser';
 import ActionButtons from './ActionButtons';
+import { Version } from '../types';
 
 const Main: React.FC = () => {
   const [towerfallVersion, setTowerfallVersion] = useState<Version>(null);
@@ -17,10 +18,13 @@ const Main: React.FC = () => {
       <h1>Bartizan (Plus) Patcher</h1>
       <h4>Version: {appVersion}</h4>
       <VersionSelector
-        version={towerfallVersion}
+        towerfallVersion={towerfallVersion}
         onChange={setTowerfallVersion}
       />
-      <FileBrowser version={towerfallVersion} onChange={setTowerfallPath} />
+      <FileBrowser
+        towerfallVersion={towerfallVersion}
+        onChange={setTowerfallPath}
+      />
       <ActionButtons
         towerfallPath={towerfallPath}
         towerfallVersion={towerfallVersion}

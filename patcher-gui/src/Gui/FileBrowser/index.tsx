@@ -1,40 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import type { Version } from '../VersionSelector';
 import InstallationSelector from './InstallationSelector';
 import { usePrevious } from '../utils';
 import Button from '../general/Button';
 import testIds from '../test-helpers/testIds';
+import { Version } from '../../types';
 
 type FileBrowserProps = {
-  version: Version;
+  towerfallVersion: Version;
   onChange: (towerfallPath: string) => void;
 };
 
 type Installation = 'default' | 'other';
 
-const FileBrowser: React.FC<FileBrowserProps> = ({ version, onChange }) => {
+const FileBrowser: React.FC<FileBrowserProps> = ({
+  towerfallVersion,
+  onChange,
+}) => {
   const [installation, setInstallation] = useState<Installation>(null);
   const [defaultInstallationPath, setDefaultInstallationPath] =
     useState<string>(null);
   const [otherInstallationPath, setOtherInstallationPath] =
     useState<string>(null);
 
-  const previousVersion = usePrevious(version);
+  const previousVersion: Version = usePrevious<Version>(towerfallVersion);
 
   useEffect(() => {
-    if (version === '4-player' && previousVersion !== '4-player') {
-      window.api.checkForDefaultInstallation().then((path: string) => {
-        setDefaultInstallationPath(path);
-        if (typeof path === 'string' && installation === 'default') {
-          onChange(path);
-        } else if (installation === 'other' && otherInstallationPath) {
-          onChange(otherInstallationPath);
-        }
-      });
-    } else if (!version) {
+    if (
+      towerfallVersion?.startsWith('4-player') &&
+      !previousVersion?.startsWith('4-player')
+    ) {
+      window.api
+        .checkForDefaultInstallation(towerfallVersion)
+        .then((path: string) => {
+          setDefaultInstallationPath(path);
+          if (typeof path === 'string' && installation === 'default') {
+            onChange(path);
+          } else if (installation === 'other' && otherInstallationPath) {
+            onChange(otherInstallationPath);
+          }
+        });
+    } else if (!towerfallVersion) {
       onChange(null);
     }
-  }, [installation, onChange, otherInstallationPath, previousVersion, version]);
+  }, [
+    installation,
+    onChange,
+    otherInstallationPath,
+    previousVersion,
+    towerfallVersion,
+  ]);
 
   useEffect(() => {
     if (installation === 'default' && defaultInstallationPath) {
@@ -44,21 +58,22 @@ const FileBrowser: React.FC<FileBrowserProps> = ({ version, onChange }) => {
     }
   }, [defaultInstallationPath, installation, onChange, otherInstallationPath]);
 
-  if (!version) {
+  if (!towerfallVersion) {
     return null;
   }
 
   return (
     <div>
       <InstallationSelector
-        version={version}
+        towerfallVersion={towerfallVersion}
         defaultInstallationPath={defaultInstallationPath}
         installation={installation}
         onChange={setInstallation}
       />
-      {version === '8-player' ||
-      (version === '4-player' && installation === 'other') ||
-      (version === '4-player' && defaultInstallationPath === null) ? (
+      {towerfallVersion === '8-player' ||
+      (towerfallVersion.startsWith('4-player') && installation === 'other') ||
+      (towerfallVersion.startsWith('4-player') &&
+        defaultInstallationPath === null) ? (
         <div>
           <h3>Locate the TowerFall installation you wish to patch:</h3>
           <Button

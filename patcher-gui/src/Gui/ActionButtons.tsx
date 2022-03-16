@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from './general/Button';
 import FilePath from './general/FilePath';
-
-export type ButtonStatuses = {
-  canPatch: boolean;
-  canUnpatch: boolean;
-};
+import { ButtonStatuses } from '../types';
 
 type ActionButtonsProps = {
   towerfallPath: string;

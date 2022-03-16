@@ -1,17 +1,16 @@
 import React from 'react';
 import { FormControl, Select, MenuItem, InputLabel } from '@mui/material';
 import testIds from './test-helpers/testIds';
-
-export type Version = '4-player' | '8-player';
+import { Version } from '../types';
 
 type VersionSelectorProps = {
-  version: Version;
+  towerfallVersion: Version;
   onChange: (version: Version) => void;
 };
 
 const VersionSelector: React.FC<VersionSelectorProps> = ({
   onChange,
-  version,
+  towerfallVersion,
 }) => {
   return (
     <div>
@@ -25,10 +24,15 @@ const VersionSelector: React.FC<VersionSelectorProps> = ({
             onChange(event.target.value as Version);
           }}
           label="Version"
-          value={version || ''}
+          value={towerfallVersion || ''}
         >
           <MenuItem value="">(Select One)</MenuItem>
-          <MenuItem value="4-player">4-Player (version 1.3.3.3)</MenuItem>
+          <MenuItem value="4-player-steam">
+            Steam 4-Player (version 1.3.3.3)
+          </MenuItem>
+          <MenuItem value="4-player-itch">
+            Itch.io 4-Player (version 1.3.3.1)
+          </MenuItem>
           <MenuItem value="8-player">8-Player (version 1.3.2.0)</MenuItem>
         </Select>
       </FormControl>

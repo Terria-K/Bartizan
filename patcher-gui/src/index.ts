@@ -45,7 +45,7 @@ app.on('ready', () => {
 
   ipcMain.handle(ipcEvents.CHECK_PATCHABILITY, handlers.checkPatchability);
 
-  ipcMain.handle(ipcEvents.PATCH, handlers.patch);
+  ipcMain.handle(ipcEvents.PATCH, handlers.patchGame);
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
