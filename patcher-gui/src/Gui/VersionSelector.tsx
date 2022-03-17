@@ -31,7 +31,7 @@ const VersionSelector: React.FC<VersionSelectorProps> = ({
             Steam 4-Player (version 1.3.3.3)
           </MenuItem>
           <MenuItem value="4-player-itch">
-            Itch.io 4-Player (version 1.3.3.1)
+            Itch 4-Player (version 1.3.3.1)
           </MenuItem>
           <MenuItem value="8-player">8-Player (version 1.3.2.0)</MenuItem>
         </Select>
