@@ -27,7 +27,7 @@ const FileBrowser: React.FC<FileBrowserProps> = ({
   useEffect(() => {
     if (
       towerfallVersion?.startsWith('4-player') &&
-      !previousVersion?.startsWith('4-player')
+      towerfallVersion !== previousVersion
     ) {
       window.api
         .checkForDefaultInstallation(towerfallVersion)

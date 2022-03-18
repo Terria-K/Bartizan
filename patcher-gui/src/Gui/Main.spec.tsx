@@ -210,7 +210,7 @@ describe('Main', () => {
     expect(await screen.findByText(otherPathToGame)).toBeTruthy();
   });
 
-  fit('shows file browse button if Itch version selected and no path is returned', async () => {
+  it('shows file browse button if Itch version selected and no path is returned', async () => {
     withCheckForDefaultInstallationReturning('');
 
     render(<Main />);
@@ -228,11 +228,10 @@ describe('Main', () => {
     ).toBeTruthy();
   });
 
-  fit('shows file browse button if Steam version selected and no path is returned', async () => {
-    withCheckForDefaultInstallationReturning('');
-
+  it('shows file browse button if Steam version selected and no path is returned', async () => {
     render(<Main />);
 
+    withCheckForDefaultInstallationReturning('');
     selectOption(
       screen.getByTestId(testIds.VERSION_SELECT_INPUT),
       versionSteam
@@ -249,9 +248,55 @@ describe('Main', () => {
     ).toBeTruthy();
   });
 
-  it.skip('shows browse button if Steam with default found selected but then Itch selected with no default', () => {});
+  it('shows browse button if Steam with default found selected but then Itch selected with no default', async () => {
+    render(<Main />);
 
-  it.skip('shows installation selector if Itch with no default selected but then Steam selected with default', () => {});
+    withCheckForDefaultInstallationReturning('/Some/Path');
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      versionSteam
+    );
 
-  it.skip('shows Itch path if Steam with default selected and then Itch with default selected', () => {});
+    withCheckForDefaultInstallationReturning('');
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), versionItch);
+
+    expect(
+      await screen.findByTestId(testIds.BROWSE_FOR_OTHER_INSTALLATION_BUTTON)
+    ).toBeTruthy();
+  });
+
+  it('shows installation selector if Itch with no default selected but then Steam selected with default', async () => {
+    render(<Main />);
+
+    withCheckForDefaultInstallationReturning('');
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), versionItch);
+
+    withCheckForDefaultInstallationReturning('/Some/Path');
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      versionSteam
+    );
+
+    expect(
+      await screen.findByTestId(testIds.VERSION_SELECT_INPUT)
+    ).toBeTruthy();
+  });
+
+  it('shows Itch path if Steam with default selected and then Itch with default selected', async () => {
+    const itchPath = '/Itch/Path';
+    const steamPath = '/Steam/Path';
+
+    render(<Main />);
+
+    withCheckForDefaultInstallationReturning(steamPath);
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      versionSteam
+    );
+
+    withCheckForDefaultInstallationReturning(itchPath);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), versionItch);
+
+    expect(await screen.findByText(itchPath)).toBeTruthy();
+  });
 });
