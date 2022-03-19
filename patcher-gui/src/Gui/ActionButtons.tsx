@@ -20,6 +20,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   onUnpatchSuccess,
   onUnpatchFail,
 }) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [buttonStatuses, setButtonStatuses] = useState<ButtonStatuses>({
     canPatch: false,
     canUnpatch: false,
@@ -27,7 +28,11 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
 
   useEffect(() => {
     if (towerfallPath) {
-      window.api.checkPatchability(towerfallPath).then(setButtonStatuses);
+      setLoading(true);
+      window.api.checkPatchability(towerfallPath).then((statuses) => {
+        setLoading(false);
+        setButtonStatuses(statuses);
+      });
     } else {
       setButtonStatuses({ canPatch: false, canUnpatch: false });
     }
@@ -42,18 +47,26 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       <h3>Selected Path:</h3>
       <FilePath path={towerfallPath} />
       <Button
-        disabled={!buttonStatuses.canPatch}
-        onClick={() =>
+        disabled={!buttonStatuses.canPatch || loading}
+        onClick={() => {
+          setLoading(true);
           window.api
             .patch(towerfallPath, towerfallVersion)
-            .then((success) => (success ? onPatchSuccess() : onPatchFail()))
-        }
+            .then((success) => {
+              setLoading(false);
+              success ? onPatchSuccess() : onPatchFail();
+            })
+            .catch(() => {
+              setLoading(false);
+              onPatchFail();
+            });
+        }}
       >
         Patch
       </Button>
       &nbsp;
       <Button
-        disabled={!buttonStatuses.canUnpatch}
+        disabled={!buttonStatuses.canUnpatch || loading}
         onClick={() => console.log('unpatch')}
       >
         Unpatch
