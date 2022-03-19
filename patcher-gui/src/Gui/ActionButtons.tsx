@@ -54,7 +54,15 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
             .patch(towerfallPath, towerfallVersion)
             .then((success) => {
               setLoading(false);
-              success ? onPatchSuccess() : onPatchFail();
+              if (success) {
+                setButtonStatuses({
+                  canPatch: true,
+                  canUnpatch: true,
+                });
+                onPatchSuccess();
+              } else {
+                onPatchFail();
+              }
             })
             .catch(() => {
               setLoading(false);
@@ -73,7 +81,15 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
             .unpatch(towerfallPath)
             .then((success) => {
               setLoading(false);
-              success ? onUnpatchSuccess() : onUnpatchFail();
+              if (success) {
+                setButtonStatuses({
+                  canPatch: true,
+                  canUnpatch: false,
+                });
+                onUnpatchSuccess();
+              } else {
+                onUnpatchFail();
+              }
             })
             .catch(() => {
               setLoading(false);

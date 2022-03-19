@@ -47,7 +47,7 @@ const Main: React.FC = () => {
         onUnpatchFail={() =>
           setAlert({
             message: 'Unpatch Failed',
-            color: 'success',
+            color: 'error',
           })
         }
       />

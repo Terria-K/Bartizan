@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import Main from './Main';
@@ -309,7 +309,7 @@ describe('Main', () => {
     expect(await screen.findByText(itchPath)).toBeTruthy();
   });
 
-  it('shows success message if api.patch returns true', async () => {
+  it('shows success message if api.patch returns true, and enables unpatch button', async () => {
     const pathToGame = `/Path/To/Game`;
     withCheckForDefaultInstallationReturning(pathToGame);
     withCheckPatchabilityReturning({ canPatch: true, canUnpatch: false });
@@ -326,12 +326,17 @@ describe('Main', () => {
       await screen.findByTestId(testIds.DEFAULT_INSTALLATION_BUTTON)
     );
 
+    expect(screen.queryByText('Unpatch')).toHaveAttribute('disabled');
+
     userEvent.click(await screen.findByText('Patch'));
 
     expect(await screen.findByText(/success/i)).toBeTruthy();
+    await waitFor(() =>
+      expect(screen.queryByText('Unpatch')).not.toHaveAttribute('disabled')
+    );
   });
 
-  it('shows failure message if api.patch returns false', async () => {
+  it('shows failure message if api.patch returns false, and unpatch button remains disabled', async () => {
     const pathToGame = `/Path/To/Game`;
     withCheckForDefaultInstallationReturning(pathToGame);
     withCheckPatchabilityReturning({ canPatch: true, canUnpatch: false });
@@ -351,9 +356,10 @@ describe('Main', () => {
     userEvent.click(await screen.findByText('Patch'));
 
     expect(await screen.findByText(/fail/i)).toBeTruthy();
+    expect(screen.queryByText('Unpatch')).toHaveAttribute('disabled');
   });
 
-  it('shows success message if api.unpatch returns true', async () => {
+  it('shows success message if api.unpatch returns true, and disables unpatch button', async () => {
     const pathToGame = `/Path/To/Game`;
     withCheckForDefaultInstallationReturning(pathToGame);
     withCheckPatchabilityReturning({ canPatch: true, canUnpatch: true });
@@ -373,9 +379,10 @@ describe('Main', () => {
     userEvent.click(await screen.findByText('Unpatch'));
 
     expect(await screen.findByText(/success/i)).toBeTruthy();
+    expect(screen.queryByText('Unpatch')).toHaveAttribute('disabled');
   });
 
-  it('shows failure message if api.unpatch returns false', async () => {
+  it('shows failure message if api.unpatch returns false, and unpatch button remains enabled', async () => {
     const pathToGame = `/Path/To/Game`;
     withCheckForDefaultInstallationReturning(pathToGame);
     withCheckPatchabilityReturning({ canPatch: true, canUnpatch: true });
@@ -395,5 +402,6 @@ describe('Main', () => {
     userEvent.click(await screen.findByText('Unpatch'));
 
     expect(await screen.findByText(/fail/i)).toBeTruthy();
+    expect(screen.queryByText('Unpatch')).not.toHaveAttribute('disabled');
   });
 });
