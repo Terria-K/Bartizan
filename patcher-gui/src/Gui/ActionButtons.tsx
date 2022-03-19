@@ -70,7 +70,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
             });
         }}
       >
-        Patch
+        {buttonStatuses.canUnpatch ? 'Re-Patch' : 'Patch'}
       </Button>
       &nbsp;
       <Button
