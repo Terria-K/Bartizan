@@ -48,26 +48,27 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       <FilePath path={towerfallPath} />
       <Button
         disabled={!buttonStatuses.canPatch || loading}
-        onClick={() => {
+        onClick={async () => {
           setLoading(true);
-          window.api
-            .patch(towerfallPath, towerfallVersion)
-            .then((success) => {
-              setLoading(false);
-              if (success) {
-                setButtonStatuses({
-                  canPatch: true,
-                  canUnpatch: true,
-                });
-                onPatchSuccess();
-              } else {
-                onPatchFail();
-              }
-            })
-            .catch(() => {
-              setLoading(false);
+          try {
+            const success = await window.api.patch(
+              towerfallPath,
+              towerfallVersion
+            );
+            setLoading(false);
+            if (success) {
+              setButtonStatuses({
+                canPatch: true,
+                canUnpatch: true,
+              });
+              onPatchSuccess();
+            } else {
               onPatchFail();
-            });
+            }
+          } catch (error) {
+            setLoading(false);
+            onPatchFail();
+          }
         }}
       >
         {buttonStatuses.canUnpatch ? 'Re-Patch' : 'Patch'}
@@ -75,26 +76,24 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       &nbsp;
       <Button
         disabled={!buttonStatuses.canUnpatch || loading}
-        onClick={() => {
+        onClick={async () => {
           setLoading(true);
-          window.api
-            .unpatch(towerfallPath)
-            .then((success) => {
-              setLoading(false);
-              if (success) {
-                setButtonStatuses({
-                  canPatch: true,
-                  canUnpatch: false,
-                });
-                onUnpatchSuccess();
-              } else {
-                onUnpatchFail();
-              }
-            })
-            .catch(() => {
-              setLoading(false);
-              onPatchFail();
-            });
+          try {
+            const success = await window.api.unpatch(towerfallPath);
+            setLoading(false);
+            if (success) {
+              setButtonStatuses({
+                canPatch: true,
+                canUnpatch: false,
+              });
+              onUnpatchSuccess();
+            } else {
+              onUnpatchFail();
+            }
+          } catch (error) {
+            setLoading(false);
+            onPatchFail();
+          }
         }}
       >
         Unpatch
