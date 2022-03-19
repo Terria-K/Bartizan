@@ -33,16 +33,17 @@ export const getPatchFilesPath = () => {
 
 export function execShellCommand(cmd: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    exec(cmd, { maxBuffer: 1024 * 500 }, (error, stdout, stderr) => {
-      if (error) {
-        console.warn(error);
-        reject();
-      } else if (stdout) {
+    try {
+      exec(cmd, { maxBuffer: 1024 * 500 }, (error) => {
+        if (error) {
+          console.error(error);
+          reject();
+        }
         resolve(true);
-      } else {
-        console.log(stderr);
-        reject();
-      }
-    });
+      });
+    } catch (error) {
+      console.error(error);
+      reject();
+    }
   });
 }

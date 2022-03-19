@@ -43,7 +43,8 @@ export async function patchGame(
     const commandPrefix = isMac() ? 'mono ' : '';
     const patcherPath = path.join(patchFilesPath, 'Patcher.exe');
     const patcherArgs = [
-      `Mod-${towerfallVersion}.dll`,
+      'patch-exe',
+      path.join(patchFilesPath, `Mod-${towerfallVersion}.dll`),
       pathToExe,
       path.join(pathToExe, 'TowerFall.exe'),
     ];
