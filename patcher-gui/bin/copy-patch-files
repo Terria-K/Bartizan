@@ -6,6 +6,6 @@ cp $1/Patcher.exe $2/Patcher.exe
 cp $1/Content/Atlas/modAtlas.png $2/modAtlas.png
 cp $1/Content/Atlas/modAtlas.xml $2/modAtlas.xml
 cp $1/System.Xml.Linq.dll $2/System.Xml.Linq.dll
-cp $1/builds/4-player/Mod.dll $2/Mod-4-player.dll
+cp $1/builds/4-player/Mod.dll $2/Mod-4-player-steam.dll
 cp $1/builds/4-player-itch/Mod.dll $2/Mod-4-player-itch.dll
 cp $1/builds/8-player/Mod.dll $2/Mod-8-player.dll
