@@ -67,7 +67,19 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       &nbsp;
       <Button
         disabled={!buttonStatuses.canUnpatch || loading}
-        onClick={() => console.log('unpatch')}
+        onClick={() => {
+          setLoading(true);
+          window.api
+            .unpatch(towerfallPath)
+            .then((success) => {
+              setLoading(false);
+              success ? onUnpatchSuccess() : onUnpatchFail();
+            })
+            .catch(() => {
+              setLoading(false);
+              onPatchFail();
+            });
+        }}
       >
         Unpatch
       </Button>

@@ -19,6 +19,27 @@ export const checkPatchability = (
   };
 };
 
+export async function unpatchGame(
+  event: Electron.IpcMainInvokeEvent,
+  towerfallPath: string
+): Promise<boolean> {
+  try {
+    const pathToExe = getPathToTowerfallExe(towerfallPath);
+    if (pathToExe) {
+      if (fs.existsSync(path.join(pathToExe, 'TowerFall-Original.exe'))) {
+        fs.renameSync(
+          path.join(pathToExe, 'TowerFall-Original.exe'),
+          path.join(pathToExe, 'TowerFall.exe')
+        );
+        return Promise.resolve(true);
+      }
+    }
+    return Promise.resolve(false);
+  } catch (error) {
+    return Promise.resolve(false);
+  }
+}
+
 export async function patchGame(
   event: Electron.IpcMainInvokeEvent,
   towerfallPath: string,

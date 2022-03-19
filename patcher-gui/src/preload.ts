@@ -13,4 +13,6 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.invoke(ipcEvents.CHECK_PATCHABILITY, towerfallPath),
   patch: (towerfallPath: string, towerfallVersion: Version) =>
     ipcRenderer.invoke(ipcEvents.PATCH, towerfallPath, towerfallVersion),
+  unpatch: (towerfallPath: string) =>
+    ipcRenderer.invoke(ipcEvents.UNPATCH, towerfallPath),
 });

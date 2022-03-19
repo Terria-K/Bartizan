@@ -6,6 +6,7 @@ export interface API {
   browseFiles: () => Promise<string>;
   checkPatchability: (towerfallPath: string) => Promise<ButtonStatuses>;
   patch: (towerfallPath: string, towerfallVersion: Version) => Promise<boolean>;
+  unpatch: (towerfallPath: string) => Promise<boolean>;
 }
 
 declare global {
