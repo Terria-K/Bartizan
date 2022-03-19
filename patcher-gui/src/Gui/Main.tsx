@@ -3,11 +3,15 @@ import { version as appVersion } from '../../package.json';
 import VersionSelector from './VersionSelector';
 import FileBrowser from './FileBrowser';
 import ActionButtons from './ActionButtons';
+import Alert from './general/Alert';
+import type { AlertColor } from '@mui/material';
 import { Version } from '../types';
 
 const Main: React.FC = () => {
   const [towerfallVersion, setTowerfallVersion] = useState<Version>(null);
   const [towerfallPath, setTowerfallPath] = useState<string>(null);
+  const [alert, setAlert] =
+    useState<{ message: string; color: AlertColor }>(null);
 
   useEffect(() => {
     setTowerfallPath(null);
@@ -28,7 +32,26 @@ const Main: React.FC = () => {
       <ActionButtons
         towerfallPath={towerfallPath}
         towerfallVersion={towerfallVersion}
+        onPatchSuccess={() =>
+          setAlert({ message: 'Patch Successful', color: 'success' })
+        }
+        onPatchFail={() =>
+          setAlert({ message: 'Patch Failed', color: 'error' })
+        }
+        onUnpatchSuccess={() =>
+          setAlert({
+            message: 'Unpatch Successful',
+            color: 'success',
+          })
+        }
+        onUnpatchFail={() =>
+          setAlert({
+            message: 'Unpatch Failed',
+            color: 'success',
+          })
+        }
       />
+      <Alert alert={alert} onClose={() => setAlert(null)} />
     </div>
   );
 };

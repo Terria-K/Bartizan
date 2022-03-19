@@ -37,6 +37,10 @@ describe('Main', () => {
     );
   };
 
+  const withPatchReturning = (result: boolean) => {
+    (window.api.patch as jest.Mock).mockReturnValue(Promise.resolve(result));
+  };
+
   it('does not check for default installation if 8-player selected and shows browse button', async () => {
     render(<Main />);
 
@@ -298,5 +302,49 @@ describe('Main', () => {
     selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), versionItch);
 
     expect(await screen.findByText(itchPath)).toBeTruthy();
+  });
+
+  it('shows success message if api.patch returns true', async () => {
+    const pathToGame = `/Path/To/Game`;
+    withCheckForDefaultInstallationReturning(pathToGame);
+    withCheckPatchabilityReturning({ canPatch: true, canUnpatch: false });
+    withPatchReturning(true);
+
+    render(<Main />);
+
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      versionSteam
+    );
+
+    userEvent.click(
+      await screen.findByTestId(testIds.DEFAULT_INSTALLATION_BUTTON)
+    );
+
+    userEvent.click(await screen.findByText('Patch'));
+
+    expect(await screen.findByText(/success/i)).toBeTruthy();
+  });
+
+  it('shows failure message if api.patch returns false', async () => {
+    const pathToGame = `/Path/To/Game`;
+    withCheckForDefaultInstallationReturning(pathToGame);
+    withCheckPatchabilityReturning({ canPatch: true, canUnpatch: false });
+    withPatchReturning(false);
+
+    render(<Main />);
+
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      versionSteam
+    );
+
+    userEvent.click(
+      await screen.findByTestId(testIds.DEFAULT_INSTALLATION_BUTTON)
+    );
+
+    userEvent.click(await screen.findByText('Patch'));
+
+    expect(await screen.findByText(/fail/i)).toBeTruthy();
   });
 });
