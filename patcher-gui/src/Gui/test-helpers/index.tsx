@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+// Select an option in a MUI Select component
 export function selectOption(
   element: HTMLElement,
   optionText: RegExp | string

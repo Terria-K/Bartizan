@@ -25,22 +25,18 @@ const FileBrowser: React.FC<FileBrowserProps> = ({
   const previousVersion: Version = usePrevious<Version>(towerfallVersion);
 
   useEffect(() => {
-    if (
-      towerfallVersion?.startsWith('4-player') &&
-      towerfallVersion !== previousVersion
-    ) {
-      window.api
-        .checkForDefaultInstallation(towerfallVersion)
-        .then((path: string) => {
-          setDefaultInstallationPath(path);
-          if (typeof path === 'string' && installation === 'default') {
-            onChange(path);
-          } else if (installation === 'other' && otherInstallationPath) {
-            onChange(otherInstallationPath);
-          }
-        });
-    } else if (!towerfallVersion) {
+    if (towerfallVersion !== previousVersion) {
+      setInstallation(null);
+      setDefaultInstallationPath(null);
+      setOtherInstallationPath(null);
       onChange(null);
+      if (towerfallVersion?.startsWith('4-player')) {
+        window.api
+          .checkForDefaultInstallation(towerfallVersion)
+          .then((path: string) => {
+            setDefaultInstallationPath(path);
+          });
+      }
     }
   }, [
     installation,

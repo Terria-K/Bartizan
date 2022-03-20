@@ -173,52 +173,6 @@ describe('Main', () => {
     expect(unpatchButton).toHaveAttribute('disabled');
   });
 
-  it('shows custom path when user switches back to 4-player-steam having selecting one earlier and deselecting 4-player-steam', async () => {
-    const pathToGame = `/Path/To/Game`;
-    withCheckForDefaultInstallationReturning(pathToGame);
-    withCheckPatchabilityReturning({ canPatch: true, canUnpatch: true });
-
-    render(<Main />);
-
-    // Select 4-player-steam
-    selectOption(
-      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
-      versionSteam
-    );
-
-    // Select other installation
-    userEvent.click(
-      await screen.findByTestId(testIds.OTHER_INSTALLATION_BUTTON)
-    );
-
-    // Browse and select path
-    const otherPathToGame = `/Other/Path`;
-    (window.api.browseFiles as jest.Mock).mockImplementation(() =>
-      Promise.resolve(otherPathToGame)
-    );
-    userEvent.click(
-      screen.getByTestId(testIds.BROWSE_FOR_OTHER_INSTALLATION_BUTTON)
-    );
-
-    // Select path appears on the screen
-    expect(await screen.findByText(otherPathToGame)).toBeTruthy();
-
-    // De-select 4-player-steam
-    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), versionNone);
-
-    // Select path appears on the screen
-    await expect(screen.findByText(otherPathToGame)).rejects.toThrow();
-
-    // Re-select 4-player-steam
-    selectOption(
-      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
-      versionSteam
-    );
-
-    // Select path reappears on the screen
-    expect(await screen.findByText(otherPathToGame)).toBeTruthy();
-  });
-
   it('shows file browse button if Itch version selected and no path is returned', async () => {
     withCheckForDefaultInstallationReturning('');
 
@@ -403,5 +357,60 @@ describe('Main', () => {
 
     expect(await screen.findByText(/fail/i)).toBeTruthy();
     expect(screen.queryByText('Unpatch')).not.toHaveAttribute('disabled');
+  });
+
+  it('shows installations selector again with no value selected when switching between 4-player versions', async () => {
+    const pathToGame = `/Path/To/Game`;
+    withCheckForDefaultInstallationReturning(pathToGame);
+    withCheckPatchabilityReturning({ canPatch: true, canUnpatch: true });
+
+    render(<Main />);
+
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      versionSteam
+    );
+
+    userEvent.click(
+      await screen.findByTestId(testIds.DEFAULT_INSTALLATION_BUTTON)
+    );
+
+    expect(await screen.findByText('Patch')).toBeTruthy();
+
+    const pathToGame2 = `/Path/To/Game2`;
+    withCheckForDefaultInstallationReturning(pathToGame2);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), versionItch);
+
+    expect(await screen.findByText(pathToGame2)).toBeTruthy();
+    expect(screen.queryByText('Patch')).toBeFalsy();
+  });
+
+  it('does not maintain custom path when switching between 4-player versions', async () => {
+    const pathToGame = `/Path/To/Game`;
+    withCheckForDefaultInstallationReturning(pathToGame);
+    withCheckPatchabilityReturning({ canPatch: true, canUnpatch: true });
+
+    render(<Main />);
+
+    selectOption(
+      screen.getByTestId(testIds.VERSION_SELECT_INPUT),
+      versionSteam
+    );
+
+    userEvent.click(
+      await screen.findByTestId(testIds.OTHER_INSTALLATION_BUTTON)
+    );
+
+    const selectedPath = `/Other/Path`;
+    withBrowseFilesReturning(selectedPath);
+
+    const otherDefaultPath = `Other/Path/To/Game`;
+    withCheckForDefaultInstallationReturning(otherDefaultPath);
+    selectOption(screen.getByTestId(testIds.VERSION_SELECT_INPUT), versionItch);
+
+    expect(await screen.findByText(otherDefaultPath)).toBeTruthy();
+    expect(screen.queryByText(selectedPath)).toBeFalsy();
+    expect(screen.queryByText(pathToGame)).toBeFalsy();
+    expect(screen.queryByText('Patch')).toBeFalsy();
   });
 });
