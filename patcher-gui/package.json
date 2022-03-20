@@ -18,6 +18,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
+        "icon": "icons/icon",
         "extraResource": [
           "patchFiles"
         ]
