@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { spawnSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 
@@ -27,23 +27,19 @@ export const getPatchFilesPath = () => {
   if (process.env.NODE_ENV === 'development') {
     return path.normalize(path.join(__dirname, '..', '..', 'patchFiles'));
   } else {
-    return process.resourcesPath;
+    return path.join(process.resourcesPath, 'patchFiles');
   }
 };
 
-export function execShellCommand(cmd: string): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    try {
-      exec(cmd, { maxBuffer: 1024 * 500 }, (error) => {
-        if (error) {
-          console.error(error);
-          reject();
-        }
-        resolve(true);
-      });
-    } catch (error) {
-      console.error(error);
-      reject();
-    }
-  });
+// export function execShellCommand(cmd: string): Promise<boolean> {
+export function execShellCommand(cmd: string, args: string[]): Buffer {
+  const process = spawnSync(cmd, args);
+  if (process.error) {
+    throw process.error;
+  }
+  return process.stdout;
+}
+
+export function escapeFilePath(filePath: string): string {
+  return `"${filePath.replace('"', String.raw`\"`)}"`;
 }

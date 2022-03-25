@@ -62,17 +62,20 @@ export async function patchGame(
         );
       }
       // Patch EXE
-      const commandPrefix = isMac() ? 'mono ' : '';
-      const patcherPath = path.join(patchFilesPath, 'Patcher.exe');
-      const patcherArgs = [
+      const command = isMac()
+        ? 'mono'
+        : path.join(patchFilesPath, 'Patcher.exe');
+      const args = [];
+      if (isMac()) {
+        args.push(path.join(patchFilesPath, 'Patcher.exe'));
+      }
+      args.push.apply(args, [
         'patch-exe',
         path.join(patchFilesPath, `Mod-${towerfallVersion}.dll`),
         pathToExe,
         path.join(pathToExe, 'TowerFall.exe'),
-      ];
-      await execShellCommand(
-        `${commandPrefix}${patcherPath} ${patcherArgs.join(' ')}`
-      );
+      ]);
+      execShellCommand(command, args);
       // Copy Mod.dll file
       fs.copyFileSync(
         path.join(patchFilesPath, `Mod-${towerfallVersion}.dll`),
