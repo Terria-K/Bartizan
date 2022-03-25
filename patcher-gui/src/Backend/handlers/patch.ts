@@ -31,6 +31,9 @@ export async function unpatchGame(
           path.join(pathToExe, 'TowerFall-Original.exe'),
           path.join(pathToExe, 'TowerFall.exe')
         );
+        fs.unlinkSync(path.join(pathToExe, 'Mod.dll'));
+        fs.unlinkSync(path.join(pathToExe, 'Content', 'Atlas', 'modAtlas.xml'));
+        fs.unlinkSync(path.join(pathToExe, 'Content', 'Atlas', 'modAtlas.png'));
         return Promise.resolve(true);
       }
     }
