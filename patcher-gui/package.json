@@ -104,6 +104,7 @@
     "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.5.0",
     "electron-squirrel-startup": "^1.0.0",
+    "fix-path": "^4.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   }

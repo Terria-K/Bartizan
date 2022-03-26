@@ -1,6 +1,7 @@
 import { spawnSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
+import fixPath from 'fix-path';
 
 export function isMac() {
   return process.platform === 'darwin';
@@ -31,8 +32,8 @@ export const getPatchFilesPath = () => {
   }
 };
 
-// export function execShellCommand(cmd: string): Promise<boolean> {
-export function execShellCommand(cmd: string, args: string[]): Buffer {
+export function execShellCommand(cmd: string, args: string[] = []): Buffer {
+  fixPath();
   const process = spawnSync(cmd, args);
   if (process.error) {
     throw process.error;
