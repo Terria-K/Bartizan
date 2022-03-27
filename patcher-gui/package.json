@@ -11,7 +11,7 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "test": "jest --config jest.config.js --verbose --forceExit --runInBand --coverage=false --env=jsdom",
-    "copy-patch-files": "./bin/copy-patch-files.js"
+    "copy-patch-files": "node ./bin/copy-patch-files.js"
   },
   "keywords": [],
   "license": "MIT",
