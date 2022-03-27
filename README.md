@@ -109,8 +109,6 @@ You'll need to copy the following dll files to `bin`.
 
 These files can be found in `c:\Windows\Microsoft.NET\assembly\GAC_32` and `c:\Windows\Microsoft.NET\assembly\GAC_MSIL`.
 
-Make sure to select the build configs with the `-windows` suffix
-
 # Original Readme
 
 A mod framework for [TowerFall Ascension](http://www.towerfall-game.com/) (copyright 2013 Matt Thorson, obviously).
