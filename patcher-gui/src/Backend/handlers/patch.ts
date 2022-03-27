@@ -5,6 +5,7 @@ import {
   getPathToTowerfallExe,
   execShellCommand,
   getPatchFilesPath,
+  unlinkIfExists,
 } from '../utils';
 import { Version } from '../../types';
 
@@ -31,9 +32,13 @@ export async function unpatchGame(
           path.join(pathToExe, 'TowerFall-Original.exe'),
           path.join(pathToExe, 'TowerFall.exe')
         );
-        fs.unlinkSync(path.join(pathToExe, 'Mod.dll'));
-        fs.unlinkSync(path.join(pathToExe, 'Content', 'Atlas', 'modAtlas.xml'));
-        fs.unlinkSync(path.join(pathToExe, 'Content', 'Atlas', 'modAtlas.png'));
+        unlinkIfExists(path.join(pathToExe, 'Mod.dll'));
+        unlinkIfExists(
+          path.join(pathToExe, 'Content', 'Atlas', 'modAtlas.xml')
+        );
+        unlinkIfExists(
+          path.join(pathToExe, 'Content', 'Atlas', 'modAtlas.png')
+        );
         return Promise.resolve(true);
       }
     }

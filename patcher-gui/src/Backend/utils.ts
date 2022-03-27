@@ -41,6 +41,12 @@ export function execShellCommand(cmd: string, args: string[] = []): Buffer {
   return process.stdout;
 }
 
+export function unlinkIfExists(path: string) {
+  if (fs.existsSync(path)) {
+    return fs.unlinkSync(path);
+  }
+}
+
 export function escapeFilePath(filePath: string): string {
   return `"${filePath.replace('"', String.raw`\"`)}"`;
 }
