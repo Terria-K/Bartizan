@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using System.Collections.Generic;
 using System;
+#if (!EIGHT_PLAYER)
+    using TowerFall.Editor;
+#endif
 
 namespace Mod
 {
@@ -42,6 +45,12 @@ namespace Mod
                     return new WarlordRoundLogic(session);
                 case Modes.LevelTest:
                     return new LevelTestRoundLogic(session);
+                #if (!EIGHT_PLAYER)
+                    case Modes.EditorTest:
+                        return new EditorTestRoundLogic (session);
+                    case Modes.EditorPreview:
+                        return new SubmitPreviewRoundLogic (session);
+                #endif
                 case RespawnRoundLogic.Mode:
                     return new RespawnRoundLogic(session);
                 case MobRoundLogic.Mode:
