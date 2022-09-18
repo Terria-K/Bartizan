@@ -69,37 +69,69 @@
     <Reference Include="BaseTowerFall-4-player-itch">
       <HintPath>..\bin\BaseTowerFall-4-player-itch.exe</HintPath>
     </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\packages\Mono.Cecil.0.10.4\lib\net40\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb">
+      <HintPath>..\packages\Mono.Cecil.0.10.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb">
+      <HintPath>..\packages\Mono.Cecil.0.10.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks">
+      <HintPath>..\packages\Mono.Cecil.0.10.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMod.Utils">
+      <HintPath>..\packages\MonoMod.Utils.22.5.1.1\lib\net35\MonoMod.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMod">
+      <HintPath>..\packages\MonoMod.22.5.1.1\lib\net35\MonoMod.exe</HintPath>
+    </Reference>
+    <Reference Include="MonoMod.Common">
+      <HintPath>..\packages\MonoMod.Common.22.6.3.1\lib\net35\MonoMod.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\New\ArcherColor.cs" />
+    <!-- <Compile Include="Classes\New\ArcherColor.cs" />
     <Compile Include="Classes\New\GhostDeathInterface.cs" />
     <Compile Include="Classes\New\MobRoundLogic.cs" />
     <Compile Include="Classes\New\MyGlobals.cs" />
     <Compile Include="Classes\New\MyMatchStats.cs" />
     <Compile Include="Classes\New\MyOptionsButton.cs" />
+    <Compile Include="Classes\New\PlayerGhostShield.cs" />
     <Compile Include="Classes\New\PlayerNames.cs" />
     <Compile Include="Classes\New\RespawnRoundLogic.cs" />
     <Compile Include="Classes\New\RosterButtonCreator.cs" />
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
-    <Compile Include="Classes\New\TrackerApiClient.cs" />
-    <Compile Include="Classes\Patched\MyArrow.cs" />
+    <Compile Include="Classes\New\TrackerApiClient.cs" /> -->
+    <!-- <Compile Include="Classes\Patched\MyArrow.cs" />
     <Compile Include="Classes\Patched\MyGameplayLayer.cs" />
+    <Compile Include="Classes\Patched\MyHeadhuntersRoundLogic.cs" />
+    <Compile Include="Classes\Patched\MyLastManStandingRoundLogic.cs" />
     <Compile Include="Classes\Patched\MyLevel.cs" />
     <Compile Include="Classes\Patched\MyMainMenu.cs" />
     <Compile Include="Classes\Patched\MyMapScene.cs" />
     <Compile Include="Classes\Patched\MyMatchSettings.cs" />
     <Compile Include="Classes\Patched\MyMatchVariants.cs" />
+    <Compile Include="Classes\Patched\MyMirrorPickup.cs" />
+    <Compile Include="Classes\Patched\MyOrbPickup.cs" />
     <Compile Include="Classes\Patched\MyPlayer.cs" />
     <Compile Include="Classes\Patched\MyPlayerCorpse.cs" />
     <Compile Include="Classes\Patched\MyPlayerGhost.cs" />
     <Compile Include="Classes\Patched\MyPlayerIndicator.cs" />
+    <Compile Include="Classes\Patched\MyQuestSpawnPortal.cs" />
     <Compile Include="Classes\Patched\MyReplayFrame.cs" />
     <Compile Include="Classes\Patched\MyRollcallElement.cs" />
     <Compile Include="Classes\Patched\MyRoundLogic.cs" />
     <Compile Include="Classes\Patched\MyScene.cs" />
     <Compile Include="Classes\Patched\MyScreenTitle.cs" />
     <Compile Include="Classes\Patched\MySession.cs" />
+    <Compile Include="Classes\Patched\MyShieldPickup.cs" />
+    <Compile Include="Classes\Patched\MySpeedBootsPickup.cs" />
+    <Compile Include="Classes\Patched\MyTeamDeathmatchRoundLogic.cs" /> -->
     <Compile Include="Classes\Patched\MyTFGame.cs" />
+    <!-- <Compile Include="Classes\Patched\MyTreasureChest.cs" />
+    <Compile Include="Classes\Patched\MyTreasureSpawner.cs" />
     <Compile Include="Classes\Patched\MyVersusCoinButton.cs" />
     <Compile Include="Classes\Patched\MyVersusMatchResults.cs" />
     <Compile Include="Classes\Patched\MyVersusModeButton.cs" />
@@ -107,20 +139,9 @@
     <Compile Include="Classes\Patched\MyVersusRoundResults.cs" />
     <Compile Include="Classes\Patched\MyXGamepadData.cs" />
     <Compile Include="Classes\Replaced\MyChalice.cs" />
-    <Compile Include="Classes\Replaced\MyChalicePad.cs" />
     <Compile Include="Classes\Replaced\MyChaliceGhost.cs" />
-    <Compile Include="Classes\Patched\MyOrbPickup.cs" />
-    <Compile Include="Classes\Replaced\MyTeamReviver.cs" />
-    <Compile Include="Classes\New\PlayerGhostShield.cs" />
-    <Compile Include="Classes\Patched\MyShieldPickup.cs" />
-    <Compile Include="Classes\Patched\MyTreasureChest.cs" />
-    <Compile Include="Classes\Patched\MyTreasureSpawner.cs" />
-    <Compile Include="Classes\Patched\MySpeedBootsPickup.cs" />
-    <Compile Include="Classes\Patched\MyMirrorPickup.cs" />
-    <Compile Include="Classes\Patched\MyTeamDeathmatchRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MyHeadhuntersRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MyLastManStandingRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MyQuestSpawnPortal.cs" />
+    <Compile Include="Classes\Replaced\MyChalicePad.cs" />
+    <Compile Include="Classes\Replaced\MyTeamReviver.cs" /> -->
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -202,7 +223,9 @@
   <Target Name="AfterBuild">
     <Copy SourceFiles=".\Atlas\modAtlas.png" DestinationFolder="..\bin\originals\$(Configuration)\Content\Atlas" />
     <Copy SourceFiles=".\Atlas\modAtlas.xml" DestinationFolder="..\bin\originals\$(Configuration)\Content\Atlas" />
-    <Exec Command="..\bin\Patcher.exe patch-exe Mod.dll originals\$(Configuration) TowerFall.exe" WorkingDirectory="..\bin" />
+    <Copy SourceFiles="..\bin\Mod.dll" DestinationFolder="..\bin\TowerFall.Mod.mm.dll" />
+    <Copy SourceFiles="..\bin\originals\$(Configuration)\TowerFall.exe" DestinationFolder="..\bin\" />
+    <Exec Command="..\bin\MonoMod.exe TowerFall.exe" WorkingDirectory="..\bin" />
     <Exec Command="..\bin\Patcher.exe patch-resources originals\$(Configuration)" WorkingDirectory="..\bin" />
     <Exec Command="..\BuildScripts\prepare-build-$(Configuration)" WorkingDirectory="..\BuildScripts" />
   </Target>

@@ -1,3 +1,6 @@
+#pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
+
+using MonoMod;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
@@ -11,23 +14,31 @@ using System.Threading.Tasks;
 using Patcher;
 using TowerFall;
 
-namespace Mod
+namespace TowerFall
 {
-  [Patch]
-  public class MyTFGame : TFGame
+  class patch_TFGame : TFGame
   {
     public static Atlas ModAtlas {
       get;
       set;
     }
 
-    public MyTFGame(bool noIntro) : base(noIntro)
-    {
+    public patch_TFGame(bool noIntro) : base(noIntro) {
+      // no-op. MonoMod ignores this - we only need this to make the compiler shut up.
     }
 
-    public override void Initialize ()
+    // Skip intro
+    public extern void orig_ctor(bool noIntro);
+    [MonoModConstructor]
+    public void ctor(bool noIntro) {
+      orig_ctor(noIntro);
+      this.noIntro = true;
+    }
+
+    public extern void orig_Initialize();
+    public void patch_Initialize()
     {
-      base.Initialize();
+      orig_Initialize();
       // MInput.GamepadVibration does not exist in 8-Player Windows
       #if (!(EIGHT_PLAYER && WINDOWS))
         // Fix bug where rumble always initializes to enabled
@@ -35,14 +46,15 @@ namespace Mod
       #endif
     }
 
-    public override void LoadContent ()
+    public extern void orig_LoadContent();
+    public void patch_LoadContent()
     {
-      base.LoadContent();
+      orig_LoadContent();
 
-      if (MyTFGame.ModAtlas == null) {
-          MyTFGame.ModAtlas = new Atlas ("Atlas/modAtlas.xml", "Atlas/modAtlas.png", true);
+      if (patch_TFGame.ModAtlas == null) {
+        patch_TFGame.ModAtlas = new Atlas ("Atlas/modAtlas.xml", "Atlas/modAtlas.png", true);
       } else {
-          MyTFGame.ModAtlas.Load ();
+        patch_TFGame.ModAtlas.Load ();
       }
     }
   }
