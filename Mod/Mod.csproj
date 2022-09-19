@@ -135,7 +135,8 @@
     <Compile Include="Classes\Patched\MyShieldPickup.cs" />
     <Compile Include="Classes\Patched\MySpeedBootsPickup.cs" />
     <Compile Include="Classes\Patched\MyTeamDeathmatchRoundLogic.cs" /> -->
-    <Compile Include="Classes\Patched\MyTFGame.cs" />
+    <Compile Include="Classes\Patched\TFGame.cs" />
+    <Compile Include="Classes\Patched\XGamepadData.cs" />
     <!-- <Compile Include="Classes\Patched\MyTreasureChest.cs" />
     <Compile Include="Classes\Patched\MyTreasureSpawner.cs" />
     <Compile Include="Classes\Patched\MyVersusCoinButton.cs" />
@@ -143,7 +144,6 @@
     <Compile Include="Classes\Patched\MyVersusModeButton.cs" />
     <Compile Include="Classes\Patched\MyVersusPlayerMatchResults.cs" />
     <Compile Include="Classes\Patched\MyVersusRoundResults.cs" />
-    <Compile Include="Classes\Patched\MyXGamepadData.cs" />
     <Compile Include="Classes\Replaced\MyChalice.cs" />
     <Compile Include="Classes\Replaced\MyChaliceGhost.cs" />
     <Compile Include="Classes\Replaced\MyChalicePad.cs" />
@@ -229,8 +229,8 @@
   <Target Name="AfterBuild">
     <Copy SourceFiles=".\Atlas\modAtlas.png" DestinationFolder="..\bin\originals\$(Configuration)\Content\Atlas" />
     <Copy SourceFiles=".\Atlas\modAtlas.xml" DestinationFolder="..\bin\originals\$(Configuration)\Content\Atlas" />
-    <Copy SourceFiles="..\bin\Mod.dll" DestinationFolder="..\bin\TowerFall.Mod.mm.dll" />
     <Copy SourceFiles="..\bin\originals\$(Configuration)\TowerFall.exe" DestinationFolder="..\bin\" />
+    <Exec Command="cp ..\bin\Mod.dll ..\bin\TowerFall.Mod.mm.dll" WorkingDirectory="..\bin" />
     <Exec Command="..\bin\MonoMod.exe TowerFall.exe" WorkingDirectory="..\bin" />
     <Exec Command="..\bin\Patcher.exe patch-resources originals\$(Configuration)" WorkingDirectory="..\bin" />
     <Exec Command="..\BuildScripts\prepare-build-$(Configuration)" WorkingDirectory="..\BuildScripts" />
