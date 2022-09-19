@@ -98,14 +98,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <!-- <Compile Include="Classes\New\ArcherColor.cs" />
+    <!--
     <Compile Include="Classes\New\GhostDeathInterface.cs" />
     <Compile Include="Classes\New\MobRoundLogic.cs" />
-    <Compile Include="Classes\New\MyGlobals.cs" />
     <Compile Include="Classes\New\MyMatchStats.cs" />
     <Compile Include="Classes\New\MyOptionsButton.cs" />
     <Compile Include="Classes\New\PlayerGhostShield.cs" />
-    <Compile Include="Classes\New\PlayerNames.cs" />
     <Compile Include="Classes\New\RespawnRoundLogic.cs" />
     <Compile Include="Classes\New\RosterButtonCreator.cs" />
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
@@ -129,12 +127,15 @@
     <Compile Include="Classes\Patched\MyReplayFrame.cs" />
     <Compile Include="Classes\Patched\MyRollcallElement.cs" />
     <Compile Include="Classes\Patched\MyRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MyScene.cs" />
     <Compile Include="Classes\Patched\MyScreenTitle.cs" />
     <Compile Include="Classes\Patched\MySession.cs" />
     <Compile Include="Classes\Patched\MyShieldPickup.cs" />
     <Compile Include="Classes\Patched\MySpeedBootsPickup.cs" />
     <Compile Include="Classes\Patched\MyTeamDeathmatchRoundLogic.cs" /> -->
+    <Compile Include="Classes\New\ArcherColor.cs" />
+    <Compile Include="Classes\New\MyGlobals.cs" />
+    <Compile Include="Classes\New\PlayerNames.cs" />
+    <Compile Include="Classes\Patched\Scene.cs" />
     <Compile Include="Classes\Patched\TFGame.cs" />
     <Compile Include="Classes\Patched\XGamepadData.cs" />
     <!-- <Compile Include="Classes\Patched\MyTreasureChest.cs" />
