@@ -1,7 +1,9 @@
+#pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
+
 // Currently the whole file is dedicated to adding the roster button, so skip if no stat tracking
 #if (STAT_TRACKING)
-using TowerFall;
-using Patcher;
+using MonoMod;
+using Mod;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,24 +14,31 @@ using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 
-namespace Mod
+namespace TowerFall
 {
-  [Patch]
-  class MyMainMenu : MainMenu
+  class patch_MainMenu : MainMenu
   {
     public const int ROSTER = 16;
 
     private TrackerApiClient trackerClient;
 
-    public MyMainMenu (MenuState state) : base(state)
+    public patch_MainMenu(MenuState state) : base(state) {
+      // no-op. MonoMod ignores this
+    }
+
+    public extern void orig_ctor(MenuState state);
+    [MonoModConstructor]
+    public void ctor(MenuState state)
     {
+      orig_ctor(state);
+
       trackerClient = new TrackerApiClient();
       if (trackerClient.IsSetup()) {
         trackerClient.GetRoster();
       }
     }
 
-    public override void CreateMain ()
+    public void patch_CreateMain ()
     {
       BladeButton rosterButton = null;
       BladeButton quitButton = null;
@@ -107,7 +116,7 @@ namespace Mod
       MainMenu.CurrentMatchSettings = null;
     }
 
-    public override void CallStateFunc (string name, MenuState state)
+    public void patch_CallStateFunc (string name, MenuState state)
     {
       if (state == (MenuState)ROSTER) {
         if (name == "Create") {
