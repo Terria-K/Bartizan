@@ -112,7 +112,6 @@
     <Compile Include="Classes\Patched\MyLevel.cs" />
     <Compile Include="Classes\Patched\MyMapScene.cs" />
     <Compile Include="Classes\Patched\MyMatchSettings.cs" />
-    <Compile Include="Classes\Patched\MyMatchVariants.cs" />
     <Compile Include="Classes\Patched\MyMirrorPickup.cs" />
     <Compile Include="Classes\Patched\MyOrbPickup.cs" />
     <Compile Include="Classes\Patched\MyPlayer.cs" />
@@ -134,6 +133,7 @@
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
     <Compile Include="Classes\New\TrackerApiClient.cs" />
     <Compile Include="Classes\Patched\MainMenu.cs" />
+    <Compile Include="Classes\Patched\MatchVariants.cs" />
     <Compile Include="Classes\Patched\OptionsButton.cs" />
     <Compile Include="Classes\Patched\Scene.cs" />
     <Compile Include="Classes\Patched\ScreenTitle.cs" />
