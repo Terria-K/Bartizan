@@ -105,7 +105,7 @@
     <Compile Include="Classes\New\PlayerGhostShield.cs" />
     <Compile Include="Classes\New\RespawnRoundLogic.cs" />
      -->
-    <!-- <Compile Include="Classes\Patched\MyArrow.cs" />
+    <!--
     <Compile Include="Classes\Patched\MyGameplayLayer.cs" />
     <Compile Include="Classes\Patched\MyHeadhuntersRoundLogic.cs" />
     <Compile Include="Classes\Patched\MyLastManStandingRoundLogic.cs" />
@@ -132,6 +132,7 @@
     <Compile Include="Classes\New\RosterButtonCreator.cs" />
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
     <Compile Include="Classes\New\TrackerApiClient.cs" />
+    <Compile Include="Classes\Patched\Arrow.cs" />
     <Compile Include="Classes\Patched\MainMenu.cs" />
     <Compile Include="Classes\Patched\MatchVariants.cs" />
     <Compile Include="Classes\Patched\OptionsButton.cs" />
