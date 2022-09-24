@@ -1,17 +1,19 @@
-using Patcher;
+#pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
+
 using TowerFall;
 using Monocle;
+using Mod;
 using System;
 using System.Collections.Generic;
 
-namespace Mod
+namespace TowerFall
 {
-  [Patch]
-  public class MyGameplayLayer : GameplayLayer
+  public class patch_GameplayLayer : GameplayLayer
   {
-    public override void BatchedRender ()
+    public extern void orig_BatchedRender();
+    public void patch_BatchedRender ()
     {
-      base.BatchedRender();
+      orig_BatchedRender();
 
       List<Entity> teamRevivers = base.Scene[(GameTags)MyGlobals.GameTags.MyTeamReviver];
       for (int i = 0; i < teamRevivers.Count; i++) {

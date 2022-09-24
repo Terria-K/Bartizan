@@ -99,47 +99,48 @@
   </ItemGroup>
   <ItemGroup>
     <!--
-    <Compile Include="Classes\New\GhostDeathInterface.cs" />
-    <Compile Include="Classes\New\MobRoundLogic.cs" />
-    <Compile Include="Classes\New\MyMatchStats.cs" />
-    <Compile Include="Classes\New\PlayerGhostShield.cs" />
-    <Compile Include="Classes\New\RespawnRoundLogic.cs" />
-     -->
-    <!--
-    <Compile Include="Classes\Patched\MyGameplayLayer.cs" />
-    <Compile Include="Classes\Patched\MyHeadhuntersRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MyLastManStandingRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MyLevel.cs" />
     <Compile Include="Classes\Patched\MyMapScene.cs" />
     <Compile Include="Classes\Patched\MyMatchSettings.cs" />
     <Compile Include="Classes\Patched\MyMirrorPickup.cs" />
     <Compile Include="Classes\Patched\MyOrbPickup.cs" />
-    <Compile Include="Classes\Patched\MyPlayer.cs" />
     <Compile Include="Classes\Patched\MyPlayerCorpse.cs" />
-    <Compile Include="Classes\Patched\MyPlayerGhost.cs" />
     <Compile Include="Classes\Patched\MyPlayerIndicator.cs" />
     <Compile Include="Classes\Patched\MyQuestSpawnPortal.cs" />
     <Compile Include="Classes\Patched\MyReplayFrame.cs" />
     <Compile Include="Classes\Patched\MyRollcallElement.cs" />
-    <Compile Include="Classes\Patched\MyRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MySession.cs" />
     <Compile Include="Classes\Patched\MyShieldPickup.cs" />
-    <Compile Include="Classes\Patched\MySpeedBootsPickup.cs" />
-    <Compile Include="Classes\Patched\MyTeamDeathmatchRoundLogic.cs" /> -->
+    <Compile Include="Classes\Patched\MySpeedBootsPickup.cs" /> -->
     <Compile Include="Classes\New\ArcherColor.cs" />
+    <Compile Include="Classes\New\GhostDeathInterface.cs" />
+    <Compile Include="Classes\New\MobRoundLogic.cs" />
     <Compile Include="Classes\New\MyGlobals.cs" />
+    <Compile Include="Classes\New\MyMatchStats.cs" />
+    <Compile Include="Classes\New\PlayerGhostShield.cs" />
     <Compile Include="Classes\New\PlayerNames.cs" />
+    <Compile Include="Classes\New\RespawnRoundLogic.cs" />
     <Compile Include="Classes\New\RosterButtonCreator.cs" />
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
     <Compile Include="Classes\New\TrackerApiClient.cs" />
     <Compile Include="Classes\Patched\Arrow.cs" />
+    <Compile Include="Classes\Patched\HeadhuntersRoundLogic.cs" />
+    <Compile Include="Classes\Patched\GameplayLayer.cs" />
+    <Compile Include="Classes\Patched\Level.cs" />
+    <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
     <Compile Include="Classes\Patched\MainMenu.cs" />
     <Compile Include="Classes\Patched\MatchVariants.cs" />
     <Compile Include="Classes\Patched\OptionsButton.cs" />
+    <Compile Include="Classes\Patched\Player.cs" />
+    <Compile Include="Classes\Patched\PlayerCorpse.cs" />
+    <Compile Include="Classes\Patched\PlayerGhost.cs" />
+    <Compile Include="Classes\Patched\RoundLogic.cs" />
     <Compile Include="Classes\Patched\Scene.cs" />
     <Compile Include="Classes\Patched\ScreenTitle.cs" />
+    <Compile Include="Classes\Patched\Session.cs" />
+    <Compile Include="Classes\Patched\TeamDeathmatchRoundLogic.cs" />
+    <Compile Include="Classes\Patched\TeamReviver.cs" />
     <Compile Include="Classes\Patched\TFGame.cs" />
     <Compile Include="Classes\Patched\XGamepadData.cs" />
+    <Compile Include="Classes\Replaced\MyTeamReviver.cs" />
     <!-- <Compile Include="Classes\Patched\MyTreasureChest.cs" />
     <Compile Include="Classes\Patched\MyTreasureSpawner.cs" />
     <Compile Include="Classes\Patched\MyVersusCoinButton.cs" />
@@ -150,7 +151,7 @@
     <Compile Include="Classes\Replaced\MyChalice.cs" />
     <Compile Include="Classes\Replaced\MyChaliceGhost.cs" />
     <Compile Include="Classes\Replaced\MyChalicePad.cs" />
-    <Compile Include="Classes\Replaced\MyTeamReviver.cs" /> -->
+     -->
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

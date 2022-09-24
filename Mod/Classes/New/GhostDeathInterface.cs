@@ -2,8 +2,8 @@
 using TowerFall;
 namespace Mod
 {
-    public interface GhostDeathInterface
-    {
-        void OnPlayerGhostDeath(PlayerGhost ghost, PlayerCorpse corpse);
-    }
+  public interface GhostDeathInterface
+  {
+    void OnPlayerGhostDeath(PlayerGhost ghost, PlayerCorpse corpse);
+  }
 }

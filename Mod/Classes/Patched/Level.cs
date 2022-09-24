@@ -1,5 +1,7 @@
-using Patcher;
+#pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
+
 using TowerFall;
+using Mod;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
@@ -8,18 +10,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace Mod
+namespace TowerFall
 {
-  [Patch]
-  public class MyLevel : Level
+  public class patch_Level : Level
   {
-    public MyLevel (Session session, XmlElement xml) : base(session, xml)
+    public patch_Level (Session session, XmlElement xml) : base(session, xml)
     {
+      // no-op. MonoMod ignores this
     }
 
-    public override void Update ()
+    public extern void orig_Update();
+    public void patch_Update()
     {
-      base.Update();
+      orig_Update();
       List<Entity> teamRevivers = base[(GameTags)MyGlobals.GameTags.MyTeamReviver];
       for (int i = 0; i < teamRevivers.Count; i++) {
         MyTeamReviver teamReviver = (MyTeamReviver)(teamRevivers[i]);
