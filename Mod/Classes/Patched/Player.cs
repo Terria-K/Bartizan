@@ -120,21 +120,22 @@ namespace TowerFall
     //     this.Die (DeathCause.Arrow, playerIndex, arrow is BrambleArrow, arrow is LaserArrow).DieByArrow (arrow, ledge);
     // }
 
-    // Will figure out chalice ghost stuff later
-    // public PlayerCorpse Die (DeathCause deathCause, int killerIndex, bool brambled = false, bool laser = false)
-    // {
-    //     if (summonedChaliceGhost) {
-    //         summonedChaliceGhost.Vanish();
-    //         summonedChaliceGhost = null;
-    //     }
+    public extern PlayerCorpse orig_Die(DeathCause deathCause, int killerIndex, bool brambled = false, bool laser = false);
+    public PlayerCorpse patch_Die (DeathCause deathCause, int killerIndex, bool brambled = false, bool laser = false)
+    {
+        // Will figure out chalice ghost stuff later
+        // if (summonedChaliceGhost) {
+        //     summonedChaliceGhost.Vanish();
+        //     summonedChaliceGhost = null;
+        // }
 
-    //     if (Level.Session.MatchSettings.Variants.ReturnAsGhosts[this.PlayerIndex] && !this.diedFromPrism)
-    //     {
-    //         this.spawningGhost = true;
-    //     }
+        if (Level.Session.MatchSettings.Variants.ReturnAsGhosts[this.PlayerIndex] && !this.diedFromPrism)
+        {
+          this.spawningGhost = true;
+        }
 
-    //     return base.Die(deathCause, killerIndex, brambled, laser);
-    // }
+        return orig_Die(deathCause, killerIndex, brambled, laser);
+    }
 
     public extern int orig_DodgingUpdate();
     public int patch_DodgingUpdate()
