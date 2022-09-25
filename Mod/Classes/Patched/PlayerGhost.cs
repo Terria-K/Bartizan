@@ -157,10 +157,10 @@ namespace TowerFall
       }
     }
 
-    public void patch_Hurt(Vector2 force, int damage, int killerIndex, Arrow arrow = null, Explosion explosion = null, ShockCircle shock = null)
+    public override void Hurt(Vector2 force, int damage, int killerIndex, Arrow arrow = null, Explosion explosion = null, ShockCircle shock = null)
     {
       if (shock && killerIndex == this.PlayerIndex) {
-      // ShockCircle shouldn't kill friendly ghosts
+        // ShockCircle shouldn't kill friendly ghosts
         return;
       }
 
@@ -174,14 +174,7 @@ namespace TowerFall
       }
       else
       {
-        if (this.Alive && this.CanHurt)
-        {
-          this.Health -= damage;
-          if (this.Health <= 0)
-          {
-            this.Die(killerIndex, arrow, explosion, shock);
-          }
-        }
+        base.Hurt(force, damage, killerIndex, arrow, explosion, shock);
       }
       this.Speed = force;
     }
