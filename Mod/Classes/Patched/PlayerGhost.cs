@@ -159,9 +159,11 @@ namespace TowerFall
 
     public override void Hurt(Vector2 force, int damage, int killerIndex, Arrow arrow = null, Explosion explosion = null, ShockCircle shock = null)
     {
-      if (shock && killerIndex == this.PlayerIndex) {
-        // ShockCircle shouldn't kill friendly ghosts
-        return;
+      if (((patch_MatchVariants)(base.Level.Session.MatchSettings.Variants)).GhostRevives) {
+        if (shock && killerIndex == this.PlayerIndex) {
+          // ShockCircle shouldn't kill friendly ghosts
+          return;
+        }
       }
 
       if (this.HasShield)
@@ -190,11 +192,11 @@ namespace TowerFall
       List<Entity> players = Level.Session.CurrentLevel[GameTags.Player];
       for (int i = 0; i < players.Count; i++)
       {
-      patch_Player player = (patch_Player)players[i];
+        patch_Player player = (patch_Player)players[i];
         if (player.PlayerIndex == this.PlayerIndex)
         {
-        player.spawningGhost = false;
-        i = players.Count;
+          player.spawningGhost = false;
+          i = players.Count;
         }
       }
     }
@@ -287,49 +289,44 @@ namespace TowerFall
       }
     }
 
-    public extern void orig_Render();
     public void patch_Render()
     {
-      orig_Render();
       this.sprite.Color = this.blendColor * (0.9f + this.alphaSine.Value * 0.1f) * this.InvisOpacity;
+      this.sprite.Scale.X = Math.Abs (this.sprite.Scale.X) * (float)this.Facing;
       this.halo.Color = Color.White * this.InvisOpacity;
 
-      // I looked at this code and thought "why not just call base first and then do the code" so trying that instead
-      // this.sprite.Color = this.blendColor * (0.9f + this.alphaSine.Value * 0.1f) * this.InvisOpacity;
-      // this.sprite.Scale.X = Math.Abs (this.sprite.Scale.X) * (float)this.Facing;
-      // this.halo.Color = Color.White * this.InvisOpacity;
-      // // From LevelEntity::Render(), base of base of base...
-      // this.DoWrapRender ();
-      // if (this.ScreenWrap) {
-      //   int num;
-      //   if (base.X > 210f) {
-      //     base.X -= 420f;
-      //     this.DoWrapRender ();
-      //     base.X += 420f;
-      //     num = -1;
-      //   } else {
-      //     base.X += 420f;
-      //     this.DoWrapRender ();
-      //     base.X -= 420f;
-      //     num = 1;
-      //   }
-      //   int num2;
-      //   if (base.Y > 120f) {
-      //     base.Y -= 240f;
-      //     this.DoWrapRender ();
-      //     base.Y += 240f;
-      //     num2 = -1;
-      //   } else {
-      //     base.Y += 240f;
-      //     this.DoWrapRender ();
-      //     base.Y -= 240f;
-      //     num2 = 1;
-      //   }
-      //   Vector2 position = base.Position;
-      //   base.Position += new Vector2 ((float)(420 * num), (float)(240 * num2));
-      //   this.DoWrapRender ();
-      //   base.Position = position;
-      // }
+      // From LevelEntity::Render(), base of base of base...
+      this.DoWrapRender ();
+      if (this.ScreenWrap) {
+        int num;
+        if (base.X > 210f) {
+          base.X -= 420f;
+          this.DoWrapRender ();
+          base.X += 420f;
+          num = -1;
+        } else {
+          base.X += 420f;
+          this.DoWrapRender ();
+          base.X -= 420f;
+          num = 1;
+        }
+        int num2;
+        if (base.Y > 120f) {
+          base.Y -= 240f;
+          this.DoWrapRender ();
+          base.Y += 240f;
+          num2 = -1;
+        } else {
+          base.Y += 240f;
+          this.DoWrapRender ();
+          base.Y -= 240f;
+          num2 = 1;
+        }
+        Vector2 position = base.Position;
+        base.Position += new Vector2 ((float)(420 * num), (float)(240 * num2));
+        this.DoWrapRender ();
+        base.Position = position;
+      }
     }
   }
 }

@@ -101,15 +101,12 @@
     <!--
     <Compile Include="Classes\Patched\MyMapScene.cs" />
     <Compile Include="Classes\Patched\MyMatchSettings.cs" />
-    <Compile Include="Classes\Patched\MyMirrorPickup.cs" />
-    <Compile Include="Classes\Patched\MyOrbPickup.cs" />
     <Compile Include="Classes\Patched\MyPlayerCorpse.cs" />
     <Compile Include="Classes\Patched\MyPlayerIndicator.cs" />
     <Compile Include="Classes\Patched\MyQuestSpawnPortal.cs" />
     <Compile Include="Classes\Patched\MyReplayFrame.cs" />
     <Compile Include="Classes\Patched\MyRollcallElement.cs" />
-    <Compile Include="Classes\Patched\MyShieldPickup.cs" />
-    <Compile Include="Classes\Patched\MySpeedBootsPickup.cs" /> -->
+     -->
     <Compile Include="Classes\New\ArcherColor.cs" />
     <Compile Include="Classes\New\GhostDeathInterface.cs" />
     <Compile Include="Classes\New\MobRoundLogic.cs" />
@@ -128,7 +125,9 @@
     <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
     <Compile Include="Classes\Patched\MainMenu.cs" />
     <Compile Include="Classes\Patched\MatchVariants.cs" />
+    <Compile Include="Classes\Patched\MirrorPickup.cs" />
     <Compile Include="Classes\Patched\OptionsButton.cs" />
+    <Compile Include="Classes\Patched\OrbPickup.cs" />
     <Compile Include="Classes\Patched\Player.cs" />
     <Compile Include="Classes\Patched\PlayerCorpse.cs" />
     <Compile Include="Classes\Patched\PlayerGhost.cs" />
@@ -136,6 +135,8 @@
     <Compile Include="Classes\Patched\Scene.cs" />
     <Compile Include="Classes\Patched\ScreenTitle.cs" />
     <Compile Include="Classes\Patched\Session.cs" />
+    <Compile Include="Classes\Patched\ShieldPickup.cs" />
+    <Compile Include="Classes\Patched\SpeedBootsPickup.cs" />
     <Compile Include="Classes\Patched\TeamDeathmatchRoundLogic.cs" />
     <Compile Include="Classes\Patched\TeamReviver.cs" />
     <Compile Include="Classes\Patched\TFGame.cs" />

@@ -22,23 +22,6 @@ namespace TowerFall
     public void patch_Update ()
     {
       orig_Update();
-      // if (this.reviverAdded == true) {
-      //   this.reviverAdded = false;
-      //   List<Entity> teamRevivers = base.Level[GameTags.TeamReviver];
-      //   for (int i = 0; i < teamRevivers.Count; i++) {
-      //     TeamReviver teamReviver = (TeamReviver)(teamRevivers[i]);
-      //     if (teamReviver.Corpse.PlayerIndex == this.PlayerIndex) {
-      //       base.Level.Layers[teamReviver.LayerIndex].Remove(teamReviver);
-      //       TeamReviver myTeamReviver = new patch_TeamReviver(
-      //         this,
-      //         TeamReviver.Modes.TeamDeathmatch,
-      //         ((patch_TeamDeathmatchRoundLogic)(base.Level.Session.RoundLogic)).GetRoundEndCounter(),
-      //         ((patch_MatchVariants)(base.Level.Session.MatchSettings.Variants)).GhostRevives
-      //       );
-      //       base.Level.Layers[myTeamReviver.LayerIndex].Add(myTeamReviver, false);
-      //     }
-      //   }
-      // }
       if (this.reviverAdded == true) {
         this.reviverAdded = false;
         List<Entity> teamRevivers = base.Level[GameTags.TeamReviver];
