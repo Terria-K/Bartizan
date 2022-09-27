@@ -119,6 +119,7 @@
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
     <Compile Include="Classes\New\TrackerApiClient.cs" />
     <Compile Include="Classes\Patched\Arrow.cs" />
+    <Compile Include="Classes\Patched\ChaliceGhost.cs" />
     <Compile Include="Classes\Patched\HeadhuntersRoundLogic.cs" />
     <Compile Include="Classes\Patched\GameplayLayer.cs" />
     <Compile Include="Classes\Patched\Level.cs" />
