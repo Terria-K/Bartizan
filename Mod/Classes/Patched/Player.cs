@@ -148,7 +148,7 @@ namespace TowerFall
           lastHatState = HatState.ToString();
         } else if (lastHatState != HatState.ToString()) {
           if (lastHatState != "Crown" && HatState.ToString() == "Crown") {
-            ChalicePad chalicePad = new ChalicePad(ActualPosition, 4);
+            ChalicePad chalicePad = new ChalicePad(ActualPosition, 40);
             Chalice chalice = new Chalice(chalicePad);
             summonedChaliceGhost = new ChaliceGhost(
               PlayerIndex,
