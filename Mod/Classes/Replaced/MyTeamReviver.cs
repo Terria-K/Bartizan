@@ -13,6 +13,8 @@ using Mod;
  * And if I pasted in the original constructor I got this when calling base.Tag():
  *
  * System.NullReferenceException: Object reference not set to an instance of an object
+ *
+ * @TODO try this again, using [MonoModLinkTo("Monocle.Entity", "Tag")]
  */
 
 namespace TowerFall

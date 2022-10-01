@@ -150,10 +150,10 @@ namespace TowerFall
           if (lastHatState != "Crown" && HatState.ToString() == "Crown") {
             ChalicePad chalicePad = new ChalicePad(ActualPosition, 40);
             Chalice chalice = new Chalice(chalicePad);
-            summonedChaliceGhost = new ChaliceGhost(
+            summonedChaliceGhost = new patch_ChaliceGhost(
               PlayerIndex,
-              chalice
-              // ,((patch_MatchVariants)Level.Session.MatchSettings.Variants).ChaliceGhostsHuntGhosts
+              chalice,
+              ((patch_MatchVariants)Level.Session.MatchSettings.Variants).ChaliceGhostsHuntGhosts
             );
             Level.Layers[summonedChaliceGhost.LayerIndex].Add(summonedChaliceGhost, false);
           } else if (summonedChaliceGhost && lastHatState == "Crown" && HatState.ToString() != "Crown") {
