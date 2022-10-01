@@ -1,18 +1,20 @@
-using Patcher;
-using TowerFall;
-using System;
+#pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
 
-namespace Mod
+using System;
+using Mod;
+
+namespace TowerFall
 {
-  [Patch]
-  public class MyMatchSettings : MatchSettings
+  public class patch_MatchSettings : MatchSettings
   {
-    public MyMatchSettings(LevelSystem levelSystem, Modes mode, MatchSettings.MatchLengths matchLength)
+    public patch_MatchSettings(LevelSystem levelSystem, Modes mode, MatchSettings.MatchLengths matchLength)
       : base(levelSystem, mode, matchLength)
     {
+      // no-op. MonoMod ignores this
     }
 
-    public override int GoalScore {
+    public extern int orig_get_GoalScore();
+    public new int GoalScore {
       get {
         switch (this.Mode) {
           case RespawnRoundLogic.Mode:
@@ -24,7 +26,7 @@ namespace Mod
             #endif
             return (int)Math.Ceiling(((float)goals * MatchSettings.GoalMultiplier[(int)this.MatchLength]));
           default:
-            return base.GoalScore;
+            return orig_get_GoalScore();
         }
       }
     }

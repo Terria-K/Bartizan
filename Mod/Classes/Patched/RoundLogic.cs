@@ -14,9 +14,6 @@ namespace TowerFall
 {
   public class patch_RoundLogic : RoundLogic, GhostDeathInterface
   {
-    // public static bool myLogic; // can't tell what this is meant to do. Commenting out to see if I need it
-    // public static RoundLogic myRoundLogic; // commenting out to see if I need it
-
     public patch_RoundLogic(Session session, bool canHaveMiasma) : base(session, canHaveMiasma)
     {
       // no-op. MonoMod ignores this
@@ -61,11 +58,10 @@ namespace TowerFall
           case Modes.EditorPreview:
             return new SubmitPreviewRoundLogic (session);
         #endif
-        // Uncomment later
-        // case RespawnRoundLogic.Mode:
-        //   return new RespawnRoundLogic(session);
-        // case MobRoundLogic.Mode:
-        //   return new MobRoundLogic(session);
+        case RespawnRoundLogic.Mode:
+          return new RespawnRoundLogic(session);
+        case MobRoundLogic.Mode:
+          return new MobRoundLogic(session);
         default:
           throw new Exception("No defined Round Logic for that mode!");
       }
@@ -188,65 +184,6 @@ namespace TowerFall
       return !array[0] || !array[1];
     }
 
-    // It doesn't look like I actually changed anything here
-    // public override void OnPlayerDeath(Player player, PlayerCorpse corpse, int playerIndex, DeathCause cause, Vector2 position, int killerIndex)
-    // {
-    //   if (this.Session.CurrentLevel.KingIntro)
-    //   {
-    //     this.Session.CurrentLevel.KingIntro.Laugh();
-    //   }
-    //   if (this.Session.MatchSettings.Variants.GunnStyle)
-    //   {
-    //     GunnStyle gunnStyle = new GunnStyle(corpse);
-    //     this.Session.CurrentLevel.Layers[gunnStyle.LayerIndex].Add(gunnStyle, false);
-    //   }
-    //   if (
-    //     this.miasma && killerIndex != -1 &&
-    //     this.FFACheckForAllButOneDead()
-    //   )
-    //   {
-    //     this.miasma.Dissipate();
-    //   }
-    //   if (killerIndex != -1 && killerIndex != playerIndex)
-    //   {
-    //     this.Kills[killerIndex]++;
-    //   }
-    //   if (killerIndex != -1 && !this.Session.CurrentLevel.IsPlayerAlive(killerIndex))
-    //   {
-    //     MatchStats[] expr_F8_cp_0 = this.Session.MatchStats;
-    //     expr_F8_cp_0[killerIndex].KillsWhileDead = expr_F8_cp_0[killerIndex].KillsWhileDead + 1u;
-    //   }
-    //   if (killerIndex != -1 && killerIndex != playerIndex)
-    //   {
-    //     this.Session.MatchStats[killerIndex].RegisterFastestKill(this.Time);
-    //   }
-    //   DeathType deathType = DeathType.Normal;
-    //   if (killerIndex == playerIndex)
-    //   {
-    //     deathType = DeathType.Self;
-    //   }
-    //   else if (killerIndex != -1 && this.Session.MatchSettings.TeamMode && this.Session.MatchSettings.GetPlayerAllegiance(playerIndex) == this.Session.MatchSettings.GetPlayerAllegiance(killerIndex))
-    //   {
-    //     deathType = DeathType.Team;
-    //   }
-    //   if (killerIndex != -1) {
-    //     if (deathType == DeathType.Normal && this.Session.WasWinningAtStartOfRound (playerIndex)) {
-    //       this.Session.MatchStats [killerIndex].WinnerKills += 1u;
-    //     }
-    //     if (!this.Session.MatchSettings.SoloMode) {
-    //       this.Session.MatchStats [killerIndex].Kills.Add (deathType, cause, TFGame.Characters [playerIndex]);
-    //       SaveData.Instance.Stats.Kills.Add (deathType, cause, TFGame.Characters [killerIndex]);
-    //       SaveData.Instance.Stats.TotalVersusKills++;
-    //       SaveData.Instance.Stats.RegisterVersusKill (killerIndex);
-    //     }
-    //   }
-    //   this.Session.MatchStats [playerIndex].Deaths.Add (deathType, cause, (killerIndex == -1) ? (-1) : TFGame.Characters [killerIndex]);
-    //   SaveData.Instance.Stats.Deaths.Add (deathType, cause, TFGame.Characters [playerIndex]);
-    //   if (!this.Session.MatchSettings.SoloMode) {
-    //     SessionStats.RegisterVersusKill (killerIndex, playerIndex, deathType == DeathType.Team);
-    //   }
-    // }
-
     public void OnPlayerGhostDeath(PlayerGhost ghost, PlayerCorpse corpse)
     {
       if (
@@ -257,30 +194,5 @@ namespace TowerFall
         this.miasma.Dissipate();
       }
     }
-
-    // Doesn't look like I changed anything
-    // public new void FinalKillTeams (PlayerCorpse corpse, Allegiance otherSpotlightTeam)
-    // {
-    //   List<LevelEntity> list = new List<LevelEntity> ();
-    //   for (int i = 0; i < MyGlobals.MAX_PLAYERS; i++) {
-    //     if (TFGame.Players [i] && this.Session.MatchSettings.Teams [i] == otherSpotlightTeam) {
-    //       this.Session.MatchStats [i].GotWin = true;
-    //       LevelEntity playerOrCorpse = this.Session.CurrentLevel.GetPlayerOrCorpse (i);
-    //       if (playerOrCorpse != null && playerOrCorpse != corpse) {
-    //         list.Add (playerOrCorpse);
-    //       }
-    //     }
-    //   }
-    //   this.Session.CurrentLevel.LightingLayer.SetSpotlight (list.ToArray ());
-    //   this.FinalKillNoSpotlight ();
-    // }
-
-    // Nothing changed
-    // public override void FinalKillNoSpotlight ()
-    // {
-    //   this.Session.CurrentLevel.OrbLogic.DoSlowMoKill ();
-    //   this.Session.MatchSettings.LevelSystem.StopVersusMusic ();
-    //   Sounds.sfx_finalKill.Play (160f, 1f);
-    // }
   }
 }

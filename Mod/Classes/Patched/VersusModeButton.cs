@@ -1,13 +1,16 @@
-using Patcher;
-using TowerFall;
+#pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
+
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Monocle;
+using MonoMod;
+using Mod;
 
-namespace Mod
+using System;
+
+namespace TowerFall
 {
-  [Patch]
-  public class MyVersusModeButton : VersusModeButton
+  public class patch_VersusModeButton : VersusModeButton
   {
     static List<Modes> VersusModes = new List<Modes> {
       Modes.LastManStanding,
@@ -17,11 +20,13 @@ namespace Mod
       MobRoundLogic.Mode,
     };
 
-    public MyVersusModeButton(Vector2 position, Vector2 tweenFrom)
+    public patch_VersusModeButton(Vector2 position, Vector2 tweenFrom)
       : base(position, tweenFrom)
     {
+      // no-op. MonoMod ignores this
     }
 
+    public extern static string orig_GetModeName(Modes mode);
     public new static string GetModeName(Modes mode)
     {
       switch (mode) {
@@ -30,27 +35,30 @@ namespace Mod
         case MobRoundLogic.Mode:
           return "CRAWL";
         default:
-          return VersusModeButton.GetModeName(mode);
+          return orig_GetModeName(mode);
       }
     }
 
+    public extern static Subtexture orig_GetModeIcon(Modes mode);
     public new static Subtexture GetModeIcon(Modes mode)
     {
       switch (mode) {
         case RespawnRoundLogic.Mode:
-          return MyTFGame.ModAtlas["gameModes/respawn"];
+          return patch_TFGame.ModAtlas["gameModes/respawn"];
         case MobRoundLogic.Mode:
-          return MyTFGame.ModAtlas["gameModes/crawl"];
+          return patch_TFGame.ModAtlas["gameModes/crawl"];
         default:
-          return VersusModeButton.GetModeIcon(mode);
+          return orig_GetModeIcon(mode);
       }
     }
 
+    [MonoModLinkTo("TowerFall.BorderButton", "Update")]
+    [MonoModIgnore]
+    public extern void base_Update();
     // completely re-write to make it enum-independent
-    public override void Update()
+    public void patch_Update()
     {
-      // skip original implementation
-      Patcher.Patcher.CallRealBase();
+      base_Update();
 
       Modes mode = MainMenu.VersusMatchSettings.Mode;
       if (this.Selected) {
@@ -71,9 +79,10 @@ namespace Mod
       }
     }
 
-    public override void UpdateSides()
+    public extern void orig_UpdateSides();
+    public void patch_UpdateSides()
     {
-      base.UpdateSides();
+      orig_UpdateSides();
       this.DrawRight = (MainMenu.VersusMatchSettings.Mode < VersusModes[VersusModes.Count-1]);
     }
   }

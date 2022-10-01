@@ -99,7 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <!--
-    <Compile Include="Classes\Patched\MyMatchSettings.cs" />
     <Compile Include="Classes\Patched\MyPlayerCorpse.cs" />
     <Compile Include="Classes\Patched\MyQuestSpawnPortal.cs" />
     <Compile Include="Classes\Patched\MyReplayFrame.cs" />
@@ -124,6 +123,7 @@
     <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
     <Compile Include="Classes\Patched\MainMenu.cs" />
     <Compile Include="Classes\Patched\MapScene.cs" />
+    <Compile Include="Classes\Patched\MatchSettings.cs" />
     <Compile Include="Classes\Patched\MatchVariants.cs" />
     <Compile Include="Classes\Patched\MirrorPickup.cs" />
     <Compile Include="Classes\Patched\OptionsButton.cs" />
@@ -141,15 +141,15 @@
     <Compile Include="Classes\Patched\TeamDeathmatchRoundLogic.cs" />
     <Compile Include="Classes\Patched\TeamReviver.cs" />
     <Compile Include="Classes\Patched\TFGame.cs" />
+    <Compile Include="Classes\Patched\VersusCoinButton.cs" />
+    <Compile Include="Classes\Patched\VersusModeButton.cs" />
+    <Compile Include="Classes\Patched\VersusRoundResults.cs" />
     <Compile Include="Classes\Patched\XGamepadData.cs" />
     <Compile Include="Classes\Replaced\MyTeamReviver.cs" />
     <!-- <Compile Include="Classes\Patched\MyTreasureChest.cs" />
     <Compile Include="Classes\Patched\MyTreasureSpawner.cs" />
-    <Compile Include="Classes\Patched\MyVersusCoinButton.cs" />
     <Compile Include="Classes\Patched\MyVersusMatchResults.cs" />
-    <Compile Include="Classes\Patched\MyVersusModeButton.cs" />
     <Compile Include="Classes\Patched\MyVersusPlayerMatchResults.cs" />
-    <Compile Include="Classes\Patched\MyVersusRoundResults.cs" />
      -->
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
