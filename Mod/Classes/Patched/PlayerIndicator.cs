@@ -1,19 +1,29 @@
-using Microsoft.Xna.Framework;
-using Monocle;
-using System;
-using TowerFall;
-using Patcher;
+#pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
 
-namespace Mod
+using Microsoft.Xna.Framework;
+using Mod;
+using Monocle;
+using MonoMod;
+using System;
+
+namespace TowerFall
 {
-  [Patch]
-  public class MyPlayerIndicator : PlayerIndicator
+  public class patch_PlayerIndicator : PlayerIndicator
   {
     public const int MAX_NAME_LENGTH = 9;
 
-    public MyPlayerIndicator (Vector2 offset, int playerIndex, bool crown)
+    public patch_PlayerIndicator (Vector2 offset, int playerIndex, bool crown)
       : base (offset, playerIndex, crown)
     {
+      // no-op. MonoMod ignores this
+    }
+
+    public extern void orig_ctor(Vector2 offset, int playerIndex, bool crown);
+    [MonoModConstructor]
+    public void ctor(Vector2 offset, int playerIndex, bool crown)
+    {
+      orig_ctor(offset, playerIndex, crown);
+
       if (MyGlobals.playerNames != null) {
         string playerName = MyGlobals.playerNames.GetName(playerIndex);
         this.text = playerName.ToUpper().Substring(
@@ -25,7 +35,7 @@ namespace Mod
       }
     }
 
-    public override void Render ()
+    public void patch_Render ()
     {
       Color color = this.colorSwitch ? ArcherData.Archers [this.characterIndex].ColorB : ArcherData.Archers [this.characterIndex].ColorA;
       Vector2 value = base.Entity.Position + this.offset + new Vector2 (0f, -32f);

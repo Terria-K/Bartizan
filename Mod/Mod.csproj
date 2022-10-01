@@ -101,7 +101,6 @@
     <!--
     <Compile Include="Classes\Patched\MyMatchSettings.cs" />
     <Compile Include="Classes\Patched\MyPlayerCorpse.cs" />
-    <Compile Include="Classes\Patched\MyPlayerIndicator.cs" />
     <Compile Include="Classes\Patched\MyQuestSpawnPortal.cs" />
     <Compile Include="Classes\Patched\MyReplayFrame.cs" />
     <Compile Include="Classes\Patched\MyRollcallElement.cs" />
@@ -132,6 +131,7 @@
     <Compile Include="Classes\Patched\Player.cs" />
     <Compile Include="Classes\Patched\PlayerCorpse.cs" />
     <Compile Include="Classes\Patched\PlayerGhost.cs" />
+    <Compile Include="Classes\Patched\PlayerIndicator.cs" />
     <Compile Include="Classes\Patched\RoundLogic.cs" />
     <Compile Include="Classes\Patched\Scene.cs" />
     <Compile Include="Classes\Patched\ScreenTitle.cs" />
