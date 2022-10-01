@@ -99,7 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <!--
-    <Compile Include="Classes\Patched\MyReplayFrame.cs" />
     <Compile Include="Classes\Patched\MyRollcallElement.cs" />
      -->
     <Compile Include="Classes\New\ArcherColor.cs" />
@@ -131,6 +130,7 @@
     <Compile Include="Classes\Patched\PlayerGhost.cs" />
     <Compile Include="Classes\Patched\PlayerIndicator.cs" />
     <Compile Include="Classes\Patched\QuestSpawnPortal.cs" />
+    <Compile Include="Classes\Patched\ReplayFrame.cs" />
     <Compile Include="Classes\Patched\RoundLogic.cs" />
     <Compile Include="Classes\Patched\Scene.cs" />
     <Compile Include="Classes\Patched\ScreenTitle.cs" />
