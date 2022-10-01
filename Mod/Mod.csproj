@@ -99,7 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <!--
-    <Compile Include="Classes\Patched\MyMapScene.cs" />
     <Compile Include="Classes\Patched\MyMatchSettings.cs" />
     <Compile Include="Classes\Patched\MyPlayerCorpse.cs" />
     <Compile Include="Classes\Patched\MyPlayerIndicator.cs" />
@@ -125,6 +124,7 @@
     <Compile Include="Classes\Patched\Level.cs" />
     <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
     <Compile Include="Classes\Patched\MainMenu.cs" />
+    <Compile Include="Classes\Patched\MapScene.cs" />
     <Compile Include="Classes\Patched\MatchVariants.cs" />
     <Compile Include="Classes\Patched\MirrorPickup.cs" />
     <Compile Include="Classes\Patched\OptionsButton.cs" />

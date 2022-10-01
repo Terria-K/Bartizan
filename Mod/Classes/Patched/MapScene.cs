@@ -1,32 +1,38 @@
+#pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
+
+using MonoMod;
+using Mod;
 using TowerFall;
-using Patcher;
 using System;
 using System.IO;
 
-namespace Mod
+namespace TowerFall
 {
-  [Patch]
-  public class MyMapScene : MapScene
+  public class patch_MapScene : MapScene
     {
     private static bool initialLoad = true;
 
-    public MyMapScene(MainMenu.RollcallModes mode) : base(mode)
+    public patch_MapScene(MainMenu.RollcallModes mode) : base(mode)
     {
+      // no-op. Monomod ignores this
+    }
+
+    public extern void orig_ctor(MainMenu.RollcallModes mode);
+    [MonoModConstructor]
+    public void ctor(MainMenu.RollcallModes mode)
+    {
+      orig_ctor(mode);
+
       #if (STAT_TRACKING)
         TrackerApiClient client = new TrackerApiClient();
         client.GetPlayerNames();
       #endif
     }
 
-    static MyMapScene()
+    public extern void orig_InitVersusButtons();
+    public void patch_InitVersusButtons()
     {
-      MyMapScene.lastRandomVersusTower = -1;
-      MyMapScene.NoRandomStates = new bool[GameData.VersusTowers.Count];
-    }
-
-    public override void InitVersusButtons()
-    {
-      base.InitVersusButtons();
+      orig_InitVersusButtons();
 
       string disabledMapsFile = Path.Combine(TrackerApiClient.GetSavePath(), "tf-disabled-maps.txt");
 
