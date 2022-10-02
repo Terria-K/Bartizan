@@ -1,5 +1,3 @@
-using Patcher;
-using TowerFall;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
@@ -8,36 +6,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace Mod
+namespace TowerFall
 {
-  [Patch]
-  public class MyTreasureSpawner : TreasureSpawner
+  public class patch_TreasureSpawner : TreasureSpawner
   {
-    public MyTreasureSpawner (Session session, VersusTowerData versusTowerData)
+    public patch_TreasureSpawner (Session session, VersusTowerData versusTowerData)
       : base (session, versusTowerData.TreasureMask, versusTowerData.SpecialArrowRate, versusTowerData.ArrowShuffle)
     {
+      // no-op
     }
 
-    public MyTreasureSpawner (Session session, int[] mask, float arrowChance, bool arrowShuffle)
+    public patch_TreasureSpawner (Session session, int[] mask, float arrowChance, bool arrowShuffle)
       : base (session, mask, arrowChance, arrowShuffle)
     {
-    }
-
-    // No changes here. Had to extend to avoid compilation error.
-    public void Shuffle (List<Vector2> list, Random random)
-    {
-      int num = list.Count;
-      while (--num > 0) {
-        Vector2 value = list [num];
-        int index = Calc.Random.Next (num + 1);
-        list [num] = list [index];
-        list [index] = value;
-      }
-    }
-
-    public void Shuffle (List<Vector2> list)
-    {
-      this.Shuffle (list, Calc.Random);
+      // no-op
     }
 
     // Extended to fix asymmetrical treasure bug
@@ -45,8 +27,8 @@ namespace Mod
     {
       List<TreasureChest> list = new List<TreasureChest> ();
 
-      this.Shuffle(chestPositions);
-      this.Shuffle(bigChestPositions);
+      Calc.Shuffle(chestPositions);
+      Calc.Shuffle(bigChestPositions);
 
       if ((bool)this.Session.MatchSettings.Variants.NoTreasure) {
         return list;
@@ -86,7 +68,7 @@ namespace Mod
             }
             list3.Add (treasureSpawn);
           }
-          this.Shuffle (bigChestPositions, this.Random);
+          Calc.Shuffle (bigChestPositions, this.Random);
           Vector2 position = bigChestPositions [0];
           int timer = Calc.Range (this.Random, 30, TFGame.PlayerAmount * 30);
           if ((bool)this.Session.MatchSettings.Variants.BottomlessTreasure) {
@@ -112,6 +94,7 @@ namespace Mod
           int num = Calc.Range (Calc.Random, 10, TFGame.PlayerAmount * 60);
           Pickups treasureSpawn = this.GetTreasureSpawn (list2);
           list.Add (new TreasureChest (vector, TreasureChest.Types.Normal, TreasureChest.AppearModes.Time, treasureSpawn, num));
+          // Here is the fix. Need to update the center now that the game is widescreen.
           #if (EIGHT_PLAYER)
             float centerX = 210f;
           #else

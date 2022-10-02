@@ -138,6 +138,7 @@
     <Compile Include="Classes\Patched\TeamDeathmatchRoundLogic.cs" />
     <Compile Include="Classes\Patched\TeamReviver.cs" />
     <Compile Include="Classes\Patched\TFGame.cs" />
+    <Compile Include="Classes\Patched\TreasureSpawner.cs" />
     <Compile Include="Classes\Patched\VersusCoinButton.cs" />
     <Compile Include="Classes\Patched\VersusModeButton.cs" />
     <Compile Include="Classes\Patched\VersusPlayerMatchResults.cs" />
@@ -145,7 +146,6 @@
     <Compile Include="Classes\Patched\XGamepadData.cs" />
     <Compile Include="Classes\Replaced\MyTeamReviver.cs" />
     <!-- <Compile Include="Classes\Patched\MyTreasureChest.cs" />
-    <Compile Include="Classes\Patched\MyTreasureSpawner.cs" />
     <Compile Include="Classes\Patched\MyVersusMatchResults.cs" />
      -->
   </ItemGroup>
