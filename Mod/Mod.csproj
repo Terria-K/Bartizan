@@ -141,14 +141,12 @@
     <Compile Include="Classes\Patched\TreasureChest.cs" />
     <Compile Include="Classes\Patched\TreasureSpawner.cs" />
     <Compile Include="Classes\Patched\VersusCoinButton.cs" />
+    <Compile Include="Classes\Patched\VersusMatchResults.cs" />
     <Compile Include="Classes\Patched\VersusModeButton.cs" />
     <Compile Include="Classes\Patched\VersusPlayerMatchResults.cs" />
     <Compile Include="Classes\Patched\VersusRoundResults.cs" />
     <Compile Include="Classes\Patched\XGamepadData.cs" />
     <Compile Include="Classes\Replaced\MyTeamReviver.cs" />
-    <!--
-    <Compile Include="Classes\Patched\MyVersusMatchResults.cs" />
-     -->
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
