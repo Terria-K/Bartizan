@@ -52,8 +52,6 @@ namespace TowerFall
     [MonoModPublic]
     public extern void Vanish();
 
-    // @TODO Getting System.MissingFieldException: Field 'TowerFall.ChaliceGhost.target' not found.
-
     [MonoModLinkTo("TowerFall.LevelEntity", "Update")]
     [MonoModIgnore]
     public extern void base_Update();
