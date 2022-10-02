@@ -29,7 +29,7 @@ namespace TowerFall
           TeamReviver teamReviver = (TeamReviver)(teamRevivers[i]);
           if (teamReviver.Corpse.PlayerIndex == this.PlayerIndex) {
             base.Level.Layers[teamReviver.LayerIndex].Remove(teamReviver);
-            MyTeamReviver myTeamReviver = new MyTeamReviver(
+            patch_TeamReviver myTeamReviver = new patch_TeamReviver(
               this,
               TeamReviver.Modes.TeamDeathmatch,
               ((patch_TeamDeathmatchRoundLogic)(base.Level.Session.RoundLogic)).GetRoundEndCounter(),

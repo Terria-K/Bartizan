@@ -7,8 +7,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-// @TODO delete if not used
-
 namespace TowerFall
 {
   class patch_TeamReviver : TeamReviver
@@ -24,14 +22,65 @@ namespace TowerFall
       // no-op. MonoMod ignores this
     }
 
-    public extern void orig_ctor(PlayerCorpse corpse, TeamReviver.Modes mode);
+    [MonoModLinkTo("Monocle.Entity", "Tag")]
+    [MonoModIgnore]
+    public extern void base_Tag(GameTags tag);
+
+    [MonoModLinkTo("TowerFall.LevelEntity", "System.Void .ctor(Microsoft.Xna.Framework.Vector2)")]
+    [MonoModRemove]
+    public extern void base_ctor(Vector2 position);
+
+    // Manually pasting in origial constructor because of error: System.MissingMethodException: Method not found: 'TowerFall.TeamReviver.orig_ctor'.
+    public void OriginalConstructor(PlayerCorpse corpse, TeamReviver.Modes mode)
+    {
+      base_ctor(corpse.BottomCenter);
+      this.Mode = mode;
+      this.Corpse = corpse;
+      this.ScreenWrap = true;
+      base_Tag(GameTags.LightSource);
+      base_Tag(GameTags.TeamReviver);
+      this.LightRadius = 60f;
+      this.LightAlpha = 1f;
+      base.Collider = (this.normalHitbox = new WrapHitbox (24f, 25f, -12f, -20f));
+      this.revivingHitbox = new WrapHitbox (40f, 46f, -20f, -30f);
+      this.playerNomralHitbox = new WrapHitbox (8f, 14f, -4f, -6f);
+      this.reviveCounter = (float)this.ReviveTime;
+      base.Add(this.sine = new SineWave (90));
+      base.Add(this.arrowSine = new SineWave (20));
+      switch (this.Mode) {
+        case TeamReviver.Modes.TeamDeathmatch:
+          this.arrowColor = (this.colorA = ArcherData.Get (corpse.TeamColor).ColorA);
+          this.colorB = ArcherData.Get (corpse.TeamColor).ColorB;
+          this.PlayerCanRevive = true;
+          break;
+        case TeamReviver.Modes.DarkWorld: {
+          ArcherData archerData = ArcherData.Get (TFGame.Characters [corpse.PlayerIndex], TFGame.AltSelect [corpse.PlayerIndex]);
+          this.arrowColor = (this.colorA = archerData.ColorA);
+          this.colorB = archerData.ColorB;
+          this.PlayerCanRevive = true;
+          break;
+        }
+        case TeamReviver.Modes.Quest: {
+          ArcherData archerData = ArcherData.Get (TFGame.Characters [corpse.PlayerIndex], TFGame.AltSelect [corpse.PlayerIndex]);
+          this.arrowColor = (this.colorA = archerData.ColorA);
+          this.colorB = archerData.ColorB;
+          this.PlayerCanRevive = false;
+          break;
+        }
+      }
+      Alarm.Set(this, 60, delegate {
+        this.canRevive = true;
+      }, Alarm.AlarmMode.Oneshot);
+      this.targetLightAlpha = 1f;
+    }
+
     [MonoModConstructor]
     public void ctor(PlayerCorpse corpse, TeamReviver.Modes mode, RoundEndCounter roundEndCounter, bool ghostRevives=false)
     {
       this.roundEndCounter = roundEndCounter;
       this.ghostRevives = ghostRevives;
 
-      orig_ctor(corpse, mode);
+      OriginalConstructor(corpse, mode);
     }
 
     public void patch_HUDRender()
@@ -58,11 +107,15 @@ namespace TowerFall
       return result;
     }
 
+    [MonoModLinkTo("TowerFall.LevelEntity", "Update")]
+    [MonoModIgnore]
+    public extern void base_Update();
+
     // This is pasted code from the original class, except where it calls functions defined in this class
     private void ReviveUpdateOriginalWithAdditions()
     {
       this.LightAlpha = Calc.Approach (this.LightAlpha, this.targetLightAlpha, 0.1f * Engine.TimeMult);
-      base.Update ();
+      base_Update ();
       if (this.levitateCorpse) {
         float num = this.targetPosition.Y + this.sine.Value * 2f;
         Vector2 zero = Vector2.Zero;
@@ -144,7 +197,7 @@ namespace TowerFall
           } else {
             this.ResetCounter ();
             this.LightAlpha = Calc.Approach (this.LightAlpha, 0f, 0.1f * Engine.TimeMult);
-            if (this.canRevive && !this.Corpse.PrismHit && this.Corpse.Squished == Vector2.Zero && this.CanReviveAtThisPosition ()) {
+            if (this.canRevive && !this.Corpse.PrismHit && this.Corpse.Squished == Vector2.Zero && this.CanReviveAtThisPosition()) {
               if (this.AutoRevive) {
                 this.StartReviving ();
               } else if (this.PlayerCanRevive) {
