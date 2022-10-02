@@ -72,9 +72,6 @@
     <Reference Include="System.Xml.Linq">
       <HintPath>..\packages\System.Xml.Linq.3.5.21022.801\lib\net20\System.Xml.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="BaseTowerFall-4-player-itch">
-      <HintPath>..\bin\BaseTowerFall-4-player-itch.exe</HintPath>
-    </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>..\packages\Mono.Cecil.0.10.4\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -96,11 +93,11 @@
     <Reference Include="MonoMod.Common">
       <HintPath>..\packages\MonoMod.Common.22.6.3.1\lib\net35\MonoMod.Common.dll</HintPath>
     </Reference>
+    <Reference Include="BaseTowerFall-8-player">
+      <HintPath>..\bin\BaseTowerFall-8-player.exe</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <!--
-    <Compile Include="Classes\Patched\MyRollcallElement.cs" />
-     -->
     <Compile Include="Classes\New\ArcherColor.cs" />
     <Compile Include="Classes\New\GhostDeathInterface.cs" />
     <Compile Include="Classes\New\MobRoundLogic.cs" />
@@ -131,6 +128,7 @@
     <Compile Include="Classes\Patched\PlayerIndicator.cs" />
     <Compile Include="Classes\Patched\QuestSpawnPortal.cs" />
     <Compile Include="Classes\Patched\ReplayFrame.cs" />
+    <Compile Include="Classes\Patched\RollcallElement.cs" />
     <Compile Include="Classes\Patched\RoundLogic.cs" />
     <Compile Include="Classes\Patched\Scene.cs" />
     <Compile Include="Classes\Patched\ScreenTitle.cs" />
@@ -142,13 +140,13 @@
     <Compile Include="Classes\Patched\TFGame.cs" />
     <Compile Include="Classes\Patched\VersusCoinButton.cs" />
     <Compile Include="Classes\Patched\VersusModeButton.cs" />
+    <Compile Include="Classes\Patched\VersusPlayerMatchResults.cs" />
     <Compile Include="Classes\Patched\VersusRoundResults.cs" />
     <Compile Include="Classes\Patched\XGamepadData.cs" />
     <Compile Include="Classes\Replaced\MyTeamReviver.cs" />
     <!-- <Compile Include="Classes\Patched\MyTreasureChest.cs" />
     <Compile Include="Classes\Patched\MyTreasureSpawner.cs" />
     <Compile Include="Classes\Patched\MyVersusMatchResults.cs" />
-    <Compile Include="Classes\Patched\MyVersusPlayerMatchResults.cs" />
      -->
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
