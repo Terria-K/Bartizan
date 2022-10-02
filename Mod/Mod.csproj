@@ -93,8 +93,8 @@
     <Reference Include="MonoMod.Common">
       <HintPath>..\packages\MonoMod.Common.22.6.3.1\lib\net35\MonoMod.Common.dll</HintPath>
     </Reference>
-    <Reference Include="BaseTowerFall-8-player">
-      <HintPath>..\bin\BaseTowerFall-8-player.exe</HintPath>
+    <Reference Include="BaseTowerFall">
+      <HintPath>..\bin\BaseTowerFall.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
