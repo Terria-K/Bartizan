@@ -8,6 +8,8 @@ namespace Mod
   {
     public static PlayerNames playerNames;
 
+    public enum GameTags {}
+
     #if (STAT_TRACKING)
       public static JArray roster;
     #endif
