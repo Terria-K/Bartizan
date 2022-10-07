@@ -214,6 +214,9 @@
     <None Include="Content\Atlas\modAtlas\menuTitles\roster.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Atlas\modAtlas\variants\startWithGhostArrows.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

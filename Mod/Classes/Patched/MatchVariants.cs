@@ -74,6 +74,9 @@ namespace TowerFall
     [CanRandom, Description ("MORE TYPES OF MONSTERS SPAWN FROM PORTAL")]
     public Variant MeanerMonsters;
 
+    [PerPlayer, CanRandom]
+    public Variant StartWithGhostArrows;
+
     public extern void orig_ctor(bool noPerPlayer);
     [MonoModConstructor]
     public void ctor(bool noPerPlayer = false)
@@ -83,6 +86,30 @@ namespace TowerFall
       this.CreateLinks(NoHeadBounce, NoTimeLimit);
       this.CreateLinks(NoDodgeCooldowns, ShowDodgeCooldown);
       this.CreateLinks(AwfullyFastArrows, AwfullySlowArrows);
+      this.StartWithGhostArrows.AddLinks(new Variant[] {
+        this.StartWithBombArrows,
+        this.StartWithLaserArrows,
+        this.StartWithBrambleArrows,
+        this.StartWithDrillArrows,
+        this.StartWithBoltArrows,
+        this.StartWithSuperBombArrows,
+        this.StartWithFeatherArrows,
+        this.StartWithRandomArrows,
+        this.StartWithToyArrows,
+        this.StartWithTriggerArrows,
+        this.StartWithPrismArrows
+      });
+      this.StartWithBombArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithLaserArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithBrambleArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithDrillArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithBoltArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithSuperBombArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithFeatherArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithRandomArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithToyArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithTriggerArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithPrismArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
     }
 
     public static Subtexture patch_GetVariantIconFromName (string variantName)
