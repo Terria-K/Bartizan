@@ -1,6 +1,10 @@
 #pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
 
+using Mod;
 using Monocle;
+using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace TowerFall
 {
@@ -8,6 +12,31 @@ namespace TowerFall
   {
     const float AwfullySlowArrowMult = 0.2f;
     const float AwfullyFastArrowMult = 3.0f;
+
+    public static readonly Color[] ModColors = new Color[12] {
+      Calc.HexToColor ("F7EAC3"), // Regular
+      Calc.HexToColor ("F8B800"), // Bomb
+      Calc.HexToColor ("F8B800"), // Super Bomb
+      Calc.HexToColor ("B8F818"), // Laser
+      Calc.HexToColor ("F87858"), // Bramble
+      Calc.HexToColor ("8EE8FF"), // Drill
+      Calc.HexToColor ("00FF4C"), // Bolt
+      Calc.HexToColor ("FF6DFA"), // Toy
+      Calc.HexToColor ("BC70FF"), // Feather
+      Calc.HexToColor ("1BB7EE"), // Trigger
+      Calc.HexToColor ("DB4ADB"), // Prism
+      Calc.HexToColor ("FFFFFF")  // Ghost
+    };
+
+    public new static void Initialize ()
+    {
+      // Same as original, with Arrow.cached size extended for mod arrow types
+      int arrowTypes = Calc.EnumLength(typeof(ArrowTypes)) + Calc.EnumLength(typeof(MyGlobals.ArrowTypes));
+      Arrow.cached = new Stack<Arrow>[arrowTypes];
+      for (int i = 0; i < Arrow.cached.Length; i++) {
+        Arrow.cached[i] = new Stack<Arrow> ();
+      }
+    }
 
     public extern void orig_Added();
     public void patch_Added()
@@ -35,6 +64,60 @@ namespace TowerFall
         typeof(Engine).GetProperty("TimeMult").SetValue(null, Engine.TimeMult / AwfullyFastArrowMult, null);
       } else
         orig_ArrowUpdate();
+    }
+
+    public new static Arrow Create (ArrowTypes type, LevelEntity owner, Vector2 position, float direction, int? overrideCharacterIndex = default(int?), int? overridePlayerIndex = default(int?))
+    {
+      // Same as original, with cases for mod arrow types added
+      Arrow arrow;
+      if (Arrow.cached [(int)type].Count > 0) {
+        arrow = Arrow.cached [(int)type].Pop ();
+      } else {
+        switch (type) {
+        default:
+          throw new Exception ("Arrow Type not recognized");
+        case ArrowTypes.Normal:
+          arrow = new DefaultArrow();
+          break;
+        case ArrowTypes.Bomb:
+          arrow = new BombArrow();
+          break;
+        case ArrowTypes.SuperBomb:
+          arrow = new SuperBombArrow();
+          break;
+        case ArrowTypes.Laser:
+          arrow = new LaserArrow();
+          break;
+        case ArrowTypes.Bramble:
+          arrow = new BrambleArrow();
+          break;
+        case ArrowTypes.Drill:
+          arrow = new DrillArrow();
+          break;
+        case ArrowTypes.Bolt:
+          arrow = new BoltArrow();
+          break;
+        case ArrowTypes.Toy:
+          arrow = new ToyArrow();
+          break;
+        case ArrowTypes.Feather:
+          arrow = new FeatherArrow();
+          break;
+        case ArrowTypes.Trigger:
+          arrow = new TriggerArrow();
+          break;
+        case ArrowTypes.Prism:
+          arrow = new PrismArrow();
+          break;
+        case (ArrowTypes)MyGlobals.ArrowTypes.Ghost:
+          arrow = new GhostArrow();
+          break;
+        }
+      }
+      arrow.OverrideCharacterIndex = overrideCharacterIndex;
+      arrow.OverridePlayerIndex = overridePlayerIndex;
+      arrow.Init (owner, position, direction);
+      return arrow;
     }
   }
 }

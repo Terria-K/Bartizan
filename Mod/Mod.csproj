@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\New\ArcherColor.cs" />
+    <Compile Include="Classes\New\GhostArrow.cs" />
     <Compile Include="Classes\New\GhostDeathInterface.cs" />
     <Compile Include="Classes\New\MobRoundLogic.cs" />
     <Compile Include="Classes\New\MyGlobals.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
     <Compile Include="Classes\New\TrackerApiClient.cs" />
     <Compile Include="Classes\Patched\Arrow.cs" />
+    <Compile Include="Classes\Patched\ArrowHUD.cs" />
     <Compile Include="Classes\Patched\ChaliceGhost.cs" />
     <Compile Include="Classes\Patched\HeadhuntersRoundLogic.cs" />
     <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
@@ -215,6 +217,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Atlas\modAtlas\variants\startWithGhostArrows.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\player\arrowHUD\ghost.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

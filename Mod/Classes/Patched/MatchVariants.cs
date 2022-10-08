@@ -1,6 +1,7 @@
 #pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
 #pragma warning disable CS0649 // Field 'field' is never assigned to, and will always have its default value 'value'
 
+using Mod;
 using MonoMod;
 using Monocle;
 using System;
@@ -27,7 +28,8 @@ namespace TowerFall
       "GhostItems",
       "GhostJoust",
       "CalvinFall",
-      "MeanerMonsters"
+      "MeanerMonsters",
+      "StartWithGhostArrows",
     };
 
     [Header("MODS")]
@@ -121,6 +123,15 @@ namespace TowerFall
       } else {
         return TFGame.MenuAtlas ["variants/" + variantName [0].ToString ().ToLower (CultureInfo.InvariantCulture) + variantName.Substring (1)];
       }
+    }
+
+    public extern ArrowTypes orig_GetStartArrowType(int playerIndex, ArrowTypes randomType);
+    public ArrowTypes patch_GetStartArrowType(int playerIndex, ArrowTypes randomType)
+    {
+      if (this.StartWithGhostArrows[playerIndex]) {
+        return (ArrowTypes)MyGlobals.ArrowTypes.Ghost;
+      }
+      return orig_GetStartArrowType(playerIndex, randomType);
     }
   }
 }
