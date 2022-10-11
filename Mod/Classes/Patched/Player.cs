@@ -173,24 +173,10 @@ namespace TowerFall
       }
     }
 
-    // public extern void orig_CatchArrow(Arrow arrow);
     public void patch_CatchArrow(Arrow arrow)
     {
       this.lastArrowCaught = arrow;
       this.lastArrowCaughtOwner = arrow.Owner;
-      if (arrow.ArrowType == (ArrowTypes)MyGlobals.ArrowTypes.Ghost) {
-        Console.Writeline("Caught a ghost arrow");
-        Alarm.Set(this, 20, delegate {
-          if (this.miracledGhostArrow && this.lastArrowCaught == arrow) {
-            this.HasShield = true;
-          } else if (this.lastArrowCaughtOwner is Player) {
-            Console.WriteLine("Collecting it now FOR THE arrow owner");
-            this.lastArrowCaught.OnPlayerCollect((Player)(this.lastArrowCaughtOwner), true);
-          }
-          this.miracledGhostArrow = false;
-        }, Alarm.AlarmMode.Oneshot);
-      }
-      // orig_CatchArrow(arrow);
 
       // Mostly original, except where ghost arrow handled
       if (arrow.CanCatch (this) && !arrow.IsCollectible && arrow.CannotHit != this && (!this.HasShield || !arrow.Dangerous) && arrow != this.lastCaught) {
@@ -215,16 +201,24 @@ namespace TowerFall
         if (arrow.Fire.OnFire) {
           this.Fire.Start ();
         }
-        if (arrow.ArrowType == (ArrowTypes)MyGlobals.ArrowTypes.Ghost) { // @TODO do normal catch if its your own arrow
-          Console.WriteLine("NOT COLLECTING IT (YET)");
-          arrow.RemoveSelf();
+        if (arrow.ArrowType == (ArrowTypes)MyGlobals.ArrowTypes.Ghost && arrow.Owner != this) {
           // Don't collect ghost arrow (yet)
+          Alarm.Set(this, 20, delegate {
+            if (this.miracledGhostArrow && this.lastArrowCaught == arrow) {
+              this.HasShield = true;
+            } else if (this.lastArrowCaughtOwner is Player) {
+              this.lastArrowCaught.OnPlayerCollect((Player)(this.lastArrowCaughtOwner), true);
+            }
+            this.miracledGhostArrow = false;
+            this.lastArrowCaught = null;
+            this.lastArrowCaughtOwner = null;
+          }, Alarm.AlarmMode.Oneshot);
+          arrow.RemoveSelf();
         } else if (arrow.PrismCheck ()) {
           arrow.Collidable = false;
           this.StartPrism (arrow.PlayerIndex);
           arrow.RemoveSelf ();
-        } else if (this.Arrows.CanAddArrow (arrow.ArrowType)) {
-          Console.WriteLine("Collecting the arrow like normal");
+        } else if (this.Arrows.CanAddArrow(arrow.ArrowType)) {
           arrow.OnPlayerCollect (this, true);
         } else {
           this.lastCaught = arrow;
