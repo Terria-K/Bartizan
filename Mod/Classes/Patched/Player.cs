@@ -14,8 +14,6 @@ namespace TowerFall
     public bool spawningGhost;
     public bool diedFromPrism = false;
     public Arrow lastArrowCaught;
-    public LevelEntity lastArrowCaughtOwner;
-    public bool miracledGhostArrow = false;
 
     ChaliceGhost summonedChaliceGhost;
 
@@ -138,7 +136,7 @@ namespace TowerFall
         this.canHyper = true;
         if ((bool)this.dodgeCatchCounter && this.Speed.LengthSquared () >= 3.6f) {
           if (this.lastArrowCaught.ArrowType == (ArrowTypes)MyGlobals.ArrowTypes.Ghost) {
-            this.miracledGhostArrow = true;
+            ((GhostArrow)(this.lastArrowCaught)).wasMiracled = true;
           }
           ((patch_Session)(Level.Session)).MyMatchStats[this.PlayerIndex].MiracleCatches += 1u;
         }
@@ -176,7 +174,6 @@ namespace TowerFall
     public void patch_CatchArrow(Arrow arrow)
     {
       this.lastArrowCaught = arrow;
-      this.lastArrowCaughtOwner = arrow.Owner;
 
       // Mostly original, except where ghost arrow handled
       if (arrow.CanCatch (this) && !arrow.IsCollectible && arrow.CannotHit != this && (!this.HasShield || !arrow.Dangerous) && arrow != this.lastCaught) {
@@ -202,16 +199,16 @@ namespace TowerFall
           this.Fire.Start ();
         }
         if (arrow.ArrowType == (ArrowTypes)MyGlobals.ArrowTypes.Ghost && arrow.Owner != this) {
-          // Don't collect ghost arrow (yet)
           Alarm.Set(this, 20, delegate {
-            if (this.miracledGhostArrow && this.lastArrowCaught == arrow) {
+            if (((GhostArrow)(arrow)).wasMiracled) {
               this.HasShield = true;
-            } else if (this.lastArrowCaughtOwner is Player) {
-              this.lastArrowCaught.OnPlayerCollect((Player)(this.lastArrowCaughtOwner), true);
+              arrow.OnPlayerCollect(this, true);
+            } else if (arrow.PlayerIndex > -1) {
+              Player player = base.Level.GetPlayer(arrow.PlayerIndex);
+              if (player != null) {
+                arrow.OnPlayerCollect(player, true);
+              }
             }
-            this.miracledGhostArrow = false;
-            this.lastArrowCaught = null;
-            this.lastArrowCaughtOwner = null;
           }, Alarm.AlarmMode.Oneshot);
           arrow.RemoveSelf();
         } else if (arrow.PrismCheck ()) {
@@ -219,7 +216,7 @@ namespace TowerFall
           this.StartPrism (arrow.PlayerIndex);
           arrow.RemoveSelf ();
         } else if (this.Arrows.CanAddArrow(arrow.ArrowType)) {
-          arrow.OnPlayerCollect (this, true);
+          arrow.OnPlayerCollect(this, true);
         } else {
           this.lastCaught = arrow;
           arrow.Drop ((int)this.Facing);
