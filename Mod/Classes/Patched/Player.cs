@@ -198,7 +198,7 @@ namespace TowerFall
         if (arrow.Fire.OnFire) {
           this.Fire.Start ();
         }
-        if (arrow.ArrowType == (ArrowTypes)MyGlobals.ArrowTypes.Ghost && arrow.Owner != this) {
+        if (arrow.ArrowType == (ArrowTypes)MyGlobals.ArrowTypes.Ghost && arrow.Owner != this && arrow.Dangerous) {
           Alarm.Set(this, 10, delegate {
             if (((GhostArrow)(arrow)).wasMiracled) {
               this.HasShield = true;
