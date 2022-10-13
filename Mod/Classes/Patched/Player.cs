@@ -201,7 +201,6 @@ namespace TowerFall
         if (arrow.ArrowType == (ArrowTypes)MyGlobals.ArrowTypes.Ghost && arrow.Owner != this && arrow.Dangerous) {
           Alarm.Set(this, 10, delegate {
             if (((GhostArrow)(arrow)).wasMiracled) {
-              this.HasShield = true;
               arrow.OnPlayerCollect(this, true);
             } else if (arrow.PlayerIndex > -1) {
               Player player = base.Level.GetPlayer(arrow.PlayerIndex);
@@ -210,6 +209,11 @@ namespace TowerFall
               }
             }
           }, Alarm.AlarmMode.Oneshot);
+
+          ShockCircle shockCircle = Cache.Create<ShockCircle>();
+          shockCircle.Init (this.Position, this.PlayerIndex, this, ShockCircle.ShockTypes.BoltCatch);
+          this.Level.Add (shockCircle);
+          Sounds.sfx_boltArrowExplode.Play(base.X, 1f);
           arrow.RemoveSelf();
         } else if (arrow.PrismCheck ()) {
           arrow.Collidable = false;
