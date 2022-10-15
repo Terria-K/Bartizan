@@ -22,6 +22,13 @@ namespace Mod
       }
     }
 
+    // Too ghostly to be flammable
+    public override bool CanCatchFire {
+      get {
+        return false;
+      }
+    }
+
     public override void Init(LevelEntity owner, Vector2 position, float direction)
     {
       base.Init(owner, position, direction);
@@ -50,6 +57,8 @@ namespace Mod
       this.shaftImage.Visible = true;
       this.buriedShaftImage.Visible = false;
       this.featherImage.Color = ArcherData.GetColorB(base.PlayerIndex, base.TeamColor);
+
+      base.LightColor = Calc.Invert(ArcherData.GetColorB(base.PlayerIndex, base.TeamColor));
     }
 
     public override void SwapToBuriedGraphics ()
