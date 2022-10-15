@@ -1,7 +1,9 @@
 #pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
 
 using Mod;
 using Monocle;
+using MonoMod;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,24 @@ namespace TowerFall
   {
     const float AwfullySlowArrowMult = 0.2f;
     const float AwfullyFastArrowMult = 3.0f;
+
+    [MonoModPublic]
+    public bool squished;
+
+    [MonoModPublic]
+    public bool didPopThroughJumpThru;
+
+    [MonoModPublic]
+    public Counter cannotPickupCounter;
+
+    [MonoModPublic]
+    public Counter cannotHitEnemiesCounter;
+
+    [MonoModPublic]
+    public Counter cannotCatchCounter;
+
+    [MonoModPublic]
+    public WrapHitbox otherArrowHitbox;
 
     public static readonly Color[] ModColors = new Color[12] {
       Calc.HexToColor ("F7EAC3"), // Regular
