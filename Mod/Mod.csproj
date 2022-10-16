@@ -222,10 +222,13 @@
     <None Include="Content\Atlas\modAtlas\player\arrowHUD\ghost.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\modAtlas\arrows\ghost.png">
+    <None Include="Content\Atlas\modAtlas\arrows\ghostShaft.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\Atlas\modAtlas\arrows\ghostBuried.png">
+    <None Include="Content\Atlas\modAtlas\arrows\ghostHead.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\arrows\ghostOutline.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Atlas\modAtlas\arrows\ghostFeather.png">

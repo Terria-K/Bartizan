@@ -8,11 +8,13 @@ namespace Mod
 {
   class GhostArrow : Arrow
   {
+    public FlashingImage headImage;
+
     public FlashingImage shaftImage;
 
-    public FlashingImage buriedShaftImage;
-
     public FlashingImage featherImage;
+
+    public FlashingImage outlineImage;
 
     public bool wasMiracled = false;
 
@@ -38,39 +40,43 @@ namespace Mod
 
     public override void CreateGraphics()
     {
-      this.shaftImage = new FlashingImage (patch_TFGame.ModAtlas["arrows/ghost"], null);
+      this.headImage = new FlashingImage(patch_TFGame.ModAtlas["arrows/ghostHead"], null);
+      this.headImage.Origin = new Vector2 (11f, 3f);
+      this.shaftImage = new FlashingImage(patch_TFGame.ModAtlas["arrows/ghostShaft"], null);
       this.shaftImage.Origin = new Vector2 (11f, 3f);
-      this.buriedShaftImage = new FlashingImage (patch_TFGame.ModAtlas["arrows/ghostBuried"], null);
-      this.buriedShaftImage.Origin = new Vector2 (11f, 3f);
       this.featherImage = new FlashingImage (patch_TFGame.ModAtlas["arrows/ghostFeather"], null);
       this.featherImage.Origin = new Vector2 (11f, 3f);
-      base.Graphics = new Image[3] {
+      this.outlineImage = new FlashingImage (patch_TFGame.ModAtlas["arrows/ghostOutline"], null);
+      this.outlineImage.Origin = new Vector2 (11f, 3f);
+      base.Graphics = new Image[4] {
+        this.headImage,
         this.shaftImage,
-        this.buriedShaftImage,
-        this.featherImage
+        this.featherImage,
+        this.outlineImage
       };
       base.Add(base.Graphics);
     }
 
     public override void InitGraphics ()
     {
+      this.headImage.Visible = true;
       this.shaftImage.Visible = true;
-      this.buriedShaftImage.Visible = false;
-      this.featherImage.Color = ArcherData.GetColorB(base.PlayerIndex, base.TeamColor);
+      this.outlineImage.Visible = true;
+      this.outlineImage.Color = ArcherData.GetColorB(base.PlayerIndex, base.TeamColor);
 
       base.LightColor = Calc.Invert(ArcherData.GetColorB(base.PlayerIndex, base.TeamColor));
     }
 
     public override void SwapToBuriedGraphics ()
     {
-      this.shaftImage.Visible = false;
-      this.buriedShaftImage.Visible = true;
+      this.headImage.Visible = false;
+      this.outlineImage.Visible = true;
     }
 
     public override void SwapToUnburiedGraphics ()
     {
-      this.shaftImage.Visible = true;
-      this.buriedShaftImage.Visible = false;
+      this.headImage.Visible = true;
+      this.outlineImage.Visible = false;
     }
 
 
