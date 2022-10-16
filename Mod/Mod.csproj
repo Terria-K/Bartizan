@@ -244,8 +244,8 @@
     <Copy SourceFiles=".\Atlas\modAtlas.xml" DestinationFolder="..\bin\originals\$(Configuration)\Content\Atlas" />
     <Copy SourceFiles="..\bin\originals\$(Configuration)\TowerFall.exe" DestinationFolder="..\bin\" />
     <Exec Command="cp ..\bin\Mod.dll ..\bin\TowerFall.Mod.mm.dll" WorkingDirectory="..\bin" />
-    <Exec Command="..\bin\MonoMod.exe TowerFall.exe" WorkingDirectory="..\bin" />
-    <Exec Command="..\bin\Patcher.exe patch-resources originals\$(Configuration)" WorkingDirectory="..\bin" />
+    <Exec Command="mono ..\bin\MonoMod.exe TowerFall.exe" WorkingDirectory="..\bin" />
+    <Exec Command="mono ..\bin\Patcher.exe patch-resources originals\$(Configuration)" WorkingDirectory="..\bin" />
     <Exec Command="..\BuildScripts\prepare-build-$(Configuration)" WorkingDirectory="..\BuildScripts" />
   </Target>
 </Project>

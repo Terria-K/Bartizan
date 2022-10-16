@@ -55,8 +55,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
-    <Exec Command="..\bin\Patcher.exe makeBaseImage originals\4-player-itch\TowerFall.exe BaseTowerFall-4-player-itch.exe" WorkingDirectory="..\bin" />
-    <Exec Command="..\bin\Patcher.exe makeBaseImage originals\4-player\TowerFall.exe BaseTowerFall-4-player.exe" WorkingDirectory="..\bin" />
-    <Exec Command="..\bin\Patcher.exe makeBaseImage originals\8-player\TowerFall.exe BaseTowerFall-8-player.exe" WorkingDirectory="..\bin" />
+    <Exec Command="mono ..\bin\Patcher.exe makeBaseImage originals\4-player-itch\TowerFall.exe BaseTowerFall-4-player-itch.exe" WorkingDirectory="..\bin" />
+    <Exec Command="mono ..\bin\Patcher.exe makeBaseImage originals\4-player\TowerFall.exe BaseTowerFall-4-player.exe" WorkingDirectory="..\bin" />
+    <Exec Command="mono ..\bin\Patcher.exe makeBaseImage originals\8-player\TowerFall.exe BaseTowerFall-8-player.exe" WorkingDirectory="..\bin" />
   </Target>
 </Project>
