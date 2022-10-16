@@ -153,9 +153,14 @@ namespace Mod
       }
       this.DisableSolids ();
 
-      // Disappear like a laser arrow
+      // Disappear like a laser arrow, but owner gets it back
       if (!base.Flashing && base.State >= ArrowStates.Stuck) {
-        base.Flash(60, base.RemoveSelf);
+        base.Flash(60, delegate {
+          if (this.Owner is Player) {
+            this.OnPlayerCollect((Player)this.Owner, true);
+          }
+          base.RemoveSelf();
+        });
       }
     }
   }
