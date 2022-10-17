@@ -156,7 +156,7 @@ namespace Mod
       // Disappear like a laser arrow, but owner gets it back
       if (!base.Flashing && base.State >= ArrowStates.Stuck) {
         base.Flash(60, delegate {
-          if (this.Owner is Player) {
+          if (this.Owner is Player && !((Player)(this.Owner)).Dead) {
             this.OnPlayerCollect((Player)this.Owner, true);
           }
           base.RemoveSelf();
