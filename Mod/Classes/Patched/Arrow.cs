@@ -48,6 +48,36 @@ namespace TowerFall
       Calc.HexToColor ("FFFFFF")  // Ghost
     };
 
+    public static readonly Color[] ModColorsB = new Color[12] {
+      Calc.HexToColor ("FFFFFF"),
+      Calc.HexToColor ("F7D883"),
+      Calc.HexToColor ("F7D883"),
+      Calc.HexToColor ("D0F76C"),
+      Calc.HexToColor ("F7B09E"),
+      Calc.HexToColor ("D8F7FF"),
+      Calc.HexToColor ("00D33B"),
+      Calc.HexToColor ("FFB5FC"),
+      Calc.HexToColor ("D5A5FF"),
+      Calc.HexToColor ("56D4FF"),
+      Calc.HexToColor ("FF52FF"),
+      Calc.HexToColor ("3CBCFC"), // Ghost
+    };
+
+    public static readonly string[] ModNames = new string[12] {
+      "+2",
+      "BOMB",
+      "SUPER BOMB",
+      "LASER",
+      "BRAMBLE",
+      "DRILL",
+      "BOLT",
+      "TOY",
+      "FEATHER",
+      "TRIGGER",
+      "PRISM",
+      "GHOST",
+    };
+
     public new static void Initialize ()
     {
       // Same as original, with Arrow.cached size extended for mod arrow types

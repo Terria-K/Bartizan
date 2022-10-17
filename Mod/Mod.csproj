@@ -112,6 +112,7 @@
     <Compile Include="Classes\New\TrackerApiClient.cs" />
     <Compile Include="Classes\Patched\Arrow.cs" />
     <Compile Include="Classes\Patched\ArrowHUD.cs" />
+    <Compile Include="Classes\Patched\ArrowTypePickup.cs" />
     <Compile Include="Classes\Patched\ChaliceGhost.cs" />
     <Compile Include="Classes\Patched\HeadhuntersRoundLogic.cs" />
     <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Classes\Patched\MirrorPickup.cs" />
     <Compile Include="Classes\Patched\OptionsButton.cs" />
     <Compile Include="Classes\Patched\OrbPickup.cs" />
+    <Compile Include="Classes\Patched\Pickup.cs" />
     <Compile Include="Classes\Patched\Player.cs" />
     <Compile Include="Classes\Patched\PlayerCorpse.cs" />
     <Compile Include="Classes\Patched\PlayerGhost.cs" />
@@ -232,6 +234,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Atlas\modAtlas\arrows\ghostFeather.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\pickups\ghostArrows.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

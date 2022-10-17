@@ -1,6 +1,9 @@
+#pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
+using MonoMod;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +13,32 @@ namespace TowerFall
 {
   public class patch_TreasureSpawner : TreasureSpawner
   {
+    public static readonly float[] ModDefaultTreasureChances = new float[22] {
+      1f,
+      1f,
+      1f,
+      1f,
+      1f,
+      1f,
+      1f,
+      1f,
+      1f,
+      1f,
+      0.5f,
+      0.5f,
+      0.5f,
+      0.25f,
+      0.15f,
+      0.15f,
+      0.15f,
+      0.15f,
+      0.001f,
+      0.1f,
+      0f, // Gems. Normally the array cuts off before this, but we need to add to it.
+      1f  // Ghost Arrows
+    };
+
+
     public patch_TreasureSpawner (Session session, VersusTowerData versusTowerData)
       : base (session, versusTowerData.TreasureMask, versusTowerData.SpecialArrowRate, versusTowerData.ArrowShuffle)
     {
@@ -20,6 +49,90 @@ namespace TowerFall
       : base (session, mask, arrowChance, arrowShuffle)
     {
       // no-op
+    }
+
+    public extern void orig_ctor(Session session, int[] mask, float arrowChance, bool arrowShuffle);
+    [MonoModConstructor]
+    public void ctor (Session session, int[] mask, float arrowChance, bool arrowShuffle)
+    {
+      int[] onlyGhostArrowsMask  = new int[22] {
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      };
+
+      mask = onlyGhostArrowsMask;
+
+      // orig_ctor(session, onlyGhostArrowsMask, arrowChance, arrowShuffle);
+
+      // Copied with some changes
+      this.Session = session;
+      this.Random = new Random();
+      this.Exclusions = this.Session.MatchSettings.Variants.GetItemExclusions(this.Session.MatchSettings.LevelSystem.CustomTower);
+      if (!GameData.DarkWorldDLC) {
+        for (int i = 0; i < TreasureSpawner.DarkWorldTreasures.Length; i++) {
+          if (TreasureSpawner.DarkWorldTreasures [i]) {
+            this.Exclusions.Add((Pickups)i);
+          }
+        }
+      }
+      if ((bool)this.Session.MatchSettings.Variants.IgnoreTowerItemSet) {
+        this.TreasureRates = (float[])patch_TreasureSpawner.ModDefaultTreasureChances.Clone();
+      } else {
+        this.TreasureRates = new float[patch_TreasureSpawner.ModDefaultTreasureChances.Length];
+        for (int i = 0; i < this.TreasureRates.Length; i++) {
+          this.TreasureRates[i] = (float)mask[i] * patch_TreasureSpawner.ModDefaultTreasureChances[i];
+        }
+      }
+      List<Pickups>.Enumerator enumerator;
+      if (arrowShuffle || (bool)this.Session.MatchSettings.Variants.ArrowShuffle) {
+        for (int i = 1; i <= 9; i++) { // @TODO include ghost arrows in shuffle if they are enabled
+          this.TreasureRates[i] = 0f;
+        }
+        List<Pickups> arrowShufflePickups = this.GetArrowShufflePickups ();
+        enumerator = arrowShufflePickups.GetEnumerator ();
+        try {
+          while (enumerator.MoveNext ()) {
+            Pickups current = enumerator.Current;
+            this.TreasureRates [(int)current] = patch_TreasureSpawner.ModDefaultTreasureChances[(int)current];
+          }
+        } finally {
+          ((IDisposable)enumerator).Dispose ();
+        }
+      }
+      enumerator = this.Exclusions.GetEnumerator ();
+      try {
+        while (enumerator.MoveNext ()) {
+          Pickups current2 = enumerator.Current;
+          this.TreasureRates[(int)current2] = 0f;
+        }
+      } finally {
+        ((IDisposable)enumerator).Dispose ();
+      }
+      float specialArrowChance = arrowChance;
+      if ((bool)this.Session.MatchSettings.Variants.IgnoreTowerItemSet) {
+        specialArrowChance = 0.6f;
+      }
+      TreasureSpawner.AdjustTreasureRatesForSpecialArrows (this.TreasureRates, specialArrowChance);
     }
 
     // Extended to fix asymmetrical treasure bug
