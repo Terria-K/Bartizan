@@ -40,7 +40,7 @@ namespace TowerFall
 
     public void patch_Render ()
     {
-      // Unchanged from original
+      // Unchanged from original except...
       int amountOfTriggerArrowsActive = this.player.AmountOfTriggerArrowsActive;
       int arrowCountIncludingActiveTriggerArrows = this.player.Arrows.Count + amountOfTriggerArrowsActive;
       if (arrowCountIncludingActiveTriggerArrows > 0) {
@@ -55,8 +55,8 @@ namespace TowerFall
           }
           for (int i = 0; i < this.player.Arrows.Count; i++) {
             int arrowTypeInt = (int)this.player.Arrows.Arrows[i];
-            // Except here where we use Arrow.ModColors instead of Arrow.Colors
-            Draw.Texture (this.images[arrowTypeInt], Calc.Floor (this.player.Position + new Vector2 (x, -22f) + new Vector2 ((float)(4 * (i + amountOfTriggerArrowsActive)), 0f)), patch_Arrow.ModColors[arrowTypeInt]);
+            // ...here where we use Arrow.GetColor instead of Arrow.Colors
+            Draw.Texture(this.images[arrowTypeInt], Calc.Floor(this.player.Position + new Vector2 (x, -22f) + new Vector2((float)(4 * (i + amountOfTriggerArrowsActive)), 0f)), patch_Arrow.GetColor(arrowTypeInt));
           }
         }
       } else if ((bool)this.showCounter) {

@@ -33,50 +33,32 @@ namespace TowerFall
     [MonoModPublic]
     public WrapHitbox otherArrowHitbox;
 
-    public static readonly Color[] ModColors = new Color[12] {
-      Calc.HexToColor ("F7EAC3"), // Regular
-      Calc.HexToColor ("F8B800"), // Bomb
-      Calc.HexToColor ("F8B800"), // Super Bomb
-      Calc.HexToColor ("B8F818"), // Laser
-      Calc.HexToColor ("F87858"), // Bramble
-      Calc.HexToColor ("8EE8FF"), // Drill
-      Calc.HexToColor ("00FF4C"), // Bolt
-      Calc.HexToColor ("FF6DFA"), // Toy
-      Calc.HexToColor ("BC70FF"), // Feather
-      Calc.HexToColor ("1BB7EE"), // Trigger
-      Calc.HexToColor ("DB4ADB"), // Prism
-      Calc.HexToColor ("FFFFFF")  // Ghost
-    };
+    public static Color GetColor(int index) {
+      switch (index) {
+        case (int)(MyGlobals.ArrowTypes.Ghost):
+          return Calc.HexToColor("FFFFFF");
+        default:
+          return Arrow.Colors[index];
+      }
+    }
 
-    public static readonly Color[] ModColorsB = new Color[12] {
-      Calc.HexToColor ("FFFFFF"),
-      Calc.HexToColor ("F7D883"),
-      Calc.HexToColor ("F7D883"),
-      Calc.HexToColor ("D0F76C"),
-      Calc.HexToColor ("F7B09E"),
-      Calc.HexToColor ("D8F7FF"),
-      Calc.HexToColor ("00D33B"),
-      Calc.HexToColor ("FFB5FC"),
-      Calc.HexToColor ("D5A5FF"),
-      Calc.HexToColor ("56D4FF"),
-      Calc.HexToColor ("FF52FF"),
-      Calc.HexToColor ("3CBCFC"), // Ghost
-    };
+    public static Color GetColorB(int index) {
+      switch (index) {
+        case (int)(MyGlobals.ArrowTypes.Ghost):
+          return Calc.HexToColor("3CBCFC");
+        default:
+          return Arrow.ColorsB[index];
+      }
+    }
 
-    public static readonly string[] ModNames = new string[12] {
-      "+2",
-      "BOMB",
-      "SUPER BOMB",
-      "LASER",
-      "BRAMBLE",
-      "DRILL",
-      "BOLT",
-      "TOY",
-      "FEATHER",
-      "TRIGGER",
-      "PRISM",
-      "GHOST",
-    };
+    public static string GetArrowName(int index) {
+      switch (index) {
+        case (int)(MyGlobals.ArrowTypes.Ghost):
+          return "GHOST";
+        default:
+          return Arrow.Names[index];
+      }
+    }
 
     public new static void Initialize ()
     {

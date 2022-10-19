@@ -41,16 +41,16 @@ namespace TowerFall
 
     public void patch_OnPlayerCollide (Player player)
     {
-      // Original code but uses ModNames and ModColors
+      // Original code but call static methods that know about mod arrows
       if (player.CollectArrows (this.arrowType, this.arrowType)) {
-        base.DoCollectStats (player.PlayerIndex);
-        base.RemoveSelf ();
-        Color color = patch_Arrow.ModColors[(int)this.arrowType];
-        Color color2 = patch_Arrow.ModColorsB[(int)this.arrowType];
-        base.Level.Add (new FloatText (base.Position + new Vector2 (0f, -10f), patch_Arrow.ModNames[(int)this.arrowType], color, color2, 1f, 1f, false));
-        base.Level.Add (new FloatText (base.Position + new Vector2 (0f, -3f), "ARROWS", color, color2, 1f, 1f, false));
-        base.Level.Add (Cache.Create<LightFade> ().Init (this, null));
-        this.PlaySound ();
+        base.DoCollectStats(player.PlayerIndex);
+        base.RemoveSelf();
+        Color color = patch_Arrow.GetColor((int)this.arrowType);
+        Color color2 = patch_Arrow.GetColorB((int)this.arrowType);
+        base.Level.Add(new FloatText (base.Position + new Vector2 (0f, -10f), patch_Arrow.GetArrowName((int)this.arrowType), color, color2, 1f, 1f, false));
+        base.Level.Add(new FloatText (base.Position + new Vector2 (0f, -3f), "ARROWS", color, color2, 1f, 1f, false));
+        base.Level.Add(Cache.Create<LightFade> ().Init (this, null));
+        this.PlaySound();
       }
     }
   }
