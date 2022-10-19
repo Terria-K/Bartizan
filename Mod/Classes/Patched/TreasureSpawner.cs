@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
 using MonoMod;
+using Mod;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,32 +14,6 @@ namespace TowerFall
 {
   public class patch_TreasureSpawner : TreasureSpawner
   {
-    public static readonly float[] ModDefaultTreasureChances = new float[22] {
-      1f,
-      1f,
-      1f,
-      1f,
-      1f,
-      1f,
-      1f,
-      1f,
-      1f,
-      1f,
-      0.5f,
-      0.5f,
-      0.5f,
-      0.25f,
-      0.15f,
-      0.15f,
-      0.15f,
-      0.15f,
-      0.001f,
-      0.1f,
-      0f, // Gems. Normally the array cuts off before this, but we need to add to it.
-      1f  // Ghost Arrows
-    };
-
-
     public patch_TreasureSpawner (Session session, VersusTowerData versusTowerData)
       : base (session, versusTowerData.TreasureMask, versusTowerData.SpecialArrowRate, versusTowerData.ArrowShuffle)
     {
@@ -51,40 +26,9 @@ namespace TowerFall
       // no-op
     }
 
-    public extern void orig_ctor(Session session, int[] mask, float arrowChance, bool arrowShuffle);
-    [MonoModConstructor]
-    public void ctor (Session session, int[] mask, float arrowChance, bool arrowShuffle)
+    public void OriginalConstructorHandleModdedMask(Session session, int[] mask, float arrowChance, bool arrowShuffle)
     {
-      int[] onlyGhostArrowsMask  = new int[22] {
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        1
-      };
-
-      mask = onlyGhostArrowsMask;
-
-      // orig_ctor(session, onlyGhostArrowsMask, arrowChance, arrowShuffle);
-
-      // Copied with some changes
+      // Original constructor with changes to accomodate mod items
       this.Session = session;
       this.Random = new Random();
       this.Exclusions = this.Session.MatchSettings.Variants.GetItemExclusions(this.Session.MatchSettings.LevelSystem.CustomTower);
@@ -96,24 +40,25 @@ namespace TowerFall
         }
       }
       if ((bool)this.Session.MatchSettings.Variants.IgnoreTowerItemSet) {
-        this.TreasureRates = (float[])patch_TreasureSpawner.ModDefaultTreasureChances.Clone();
+        this.TreasureRates = (float[])patch_TreasureSpawner.GetDefaultTreasureChances();
       } else {
-        this.TreasureRates = new float[patch_TreasureSpawner.ModDefaultTreasureChances.Length];
+        this.TreasureRates = new float[patch_TreasureSpawner.GetDefaultTreasureChances().Length];
         for (int i = 0; i < this.TreasureRates.Length; i++) {
-          this.TreasureRates[i] = (float)mask[i] * patch_TreasureSpawner.ModDefaultTreasureChances[i];
+          this.TreasureRates[i] = (float)mask[i] * patch_TreasureSpawner.GetDefaultTreasureChances()[i];
         }
       }
       List<Pickups>.Enumerator enumerator;
       if (arrowShuffle || (bool)this.Session.MatchSettings.Variants.ArrowShuffle) {
-        for (int i = 1; i <= 9; i++) { // @TODO include ghost arrows in shuffle if they are enabled
+        for (int i = 1; i <= 9; i++) {
           this.TreasureRates[i] = 0f;
         }
-        List<Pickups> arrowShufflePickups = this.GetArrowShufflePickups ();
+        this.TreasureRates[(int)MyGlobals.Pickups.GhostArrows] = 0f;
+        List<Pickups> arrowShufflePickups = this.GetArrowShufflePickups();
         enumerator = arrowShufflePickups.GetEnumerator ();
         try {
           while (enumerator.MoveNext ()) {
             Pickups current = enumerator.Current;
-            this.TreasureRates [(int)current] = patch_TreasureSpawner.ModDefaultTreasureChances[(int)current];
+            this.TreasureRates[(int)current] = patch_TreasureSpawner.GetDefaultTreasureChances()[(int)current];
           }
         } finally {
           ((IDisposable)enumerator).Dispose ();
@@ -133,6 +78,73 @@ namespace TowerFall
         specialArrowChance = 0.6f;
       }
       TreasureSpawner.AdjustTreasureRatesForSpecialArrows (this.TreasureRates, specialArrowChance);
+    }
+
+    public extern void orig_ctor(Session session, int[] mask, float arrowChance, bool arrowShuffle);
+    [MonoModConstructor]
+    public void ctor (Session session, int[] mask, float arrowChance, bool arrowShuffle)
+    {
+      if (
+        ((patch_MatchVariants)session.MatchSettings.Variants).GhostArrowsOnAmaranth &&
+        session.MatchSettings.LevelSystem.Theme.Name == "THE AMARANTH"
+      ) {
+        List<int> treasureMask = new List<int>(mask);
+        treasureMask.Add(0); // Gems
+        treasureMask.Add(1); // Ghost Arrows
+        mask = treasureMask.ToArray();
+        OriginalConstructorHandleModdedMask(session, mask, arrowChance, arrowShuffle);
+      } else {
+        orig_ctor(session, mask, arrowChance, arrowShuffle);
+      }
+    }
+
+    public static float[] GetDefaultTreasureChances()
+    {
+      List<float> treasureChances = new List<float>(TreasureSpawner.DefaultTreasureChances);
+      treasureChances.Add(0f); // Gems
+      treasureChances.Add(1f); // Ghost Arrows
+      return treasureChances.ToArray();
+    }
+
+    // Mostly original, with mod arrows added
+    public override List<Pickups> GetArrowShufflePickups ()
+    {
+      List<Pickups> list = new List<Pickups>();
+      if (!this.Exclusions.Contains(Pickups.BombArrows)) {
+        list.Add(Pickups.BombArrows);
+      }
+      if (!this.Exclusions.Contains(Pickups.LaserArrows)) {
+        list.Add(Pickups.LaserArrows);
+      }
+      if (!this.Exclusions.Contains(Pickups.BrambleArrows)) {
+        list.Add(Pickups.BrambleArrows);
+      }
+      if (!this.Exclusions.Contains(Pickups.DrillArrows)) {
+        list.Add(Pickups.DrillArrows);
+      }
+      if (SaveData.Instance.Unlocks.SunkenCity && !this.Exclusions.Contains(Pickups.BoltArrows)) {
+        list.Add(Pickups.BoltArrows);
+      }
+      if (SaveData.Instance.Unlocks.TowerForge && !this.Exclusions.Contains(Pickups.SuperBombArrows)) {
+        list.Add(Pickups.SuperBombArrows);
+      }
+      if (SaveData.Instance.Unlocks.Ascension && !this.Exclusions.Contains(Pickups.FeatherArrows)) {
+        list.Add(Pickups.FeatherArrows);
+      }
+      if (GameData.DarkWorldDLC && !this.Exclusions.Contains(Pickups.TriggerArrows)) {
+        list.Add(Pickups.TriggerArrows);
+      }
+      if (GameData.DarkWorldDLC && !this.Exclusions.Contains(Pickups.PrismArrows)) {
+        list.Add(Pickups.PrismArrows);
+      }
+      if (((patch_MatchVariants)(this.Session.MatchSettings.Variants)).GhostArrowsOnAmaranth) {
+        list.Add((Pickups)(MyGlobals.Pickups.GhostArrows));
+      }
+      Calc.Shuffle(list);
+      while (list.Count > 2) {
+        list.RemoveAt(0);
+      }
+      return list;
     }
 
     // Extended to fix asymmetrical treasure bug

@@ -30,6 +30,7 @@ namespace TowerFall
       "CalvinFall",
       "MeanerMonsters",
       "StartWithGhostArrows",
+      "GhostArrowsOnAmaranth",
     };
 
     [Header("MODS")]
@@ -79,6 +80,9 @@ namespace TowerFall
     [PerPlayer, CanRandom]
     public Variant StartWithGhostArrows;
 
+    [CanRandom]
+    public Variant GhostArrowsOnAmaranth;
+
     public extern void orig_ctor(bool noPerPlayer);
     [MonoModConstructor]
     public void ctor(bool noPerPlayer = false)
@@ -119,9 +123,9 @@ namespace TowerFall
       bool isModVariant = patch_MatchVariants.ModVariants.Contains(variantName);
 
       if (isModVariant) {
-        return patch_TFGame.ModAtlas ["variants/" + variantName [0].ToString ().ToLower (CultureInfo.InvariantCulture) + variantName.Substring (1)];
+        return patch_TFGame.ModAtlas["variants/" + variantName[0].ToString().ToLower(CultureInfo.InvariantCulture) + variantName.Substring(1)];
       } else {
-        return TFGame.MenuAtlas ["variants/" + variantName [0].ToString ().ToLower (CultureInfo.InvariantCulture) + variantName.Substring (1)];
+        return TFGame.MenuAtlas["variants/" + variantName[0].ToString().ToLower(CultureInfo.InvariantCulture) + variantName.Substring(1)];
       }
     }
 

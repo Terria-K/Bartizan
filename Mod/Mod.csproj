@@ -221,6 +221,9 @@
     <None Include="Content\Atlas\modAtlas\variants\startWithGhostArrows.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Atlas\modAtlas\variants\ghostArrowsOnAmaranth.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Atlas\modAtlas\player\arrowHUD\ghost.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

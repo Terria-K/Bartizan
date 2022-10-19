@@ -16,7 +16,6 @@ namespace TowerFall
     public extern static Pickup orig_CreatePickup(Vector2 position, Vector2 targetPosition, Pickups type, int playerIndex);
     public static Pickup patch_CreatePickup(Vector2 position, Vector2 targetPosition, Pickups type, int playerIndex)
     {
-      Console.WriteLine("Patched CreatePickup");
       if (type == (Pickups)(MyGlobals.Pickups.GhostArrows)) {
         Pickup pickup;
         pickup = new ArrowTypePickup(position, targetPosition, (ArrowTypes)(MyGlobals.ArrowTypes.Ghost));
