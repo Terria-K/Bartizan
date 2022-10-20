@@ -85,7 +85,7 @@ namespace TowerFall
     public void ctor (Session session, int[] mask, float arrowChance, bool arrowShuffle)
     {
       if (
-        ((patch_MatchVariants)session.MatchSettings.Variants).GhostArrowsOnAmaranth &&
+        ((patch_MatchVariants)session.MatchSettings.Variants).EnableGhostArrows &&
         session.MatchSettings.LevelSystem.Theme.Name == "THE AMARANTH"
       ) {
         List<int> treasureMask = new List<int>(mask);
@@ -137,7 +137,7 @@ namespace TowerFall
       if (GameData.DarkWorldDLC && !this.Exclusions.Contains(Pickups.PrismArrows)) {
         list.Add(Pickups.PrismArrows);
       }
-      if (((patch_MatchVariants)(this.Session.MatchSettings.Variants)).GhostArrowsOnAmaranth) {
+      if (((patch_MatchVariants)(this.Session.MatchSettings.Variants)).EnableGhostArrows) {
         list.Add((Pickups)(MyGlobals.Pickups.GhostArrows));
       }
       Calc.Shuffle(list);

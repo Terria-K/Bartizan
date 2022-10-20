@@ -30,7 +30,7 @@ namespace TowerFall
       "CalvinFall",
       "MeanerMonsters",
       "StartWithGhostArrows",
-      "GhostArrowsOnAmaranth",
+      "EnableGhostArrows",
     };
 
     [Header("MODS")]
@@ -80,8 +80,8 @@ namespace TowerFall
     [PerPlayer, CanRandom]
     public Variant StartWithGhostArrows;
 
-    [CanRandom]
-    public Variant GhostArrowsOnAmaranth;
+    [CanRandom, Description("FIND THEM ON AMARANTH")]
+    public Variant EnableGhostArrows;
 
     public extern void orig_ctor(bool noPerPlayer);
     [MonoModConstructor]
