@@ -77,7 +77,7 @@ namespace TowerFall
       if ((bool)this.Session.MatchSettings.Variants.IgnoreTowerItemSet) {
         specialArrowChance = 0.6f;
       }
-      TreasureSpawner.AdjustTreasureRatesForSpecialArrows (this.TreasureRates, specialArrowChance);
+      TreasureSpawner.AdjustTreasureRatesForSpecialArrows(this.TreasureRates, specialArrowChance);
     }
 
     public extern void orig_ctor(Session session, int[] mask, float arrowChance, bool arrowShuffle);
@@ -85,12 +85,15 @@ namespace TowerFall
     public void ctor (Session session, int[] mask, float arrowChance, bool arrowShuffle)
     {
       if (
-        ((patch_MatchVariants)session.MatchSettings.Variants).EnableGhostArrows &&
-        session.MatchSettings.LevelSystem.Theme.Name == "THE AMARANTH"
+        ((patch_MatchVariants)session.MatchSettings.Variants).EnableGhostArrows
       ) {
         List<int> treasureMask = new List<int>(mask);
         treasureMask.Add(0); // Gems
-        treasureMask.Add(1); // Ghost Arrows
+        if (session.MatchSettings.LevelSystem.Theme.Name == "THE AMARANTH") {
+          treasureMask.Add(1); // Ghost Arrows
+        } else {
+          treasureMask.Add(0); // Ghost Arrows
+        }
         mask = treasureMask.ToArray();
         OriginalConstructorHandleModdedMask(session, mask, arrowChance, arrowShuffle);
       } else {
