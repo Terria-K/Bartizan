@@ -51,6 +51,12 @@
     <DefineConstants></DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '4-player-itch-stat-tracking|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin</OutputPath>
+    <DefineConstants>STAT_TRACKING</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="FNA">
@@ -66,8 +72,29 @@
     <Reference Include="System.Xml.Linq">
       <HintPath>..\packages\System.Xml.Linq.3.5.21022.801\lib\net20\System.Xml.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="BaseTowerFall-4-player-itch">
-      <HintPath>..\bin\BaseTowerFall-4-player-itch.exe</HintPath>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\packages\Mono.Cecil.0.10.4\lib\net40\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb">
+      <HintPath>..\packages\Mono.Cecil.0.10.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb">
+      <HintPath>..\packages\Mono.Cecil.0.10.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks">
+      <HintPath>..\packages\Mono.Cecil.0.10.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMod.Utils">
+      <HintPath>..\packages\MonoMod.Utils.22.5.1.1\lib\net35\MonoMod.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMod">
+      <HintPath>..\packages\MonoMod.22.5.1.1\lib\net35\MonoMod.exe</HintPath>
+    </Reference>
+    <Reference Include="MonoMod.Common">
+      <HintPath>..\packages\MonoMod.Common.22.6.3.1\lib\net35\MonoMod.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="BaseTowerFall">
+      <HintPath>..\bin\BaseTowerFall.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -76,51 +103,47 @@
     <Compile Include="Classes\New\MobRoundLogic.cs" />
     <Compile Include="Classes\New\MyGlobals.cs" />
     <Compile Include="Classes\New\MyMatchStats.cs" />
-    <Compile Include="Classes\New\MyOptionsButton.cs" />
+    <Compile Include="Classes\New\PlayerGhostShield.cs" />
     <Compile Include="Classes\New\PlayerNames.cs" />
     <Compile Include="Classes\New\RespawnRoundLogic.cs" />
     <Compile Include="Classes\New\RosterButtonCreator.cs" />
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
     <Compile Include="Classes\New\TrackerApiClient.cs" />
-    <Compile Include="Classes\Patched\MyArrow.cs" />
-    <Compile Include="Classes\Patched\MyGameplayLayer.cs" />
-    <Compile Include="Classes\Patched\MyLevel.cs" />
-    <Compile Include="Classes\Patched\MyMainMenu.cs" />
-    <Compile Include="Classes\Patched\MyMapScene.cs" />
-    <Compile Include="Classes\Patched\MyMatchSettings.cs" />
-    <Compile Include="Classes\Patched\MyMatchVariants.cs" />
-    <Compile Include="Classes\Patched\MyPlayer.cs" />
-    <Compile Include="Classes\Patched\MyPlayerCorpse.cs" />
-    <Compile Include="Classes\Patched\MyPlayerGhost.cs" />
-    <Compile Include="Classes\Patched\MyPlayerIndicator.cs" />
-    <Compile Include="Classes\Patched\MyReplayFrame.cs" />
-    <Compile Include="Classes\Patched\MyRollcallElement.cs" />
-    <Compile Include="Classes\Patched\MyRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MyScene.cs" />
-    <Compile Include="Classes\Patched\MyScreenTitle.cs" />
-    <Compile Include="Classes\Patched\MySession.cs" />
-    <Compile Include="Classes\Patched\MyTFGame.cs" />
-    <Compile Include="Classes\Patched\MyVersusCoinButton.cs" />
-    <Compile Include="Classes\Patched\MyVersusMatchResults.cs" />
-    <Compile Include="Classes\Patched\MyVersusModeButton.cs" />
-    <Compile Include="Classes\Patched\MyVersusPlayerMatchResults.cs" />
-    <Compile Include="Classes\Patched\MyVersusRoundResults.cs" />
-    <Compile Include="Classes\Patched\MyXGamepadData.cs" />
-    <Compile Include="Classes\Replaced\MyChalice.cs" />
-    <Compile Include="Classes\Replaced\MyChalicePad.cs" />
-    <Compile Include="Classes\Replaced\MyChaliceGhost.cs" />
-    <Compile Include="Classes\Patched\MyOrbPickup.cs" />
-    <Compile Include="Classes\Replaced\MyTeamReviver.cs" />
-    <Compile Include="Classes\New\PlayerGhostShield.cs" />
-    <Compile Include="Classes\Patched\MyShieldPickup.cs" />
-    <Compile Include="Classes\Patched\MyTreasureChest.cs" />
-    <Compile Include="Classes\Patched\MyTreasureSpawner.cs" />
-    <Compile Include="Classes\Patched\MySpeedBootsPickup.cs" />
-    <Compile Include="Classes\Patched\MyMirrorPickup.cs" />
-    <Compile Include="Classes\Patched\MyTeamDeathmatchRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MyHeadhuntersRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MyLastManStandingRoundLogic.cs" />
-    <Compile Include="Classes\Patched\MyQuestSpawnPortal.cs" />
+    <Compile Include="Classes\Patched\Arrow.cs" />
+    <Compile Include="Classes\Patched\ChaliceGhost.cs" />
+    <Compile Include="Classes\Patched\HeadhuntersRoundLogic.cs" />
+    <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
+    <Compile Include="Classes\Patched\MainMenu.cs" />
+    <Compile Include="Classes\Patched\MapScene.cs" />
+    <Compile Include="Classes\Patched\MatchSettings.cs" />
+    <Compile Include="Classes\Patched\MatchVariants.cs" />
+    <Compile Include="Classes\Patched\MirrorPickup.cs" />
+    <Compile Include="Classes\Patched\OptionsButton.cs" />
+    <Compile Include="Classes\Patched\OrbPickup.cs" />
+    <Compile Include="Classes\Patched\Player.cs" />
+    <Compile Include="Classes\Patched\PlayerCorpse.cs" />
+    <Compile Include="Classes\Patched\PlayerGhost.cs" />
+    <Compile Include="Classes\Patched\PlayerIndicator.cs" />
+    <Compile Include="Classes\Patched\QuestSpawnPortal.cs" />
+    <Compile Include="Classes\Patched\ReplayFrame.cs" />
+    <Compile Include="Classes\Patched\RollcallElement.cs" />
+    <Compile Include="Classes\Patched\RoundLogic.cs" />
+    <Compile Include="Classes\Patched\Scene.cs" />
+    <Compile Include="Classes\Patched\ScreenTitle.cs" />
+    <Compile Include="Classes\Patched\Session.cs" />
+    <Compile Include="Classes\Patched\ShieldPickup.cs" />
+    <Compile Include="Classes\Patched\SpeedBootsPickup.cs" />
+    <Compile Include="Classes\Patched\TeamDeathmatchRoundLogic.cs" />
+    <Compile Include="Classes\Patched\TeamReviver.cs" />
+    <Compile Include="Classes\Patched\TFGame.cs" />
+    <Compile Include="Classes\Patched\TreasureChest.cs" />
+    <Compile Include="Classes\Patched\TreasureSpawner.cs" />
+    <Compile Include="Classes\Patched\VersusCoinButton.cs" />
+    <Compile Include="Classes\Patched\VersusMatchResults.cs" />
+    <Compile Include="Classes\Patched\VersusModeButton.cs" />
+    <Compile Include="Classes\Patched\VersusPlayerMatchResults.cs" />
+    <Compile Include="Classes\Patched\VersusRoundResults.cs" />
+    <Compile Include="Classes\Patched\XGamepadData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -202,7 +225,9 @@
   <Target Name="AfterBuild">
     <Copy SourceFiles=".\Atlas\modAtlas.png" DestinationFolder="..\bin\originals\$(Configuration)\Content\Atlas" />
     <Copy SourceFiles=".\Atlas\modAtlas.xml" DestinationFolder="..\bin\originals\$(Configuration)\Content\Atlas" />
-    <Exec Command="..\bin\Patcher.exe patch-exe Mod.dll originals\$(Configuration) TowerFall.exe" WorkingDirectory="..\bin" />
+    <Copy SourceFiles="..\bin\originals\$(Configuration)\TowerFall.exe" DestinationFolder="..\bin\" />
+    <Exec Command="cp ..\bin\Mod.dll ..\bin\TowerFall.Mod.mm.dll" WorkingDirectory="..\bin" />
+    <Exec Command="..\bin\MonoMod.exe TowerFall.exe" WorkingDirectory="..\bin" />
     <Exec Command="..\bin\Patcher.exe patch-resources originals\$(Configuration)" WorkingDirectory="..\bin" />
     <Exec Command="..\BuildScripts\prepare-build-$(Configuration)" WorkingDirectory="..\BuildScripts" />
   </Target>

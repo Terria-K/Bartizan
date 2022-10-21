@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Mod
 {
-  public class RosterPlayerButton : MyOptionsButton
+  public class RosterPlayerButton : patch_OptionsButton
   {
     public Subtexture[] icons;
 
@@ -147,7 +147,7 @@ namespace Mod
 
     public override void Render ()
     {
-      Color color = base.Selected ? MyOptionsButton.SelectedColor : MyOptionsButton.NotSelectedColor;
+      Color color = base.Selected ? OptionsButton.SelectedColor : OptionsButton.NotSelectedColor;
       Draw.OutlineTextJustify (TFGame.Font, this.title, base.Position + new Vector2 (-5f, 0f) + new Vector2 (5f * this.selectedWiggler.Value, 0f), color, Color.Black, new Vector2 (1f, 0.5f), 1f);
 
       Vector2 vector = new Vector2 (30f + 2f * this.changedWiggler.Value * (float)this.wiggleDir, 0f);

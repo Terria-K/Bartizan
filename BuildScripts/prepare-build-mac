@@ -10,4 +10,4 @@ cp ./PatchScripts/patch-tf-$1 ../bin/builds/$1/patch-tf
 chmod 755 ../bin/builds/$1/patch-tf
 cp ./Readmes/readme-$1-mac.txt ../bin/builds/$1/README.txt
 # Files to symlink for easier dev
-cp ../bin/TowerFall.exe ../bin/TowerFall-$1-patched.exe
+cp ../bin/MONOMODDED_TowerFall.exe ../bin/TowerFall-$1-patched.exe
