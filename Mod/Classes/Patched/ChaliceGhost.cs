@@ -4,6 +4,7 @@
 
 using MonoMod;
 using Monocle;
+using Mod;
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -58,6 +59,15 @@ namespace TowerFall
     public void patch_Update ()
     {
       base_Update();
+
+      if (!this.dead) {
+        foreach (Arrow item in ((Scene)base.Level)[GameTags.Arrow]) {
+          if (this.ArrowCheck(item)) {
+            this.OnArrowHit(item);
+          }
+        }
+      }
+
       if (base.Scene.OnInterval (5)) {
         this.flash = !this.flash;
       }
@@ -216,6 +226,15 @@ namespace TowerFall
         playerTarget = result;
       }
       return result;
+    }
+
+    public override bool OnArrowHit(Arrow arrow)
+    {
+      if (arrow.ArrowType == (ArrowTypes)(MyGlobals.ArrowTypes.Ghost)) {
+        this.Vanish();
+        return true;
+      }
+      return false;
     }
   }
 }
