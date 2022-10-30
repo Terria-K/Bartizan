@@ -9,6 +9,9 @@ import {
 } from '../utils';
 import { Version } from '../../types';
 
+const patchFilesTargetDir = 'Bartizan-Plus'
+const targetModDllFilename = 'TowerFall.Mod.mm.dll';
+
 export const checkPatchability = (
   event: Electron.IpcMainInvokeEvent,
   towerfallPath: string
@@ -32,13 +35,28 @@ export async function unpatchGame(
           path.join(pathToExe, 'TowerFall-Original.exe'),
           path.join(pathToExe, 'TowerFall.exe')
         );
-        unlinkIfExists(path.join(pathToExe, 'Mod.dll'));
+        unlinkIfExists(path.join(pathToExe, 'Mod.dll')); // If left over from v1 patch
         unlinkIfExists(
           path.join(pathToExe, 'Content', 'Atlas', 'modAtlas.xml')
         );
         unlinkIfExists(
           path.join(pathToExe, 'Content', 'Atlas', 'modAtlas.png')
         );
+        getFilesToCopyFromExePath().forEach(filename => {
+          unlinkIfExists(path.join(pathToExe, patchFilesTargetDir, filename));
+        });
+        getFilesToCopyFromPatchFiles().forEach(filename => {
+          unlinkIfExists(path.join(pathToExe, patchFilesTargetDir, filename));
+        });
+        unlinkIfExists(path.join(pathToExe, patchFilesTargetDir, targetModDllFilename));
+        unlinkIfExists(path.join(pathToExe, patchFilesTargetDir, 'MONOMODDED_TowerFall.exe'));
+        unlinkIfExists(path.join(pathToExe, patchFilesTargetDir, 'MONOMODDED_TowerFall.exe.mdb'));
+        try {
+          fs.rmdirSync(path.join(pathToExe, patchFilesTargetDir));
+        } catch (error) {
+          // Fine if patch files target path not removed
+          return Promise.resolve(true);
+        }
         return Promise.resolve(true);
       }
     }
@@ -46,6 +64,24 @@ export async function unpatchGame(
   } catch (error) {
     return Promise.resolve(false);
   }
+}
+
+function getFilesToCopyFromPatchFiles(): string[] {
+  return [
+    'Mono.Cecil.dll',
+    'Mono.Cecil.Mdb.dll',
+    'Mono.Cecil.Pdb.dll',
+    'MonoMod.Utils.dll',
+    'MonoMod.exe',
+  ];
+}
+
+function getFilesToCopyFromExePath(): string[] {
+  return [
+    'TowerFall.exe',
+    'FNA.dll',
+    'Steamworks.NET.dll'
+  ];
 }
 
 export async function patchGame(
@@ -69,25 +105,47 @@ export async function patchGame(
           path.join(pathToExe, 'TowerFall-Original.exe')
         );
       }
+
+      const filesToCopyFromExePath = getFilesToCopyFromExePath();
+      const filesToCopyFromPatchFiles = getFilesToCopyFromPatchFiles();
+
+      if (!fs.existsSync(path.join(pathToExe, patchFilesTargetDir))) {
+        fs.mkdirSync(path.join(pathToExe, patchFilesTargetDir));
+      }
+
+      filesToCopyFromExePath.forEach(filename => {
+        fs.copyFileSync(
+          path.join(pathToExe, filename),
+          path.join(pathToExe, patchFilesTargetDir, filename)
+        );
+      });
+
+      filesToCopyFromPatchFiles.forEach(filename => {
+        fs.copyFileSync(
+          path.join(patchFilesPath, filename),
+          path.join(pathToExe, patchFilesTargetDir, filename)
+        );
+      });
+      // Copy dll file for the selected TF version
+      fs.copyFileSync(
+        path.join(patchFilesPath, `TowerFall.${towerfallVersion}.mm.dll`),
+        path.join(pathToExe, patchFilesTargetDir, targetModDllFilename)
+      );
       // Patch EXE
       const command = isMac()
         ? 'mono'
-        : path.join(patchFilesPath, 'Patcher.exe');
-      const args = [];
+        : 'MonoMod.exe';
+      const args: string[] = [];
       if (isMac()) {
-        args.push(path.join(patchFilesPath, 'Patcher.exe'));
+        args.push(path.join(pathToExe, patchFilesTargetDir, 'MonoMod.exe'));
       }
       args.push.apply(args, [
-        'patch-exe',
-        path.join(patchFilesPath, `Mod-${towerfallVersion}.dll`),
-        pathToExe,
-        path.join(pathToExe, 'TowerFall.exe'),
+        path.join('TowerFall.exe'),
       ]);
-      execShellCommand(command, args);
-      // Copy Mod.dll file
+      execShellCommand(command, args, path.join(pathToExe, patchFilesTargetDir));
       fs.copyFileSync(
-        path.join(patchFilesPath, `Mod-${towerfallVersion}.dll`),
-        path.join(pathToExe, 'Mod.dll')
+        path.join(pathToExe, patchFilesTargetDir, 'MONOMODDED_TowerFall.exe'),
+        path.join(pathToExe, 'TowerFall.exe')
       );
       // Copy atlas files
       fs.copyFileSync(

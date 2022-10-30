@@ -4,7 +4,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using Newtonsoft.Json.Linq;
+#if (STAT_TRACKING)
+  using Newtonsoft.Json.Linq;
+#endif
 using Mod;
 
 namespace TowerFall
