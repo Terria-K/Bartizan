@@ -25,7 +25,8 @@ export const checkPatchability = (
 
 export async function unpatchGame(
   event: Electron.IpcMainInvokeEvent,
-  towerfallPath: string
+  towerfallPath: string,
+  towerfallVersion: Version,
 ): Promise<boolean> {
   try {
     const pathToExe = getPathToTowerfallExe(towerfallPath);
@@ -42,7 +43,7 @@ export async function unpatchGame(
         unlinkIfExists(
           path.join(pathToExe, 'Content', 'Atlas', 'modAtlas.png')
         );
-        getFilesToCopyFromExePath().forEach(filename => {
+        getFilesToCopyFromExePath(towerfallVersion).forEach(filename => {
           unlinkIfExists(path.join(pathToExe, patchFilesTargetDir, filename));
         });
         getFilesToCopyFromPatchFiles().forEach(filename => {
@@ -76,12 +77,15 @@ function getFilesToCopyFromPatchFiles(): string[] {
   ];
 }
 
-function getFilesToCopyFromExePath(): string[] {
-  return [
+function getFilesToCopyFromExePath(towerfallVersion: Version): string[] {
+  const files = [
     'TowerFall.exe',
     'FNA.dll',
-    'Steamworks.NET.dll'
   ];
+  if (towerfallVersion === '4-player-steam') {
+    files.push('Steamworks.NET.dll');
+  }
+  return files;
 }
 
 export async function patchGame(
@@ -106,7 +110,7 @@ export async function patchGame(
         );
       }
 
-      const filesToCopyFromExePath = getFilesToCopyFromExePath();
+      const filesToCopyFromExePath = getFilesToCopyFromExePath(towerfallVersion);
       const filesToCopyFromPatchFiles = getFilesToCopyFromPatchFiles();
 
       if (!fs.existsSync(path.join(pathToExe, patchFilesTargetDir))) {

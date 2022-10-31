@@ -79,7 +79,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
         onClick={async () => {
           setLoading(true);
           try {
-            const success = await window.api.unpatch(towerfallPath);
+            const success = await window.api.unpatch(towerfallPath, towerfallVersion);
             setLoading(false);
             if (success) {
               setButtonStatuses({
