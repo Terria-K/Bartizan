@@ -110,6 +110,7 @@
     <Compile Include="Classes\New\RosterButtonCreator.cs" />
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
     <Compile Include="Classes\New\TrackerApiClient.cs" />
+    <Compile Include="Classes\Patched\Actor.cs" />
     <Compile Include="Classes\Patched\Arrow.cs" />
     <Compile Include="Classes\Patched\ArrowHUD.cs" />
     <Compile Include="Classes\Patched\ArrowTypePickup.cs" />
