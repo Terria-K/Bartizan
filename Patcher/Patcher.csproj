@@ -34,16 +34,16 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="Mono.Cecil">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.11.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -55,8 +55,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
-    <Exec Command="..\bin\Patcher.exe makeBaseImage originals\4-player-itch\TowerFall.exe BaseTowerFall-4-player-itch.exe" WorkingDirectory="..\bin" />
-    <Exec Command="..\bin\Patcher.exe makeBaseImage originals\4-player\TowerFall.exe BaseTowerFall-4-player.exe" WorkingDirectory="..\bin" />
-    <Exec Command="..\bin\Patcher.exe makeBaseImage originals\8-player\TowerFall.exe BaseTowerFall-8-player.exe" WorkingDirectory="..\bin" />
+    <Exec Command="mono ..\bin\Patcher.exe makeBaseImage originals\4-player-itch\TowerFall.exe BaseTowerFall-4-player-itch.exe" WorkingDirectory="..\bin" />
+    <Exec Command="mono ..\bin\Patcher.exe makeBaseImage originals\4-player\TowerFall.exe BaseTowerFall-4-player.exe" WorkingDirectory="..\bin" />
+    <Exec Command="mono ..\bin\Patcher.exe makeBaseImage originals\8-player\TowerFall.exe BaseTowerFall-8-player.exe" WorkingDirectory="..\bin" />
   </Target>
 </Project>

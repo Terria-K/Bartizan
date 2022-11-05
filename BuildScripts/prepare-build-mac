@@ -1,8 +1,7 @@
 #! /usr/bin/env bash
 mkdir -p ../bin/builds/$1
 cp ../bin/Patcher.exe ../bin/builds/$1/
-cp ../bin/Wizard.exe ../bin/builds/$1/
-cp ../bin/Mod.dll ../bin/builds/$1/
+cp ../bin/TowerFall.Mod.mm.dll ../bin/builds/$1/
 cp ../bin/System.Xml.Linq.dll ../bin/builds/$1/
 cp ../bin/Content/Atlas/modAtlas.png ../bin/builds/$1/modAtlas.png
 cp ../bin/Content/Atlas/modAtlas.xml ../bin/builds/$1/modAtlas.xml

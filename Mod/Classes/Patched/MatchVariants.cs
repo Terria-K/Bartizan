@@ -1,6 +1,7 @@
 #pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
 #pragma warning disable CS0649 // Field 'field' is never assigned to, and will always have its default value 'value'
 
+using Mod;
 using MonoMod;
 using Monocle;
 using System;
@@ -27,7 +28,9 @@ namespace TowerFall
       "GhostItems",
       "GhostJoust",
       "CalvinFall",
-      "MeanerMonsters"
+      "MeanerMonsters",
+      "StartWithGhostArrows",
+      "EnableGhostArrows",
     };
 
     [Header("MODS")]
@@ -74,6 +77,12 @@ namespace TowerFall
     [CanRandom, Description ("MORE TYPES OF MONSTERS SPAWN FROM PORTAL")]
     public Variant MeanerMonsters;
 
+    [PerPlayer, CanRandom]
+    public Variant StartWithGhostArrows;
+
+    [CanRandom, Description("FIND THEM ON AMARANTH")]
+    public Variant EnableGhostArrows;
+
     public extern void orig_ctor(bool noPerPlayer);
     [MonoModConstructor]
     public void ctor(bool noPerPlayer = false)
@@ -83,6 +92,30 @@ namespace TowerFall
       this.CreateLinks(NoHeadBounce, NoTimeLimit);
       this.CreateLinks(NoDodgeCooldowns, ShowDodgeCooldown);
       this.CreateLinks(AwfullyFastArrows, AwfullySlowArrows);
+      this.StartWithGhostArrows.AddLinks(new Variant[] {
+        this.StartWithBombArrows,
+        this.StartWithLaserArrows,
+        this.StartWithBrambleArrows,
+        this.StartWithDrillArrows,
+        this.StartWithBoltArrows,
+        this.StartWithSuperBombArrows,
+        this.StartWithFeatherArrows,
+        this.StartWithRandomArrows,
+        this.StartWithToyArrows,
+        this.StartWithTriggerArrows,
+        this.StartWithPrismArrows
+      });
+      this.StartWithBombArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithLaserArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithBrambleArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithDrillArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithBoltArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithSuperBombArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithFeatherArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithRandomArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithToyArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithTriggerArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
+      this.StartWithPrismArrows.AddLinks(new Variant[] {this.StartWithGhostArrows});
     }
 
     public static Subtexture patch_GetVariantIconFromName (string variantName)
@@ -90,10 +123,19 @@ namespace TowerFall
       bool isModVariant = patch_MatchVariants.ModVariants.Contains(variantName);
 
       if (isModVariant) {
-        return patch_TFGame.ModAtlas ["variants/" + variantName [0].ToString ().ToLower (CultureInfo.InvariantCulture) + variantName.Substring (1)];
+        return patch_TFGame.ModAtlas["variants/" + variantName[0].ToString().ToLower(CultureInfo.InvariantCulture) + variantName.Substring(1)];
       } else {
-        return TFGame.MenuAtlas ["variants/" + variantName [0].ToString ().ToLower (CultureInfo.InvariantCulture) + variantName.Substring (1)];
+        return TFGame.MenuAtlas["variants/" + variantName[0].ToString().ToLower(CultureInfo.InvariantCulture) + variantName.Substring(1)];
       }
+    }
+
+    public extern ArrowTypes orig_GetStartArrowType(int playerIndex, ArrowTypes randomType);
+    public ArrowTypes patch_GetStartArrowType(int playerIndex, ArrowTypes randomType)
+    {
+      if (this.StartWithGhostArrows[playerIndex]) {
+        return (ArrowTypes)MyGlobals.ArrowTypes.Ghost;
+      }
+      return orig_GetStartArrowType(playerIndex, randomType);
     }
   }
 }

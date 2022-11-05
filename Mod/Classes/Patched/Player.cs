@@ -2,6 +2,7 @@
 
 using System;
 using Microsoft.Xna.Framework;
+using Mod;
 using MonoMod;
 using Monocle;
 
@@ -12,6 +13,7 @@ namespace TowerFall
     private string lastHatState;
     public bool spawningGhost;
     public bool diedFromPrism = false;
+    public Arrow lastArrowCaught;
 
     ChaliceGhost summonedChaliceGhost;
 
@@ -133,6 +135,9 @@ namespace TowerFall
       if (this.input.DodgePressed) {
         this.canHyper = true;
         if ((bool)this.dodgeCatchCounter && this.Speed.LengthSquared () >= 3.6f) {
+          if (this.lastArrowCaught.ArrowType == (ArrowTypes)MyGlobals.ArrowTypes.Ghost) {
+            ((GhostArrow)(this.lastArrowCaught)).wasMiracled = true;
+          }
           ((patch_Session)(Level.Session)).MyMatchStats[this.PlayerIndex].MiracleCatches += 1u;
         }
       }
@@ -163,6 +168,66 @@ namespace TowerFall
           }
           lastHatState = HatState.ToString();
         }
+      }
+    }
+
+    public void patch_CatchArrow(Arrow arrow)
+    {
+      this.lastArrowCaught = arrow;
+
+      // Mostly original, except where ghost arrow handled
+      if (arrow.CanCatch (this) && !arrow.IsCollectible && arrow.CannotHit != this && (!this.HasShield || !arrow.Dangerous) && arrow != this.lastCaught) {
+        Color colorB = ArcherData.GetColorB (this.PlayerIndex, this.TeamColor);
+        arrow.OnPlayerCatch (this);
+        this.dodgeCatchCounter.Set (10);
+        base.Level.Add (Cache.Create<CatchShine> ().Init (colorB, arrow.Position));
+        this.ArcherData.SFX.ArrowGrab.Play (base.X, 1f);
+        if (!(bool)this.dodgeEndCounter && this.State == PlayerStates.Dodging) {
+          Sounds.char_dodgeStallGrab.Play (base.X, 1f);
+        }
+        TFGame.PlayerInputs [this.PlayerIndex].Rumble (0.8f, 12);
+        base.Level.Session.MatchStats [this.PlayerIndex].ArrowsCaught += 1u;
+        if (arrow.PlayerIndex == this.PlayerIndex) {
+          base.Level.Session.MatchStats [this.PlayerIndex].OwnArrowsCaught += 1u;
+        }
+        if (arrow.PlayerIndex != this.PlayerIndex && base.Allegiance != Allegiance.Neutral && arrow.Allegiance == base.Allegiance) {
+          base.Level.Session.MatchStats [this.PlayerIndex].TeamArrowCatches += 1u;
+        }
+        SaveData.Instance.Stats.ArrowsCaught++;
+        this.dodgeCurseSatisfied = true;
+        if (arrow.Fire.OnFire) {
+          this.Fire.Start ();
+        }
+        if (arrow.ArrowType == (ArrowTypes)MyGlobals.ArrowTypes.Ghost && arrow.Owner != this && arrow.Dangerous) {
+          Alarm.Set(this, 10, delegate {
+            if (((GhostArrow)(arrow)).wasMiracled) {
+              arrow.OnPlayerCollect(this, true);
+              this.HasShield = true;
+            } else if (arrow.PlayerIndex > -1) {
+              Player player = base.Level.GetPlayer(arrow.PlayerIndex);
+              if (player != null) {
+                arrow.OnPlayerCollect(player, true);
+              }
+            }
+          }, Alarm.AlarmMode.Oneshot);
+
+          ShockCircle shockCircle = Cache.Create<ShockCircle>();
+          shockCircle.Init (this.Position, this.PlayerIndex, this, ShockCircle.ShockTypes.BoltCatch);
+          this.Level.Add (shockCircle);
+          Sounds.sfx_boltArrowExplode.Play(base.X, 1f);
+          arrow.RemoveSelf();
+        } else if (arrow.PrismCheck ()) {
+          arrow.Collidable = false;
+          this.StartPrism (arrow.PlayerIndex);
+          arrow.RemoveSelf ();
+        } else if (this.Arrows.CanAddArrow(arrow.ArrowType)) {
+          arrow.OnPlayerCollect(this, true);
+        } else {
+          this.lastCaught = arrow;
+          arrow.Drop ((int)this.Facing);
+        }
+      } else {
+        arrow.Active = (arrow.Collidable = true);
       }
     }
   }

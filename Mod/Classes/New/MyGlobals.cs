@@ -10,6 +10,14 @@ namespace Mod
 
     public enum GameTags {}
 
+    public enum ArrowTypes {
+      Ghost = 11
+    }
+
+    public enum Pickups {
+      GhostArrows = 21
+    }
+
     #if (STAT_TRACKING)
       public static JArray roster;
     #endif

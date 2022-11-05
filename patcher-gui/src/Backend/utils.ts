@@ -32,9 +32,9 @@ export const getPatchFilesPath = () => {
   }
 };
 
-export function execShellCommand(cmd: string, args: string[] = []): Buffer {
+export function execShellCommand(cmd: string, args: string[] = [], cwd?: string): Buffer {
   fixPath();
-  const process = spawnSync(cmd, args);
+  const process = spawnSync(cmd, args, cwd ? { cwd } : null);
   if (process.error) {
     throw process.error;
   }

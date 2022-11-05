@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\New\ArcherColor.cs" />
+    <Compile Include="Classes\New\GhostArrow.cs" />
     <Compile Include="Classes\New\GhostDeathInterface.cs" />
     <Compile Include="Classes\New\MobRoundLogic.cs" />
     <Compile Include="Classes\New\MyGlobals.cs" />
@@ -110,6 +111,8 @@
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
     <Compile Include="Classes\New\TrackerApiClient.cs" />
     <Compile Include="Classes\Patched\Arrow.cs" />
+    <Compile Include="Classes\Patched\ArrowHUD.cs" />
+    <Compile Include="Classes\Patched\ArrowTypePickup.cs" />
     <Compile Include="Classes\Patched\ChaliceGhost.cs" />
     <Compile Include="Classes\Patched\HeadhuntersRoundLogic.cs" />
     <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
@@ -120,6 +123,7 @@
     <Compile Include="Classes\Patched\MirrorPickup.cs" />
     <Compile Include="Classes\Patched\OptionsButton.cs" />
     <Compile Include="Classes\Patched\OrbPickup.cs" />
+    <Compile Include="Classes\Patched\Pickup.cs" />
     <Compile Include="Classes\Patched\Player.cs" />
     <Compile Include="Classes\Patched\PlayerCorpse.cs" />
     <Compile Include="Classes\Patched\PlayerGhost.cs" />
@@ -214,6 +218,30 @@
     <None Include="Content\Atlas\modAtlas\menuTitles\roster.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Atlas\modAtlas\variants\startWithGhostArrows.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\variants\enableGhostArrows.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\player\arrowHUD\ghost.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\arrows\ghostShaft.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\arrows\ghostHead.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\arrows\ghostOutline.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\arrows\ghostFeather.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\pickups\ghostArrows.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -227,8 +255,8 @@
     <Copy SourceFiles=".\Atlas\modAtlas.xml" DestinationFolder="..\bin\originals\$(Configuration)\Content\Atlas" />
     <Copy SourceFiles="..\bin\originals\$(Configuration)\TowerFall.exe" DestinationFolder="..\bin\" />
     <Exec Command="cp ..\bin\Mod.dll ..\bin\TowerFall.Mod.mm.dll" WorkingDirectory="..\bin" />
-    <Exec Command="..\bin\MonoMod.exe TowerFall.exe" WorkingDirectory="..\bin" />
-    <Exec Command="..\bin\Patcher.exe patch-resources originals\$(Configuration)" WorkingDirectory="..\bin" />
+    <Exec Command="mono ..\bin\MonoMod.exe TowerFall.exe" WorkingDirectory="..\bin" />
+    <Exec Command="mono ..\bin\Patcher.exe patch-resources originals\$(Configuration)" WorkingDirectory="..\bin" />
     <Exec Command="..\BuildScripts\prepare-build-$(Configuration)" WorkingDirectory="..\BuildScripts" />
   </Target>
 </Project>

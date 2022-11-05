@@ -1,5 +1,7 @@
 using TowerFall;
-using Newtonsoft.Json.Linq;
+#if (STAT_TRACKING)
+  using Newtonsoft.Json.Linq;
+#endif
 using System;
 
 namespace Mod
@@ -19,16 +21,18 @@ namespace Mod
       UNASSIGNED_NAME,
     };
 
-    public PlayerNames(JObject playerNamesJObject) {
-      for (int i = 0; i < MyGlobals.MAX_PLAYERS; i++) {
-        if (TFGame.Players[i]) {
-          string playerColor = ((ArcherColor)TFGame.Characters[i]).ToString();
-          if (playerNamesJObject.ContainsKey(playerColor)) {
-            playerNames[i] = playerNamesJObject.Value<string>(playerColor);
+    #if (STAT_TRACKING)
+      public PlayerNames(JObject playerNamesJObject) {
+        for (int i = 0; i < MyGlobals.MAX_PLAYERS; i++) {
+          if (TFGame.Players[i]) {
+            string playerColor = ((ArcherColor)TFGame.Characters[i]).ToString();
+            if (playerNamesJObject.ContainsKey(playerColor)) {
+              playerNames[i] = playerNamesJObject.Value<string>(playerColor);
+            }
           }
         }
       }
-    }
+    #endif
 
     public string GetName(int playerIndex)
     {
