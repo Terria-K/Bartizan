@@ -85,7 +85,6 @@ In order to work without patching the game after every build, create a copy of T
 symlinks (I'll use 8-player as an example. Replace 8 with 4 as needed):
 
 - `TowerFall.exe -> <BartizanPath>/bin/TowerFall-8-player.exe` (this should replace the existing TowerFall.exe)
-- `Mod.dll -> <BartizanPath>/bin/builds/8-player/Mod.dll`
 - `Content/Atlas/modAtlas.png -> <BartizanPath>/bin/builds/8-player/modAtlas.png`
 - `Content/Atlas/modAtlas.xml -> <BartizanPath>/bin/builds/8-player/modAtlas.xml`
 
