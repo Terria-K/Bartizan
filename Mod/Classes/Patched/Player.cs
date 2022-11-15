@@ -292,7 +292,7 @@ namespace TowerFall
       float target = flag ? 0f : (0.8f * (float)this.input.MoveX);
       this.Speed.X = Calc.Approach (this.Speed.X, target, DUCK_FRICTION * Engine.TimeMult);
       if (!this.OnGround) {
-        this.Speed.Y = Calc.Approach (this.Speed.Y, 2.8f, GetGravity() * Engine.TimeMult);
+        this.Speed.Y = Calc.Approach (this.Speed.Y, GetMaxFall(), GetGravity() * Engine.TimeMult);
       }
       base.MoveH (this.Speed.X * Engine.TimeMult, this.onCollideH);
       base.MoveV (this.Speed.Y * Engine.TimeMult, this.onCollideV);
@@ -359,7 +359,7 @@ namespace TowerFall
           this.Speed.X = Calc.Approach (this.Speed.X, this.MaxRunSpeed * this.moveAxis.X, num2 * Engine.TimeMult);
         }
       }
-      if (this.Speed.Y < GetJump()) {
+      if (IsAntiGrav() ? this.Speed.Y > GetJump() : this.Speed.Y < GetJump()) {
         if (this.canPadParticles && base.Level.OnInterval (1)) {
           base.Level.Particles.Emit (Particles.JumpPadTrail, Calc.Range (Calc.Random, base.Position, Vector2.One * 4f));
         }
@@ -371,35 +371,39 @@ namespace TowerFall
         this.wings.Normal ();
       } else {
         this.flapGravity = Calc.Approach (this.flapGravity, 1f, ((this.flapGravity < 0.5f) ? 0.012f : 0.048f) * Engine.TimeMult);
-        if (this.autoBounce && this.Speed.Y < 0f) { // Flipped to LT
+        if (this.autoBounce && (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f)) {
           this.autoBounce = false;
         }
-        float num3 = (this.Speed.Y >= 1f && (this.input.JumpCheck || this.autoBounce) && this.canVarJump) ? 0.15f : GetGravity(); // Flipped to GT
+        float num3 = (
+          (IsAntiGrav() ? this.Speed.Y >= -1f : this.Speed.Y <= 1f)
+          && (this.input.JumpCheck || this.autoBounce)
+          && this.canVarJump
+        ) ? 0.15f : 0.3f;
         num3 *= this.flapGravity;
-        float target = 2.8f;
+        float target = IsAntiGrav() ? -2.8f : 2.8f;
         if (this.moveAxis.X != 0f && this.CanWallSlide ((Facing)(int)this.moveAxis.X)) {
           this.wings.Normal ();
           target = this.wallStickMax;
           this.wallStickMax = Calc.Approach (this.wallStickMax, 1.6f, 0.01f * Engine.TimeMult);
           this.Cling = (int)this.moveAxis.X;
-          if (this.Speed.Y < 0f) { // Flipped to LT
+          if (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f) {
             this.ArcherData.SFX.WallSlide.Play (base.X, 1f);
           }
           if (base.Level.OnInterval (3)) {
             base.Level.Particles.Emit (this.DustParticleType, 1, base.Position + new Vector2 ((float)(3 * this.Cling), 0f), new Vector2 (1f, 3f));
           }
-        } else if (this.input.MoveY == 1 && this.Speed.Y < 0f) { // Flipped to LT
+        } else if (this.input.MoveY == 1 && (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f)) {
           this.wings.FallFast ();
-          target = 3.5f;
+          target = IsAntiGrav() ? -3.5f : 3.5f;
           base.Level.Session.MatchStats [this.PlayerIndex].FastFallFrames += Engine.TimeMult;
-        } else if (this.input.JumpCheck && this.HasWings && this.Speed.Y <= -1f) { // Flipped to LTE
+        } else if (this.input.JumpCheck && this.HasWings && (IsAntiGrav() ? this.Speed.Y <= 1f : this.Speed.Y >= -1f)) {
           this.wings.Glide ();
           this.gliding = true;
-          target = 0.8f;
+          target = IsAntiGrav() ? -0.8f : 0.8f;
         } else {
           this.wings.Normal ();
         }
-        if (this.Cling == 0 || this.Speed.Y >= 0f) { // Flipped to GTE
+        if (this.Cling == 0 || (IsAntiGrav() ? this.Speed.Y >= 0f : this.Speed.Y <= 0f)) {
           this.ArcherData.SFX.WallSlide.Stop (true);
         }
         this.Speed.Y = Calc.Approach (this.Speed.Y, target, num3 * Engine.TimeMult);
@@ -457,7 +461,12 @@ namespace TowerFall
       }
       float num5 = 0f;
       Entity entity = null;
-      bool flag = this.Speed.Y > -1f && this.Speed.Y < GetJump() && this.input.JumpCheck && (entity = base.CollideFirst (GameTags.JumpThru)) != null; // Flipped all comparison operators
+      bool flag = (
+        (IsAntiGrav() ? this.Speed.Y > 1f : this.Speed.Y < -1f) &&
+        (IsAntiGrav() ? this.Speed.Y < GetJump() : this.Speed.Y > GetJump()) &&
+        this.input.JumpCheck &&
+        (entity = base.CollideFirst (GameTags.JumpThru)) != null
+      );
       if (flag) {
         num5 = -2f;
         (entity as JumpThru).OnPlayerPop (base.X);
@@ -471,7 +480,15 @@ namespace TowerFall
       }
       base.MoveH (this.Speed.X * Engine.TimeMult, this.onCollideH);
       base.MoveV ((this.Speed.Y + num5) * Engine.TimeMult, this.onCollideV);
-      if (this.Prism == null && !this.OnGround && !this.Aiming && this.Speed.Y <= 0f && this.moveAxis.X != 0f && this.moveAxis.Y >= 0f && base.CollideCheck (GameTags.Solid, base.Position + Vector2.UnitX * this.moveAxis.X * 2f)) { // Flipped comparison operators
+      if (
+        this.Prism == null &&
+        !this.OnGround &&
+        !this.Aiming &&
+        (IsAntiGrav() ? this.Speed.Y <= 0f : this.Speed.Y >= 0f) &&
+        this.moveAxis.X != 0f &&
+        this.moveAxis.Y <= 0f &&
+        base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitX * this.moveAxis.X * 2f)
+      ) {
         int direction = Math.Sign (this.moveAxis.X);
         for (int i = 0; i < 10; i++) {
           if (this.CanGrabLedge ((int)base.Y - i, direction)) {
@@ -482,203 +499,206 @@ namespace TowerFall
       return 0;
     }
 
-    // Something in here segfaulting :(
-    // public void patch_Update()
-    // {
-    //   if ((bool)this.spamShotCounter) {
-    //     this.spamShotCounter.Update ();
-    //   }
-    //   base.Level.Session.MatchStats [this.PlayerIndex].FramesAlive += Engine.TimeMult;
-    //   this.EnableSolids ();
-    //   if (base.Level.Session.MatchSettings.Variants.RegeneratingArrows [this.PlayerIndex] && this.State != PlayerStates.Frozen) {
-    //     if (this.Arrows.HasArrows) {
-    //       this.arrowRegenCounter.Set (90);
-    //     } else {
-    //       this.arrowRegenCounter.Update ();
-    //       if (!(bool)this.arrowRegenCounter) {
-    //         Sounds.sfx_regenArrow.Play (base.X, 1f);
-    //         this.Arrows.AddArrows (base.Level.Session.GetRegenArrow (this.PlayerIndex));
-    //       }
-    //     }
-    //   }
-    //   if (base.Level.Session.MatchSettings.Variants.RegeneratingShields [this.PlayerIndex] && this.State != PlayerStates.Frozen) {
-    //     if (this.HasShield) {
-    //       this.shieldRegenCounter.Set (240);
-    //     } else {
-    //       this.shieldRegenCounter.Update ();
-    //       if (!(bool)this.shieldRegenCounter) {
-    //         this.HasShield = true;
-    //       }
-    //     }
-    //   }
-    //   if (this.Invisible) {
-    //     if (this.Aiming) {
-    //       this.InvisOpacity = 1f;
-    //     } else {
-    //       this.InvisOpacity = Math.Max (this.InvisOpacity - 0.02f * Engine.TimeMult, this.TargetInvisibleOpacity);
-    //     }
-    //   } else {
-    //     this.InvisOpacity = Math.Min (this.InvisOpacity + 0.05f * Engine.TimeMult, 1f);
-    //   }
-    //   if (this.State != PlayerStates.Dodging) {
-    //     if (Math.Abs (this.Speed.Y) > 2.8f) {
-    //       this.bodySprite.Scale.X = Calc.Approach (this.bodySprite.Scale.X, 0.8f, 0.04f * Engine.TimeMult);
-    //       this.bodySprite.Scale.Y = Calc.Approach (this.bodySprite.Scale.Y, 1.2f, 0.04f * Engine.TimeMult);
-    //     } else {
-    //       this.bodySprite.Scale.X = Calc.Approach (this.bodySprite.Scale.X, 1f, 0.04f * Engine.TimeMult);
-    //       this.bodySprite.Scale.Y = Calc.Approach (this.bodySprite.Scale.Y, 1f, 0.04f * Engine.TimeMult);
-    //     }
-    //   }
-    //   if (this.State == PlayerStates.Ducking && !base.Level.Session.MatchSettings.SoloMode) {
-    //     base.LightAlpha = Calc.Approach (base.LightAlpha, 0f, 0.05f * Engine.TimeMult);
-    //   } else {
-    //     base.LightAlpha = Calc.Approach (base.LightAlpha, 1f, 0.05f * Engine.TimeMult);
-    //   }
-    //   Platform below = base.GetBelow ();
-    //   this.OnGround = (below != null);
-    //   if (this.OnGround) {
-    //     this.slipperyControl = (float)((!base.Level.Session.MatchSettings.Variants.SlipperyFloors [this.PlayerIndex] && (base.Level.Session.MatchSettings.Variants.NoSlipping [this.PlayerIndex] || !base.CollideCheck (GameTags.Ice, base.Position + Vector2.UnitY))) ? 1 : 0);
-    //     this.lastPlatform = below;
-    //   } else {
-    //     this.slipperyControl = Math.Min (this.slipperyControl + 0.1f, 1f);
-    //   }
-    //   if (this.OnGround) {
-    //     this.onHotCoals = base.CollideCheck (GameTags.HotCoals, base.Position + Vector2.UnitY);
-    //   } else {
-    //     this.onHotCoals = false;
-    //   }
-    //   if (TFGame.PlayerInputs [this.PlayerIndex] != null) {
-    //     this.input = TFGame.PlayerInputs [this.PlayerIndex].GetState ();
-    //   }
-    //   this.moveAxis = new Vector2 ((float)this.input.MoveX, (float)this.input.MoveY);
-    //   this.AimDirection = (PlayerInput.GetAimDirection (this.input.AimAxis, !base.Level.Session.MatchSettings.Variants.FreeAiming [this.PlayerIndex]) ?? ((this.Facing == Facing.Right) ? 0f : 3.14159274f));
-    //   if (this.inMud == null) {
-    //     this.inMud = (base.CollideFirst (GameTags.Mud) as Mud);
-    //     if (this.inMud != null) {
-    //       this.inMud.SplashDown (base.X);
-    //       Sounds.env_mudPlayerLand.Play (base.X, 1f);
-    //     }
-    //   } else {
-    //     this.inMud = (base.CollideFirst (GameTags.Mud) as Mud);
-    //     if (this.inMud != null && this.Speed.X != 0f) {
-    //       this.inMud.ParticleSplash (base.X + this.Speed.X * 4f);
-    //     }
-    //   }
-    //   if (this.IsHyper && base.Level.OnInterval (1)) {
-    //     base.Level.Particles.Emit (this.HyperJumpParticleType, 2, base.Position, Vector2.One * 4f);
-    //   }
-    //   if (this.hyperDir != 0 && !this.IsHyper) {
-    //     float value = (this.hyperDir != 1) ? ((!(base.X > this.hyperStartX)) ? (this.hyperStartX - base.X) : (this.hyperStartX + (320f - base.X))) : ((!(base.X < this.hyperStartX)) ? (base.X - this.hyperStartX) : (320f - this.hyperStartX + base.X));
-    //     value = Math.Abs (value);
-    //     this.hyperDir = 0;
-    //     if (value >= 100f) {
-    //       UnlockData.UnlockAchievement ("SPEED_OF_LIGHT");
-    //     }
-    //   }
-    //   if (base.Level.Session.MatchSettings.Variants.DoubleJumping [this.PlayerIndex] && (this.OnGround || this.State == PlayerStates.LedgeGrab)) {
-    //     this.canDoubleJump = true;
-    //   }
-    //   if (this.State == PlayerStates.Frozen) {
-    //     base.Update ();
-    //     if (this.moveAxis.X != 0f) {
-    //       this.Facing = (Facing)Math.Sign (this.moveAxis.X);
-    //     }
-    //     this.UpdateAnimation ();
-    //     this.DisableSolids ();
-    //   } else {
-    //     this.jumpBufferCounter.Update ();
-    //     if (this.input.JumpPressed) {
-    //       this.jumpBufferCounter.Set (6);
-    //     }
-    //     if (this.Aiming) {
-    //       if (this.lastAimDirection != -1f && this.lastAimDirection != this.AimDirection) {
-    //         this.ArcherData.SFX.AimDir.Play (base.X, 1f);
-    //       }
-    //       this.lastAimDirection = this.AimDirection;
-    //     }
-    //     if (this.autoMove != 0) {
-    //       this.moveAxis.X = (float)this.autoMove;
-    //     }
-    //     if ((bool)this.canDetonateCounter) {
-    //       this.canDetonateCounter.Update ();
-    //     }
-    //     if (this.OnGround && this.Speed.Y < 0.02f) { // Flipped sign and comparison operator
-    //       this.jumpGraceCounter.SetMax (6);
-    //       this.wallStickMax = 0.5f;
-    //       this.flapGravity = 1f;
-    //       this.graceLedgeDir = 0;
-    //     } else {
-    //       this.jumpGraceCounter.Update ();
-    //     }
-    //     if ((bool)this.flapBounceCounter) {
-    //       if (this.Speed.Y >= 0f) { // Flipped to GTE
-    //         this.flapBounceCounter.Set (0);
-    //       } else {
-    //         this.flapBounceCounter.Update ();
-    //       }
-    //     }
-    //     this.gliding = false;
-    //     if (this.input.ArrowsPressed && this.Arrows.ToggleSort ()) {
-    //       Sounds.sfx_arrowToggle.Play (base.X, 1f);
-    //     }
-    //     base.Update ();
-    //     if (this.canHyper && !this.IsHyper) {
-    //       this.canHyper = false;
-    //     }
-    //     Collider collider = base.Collider;
-    //     base.CollideDo (GameTags.PlayerCollectible, this.playerColliderDo);
-    //     if (base.TargetCollider != null) {
-    //       base.Collider = base.TargetCollider;
-    //     }
-    //     base.CollideDo (GameTags.PlayerCollider, this.playerColliderDo);
-    //     base.Collider = collider;
-    //     base.Collider = this.arrowPickupHitbox;
-    //     Entity entity = base.CollideFirst (GameTags.Arrow);
-    //     if (entity != null) {
-    //       (entity as Arrow).OnPlayerCollect (this, false);
-    //     }
-    //     base.Collider = collider;
-    //     if (!this.Dead && !this.HasShield && this.HatState != 0) {
-    //       this.hatHitbox.Bottom = base.Collider.Top;
-    //       base.Collider = this.hatHitbox;
-    //       foreach (Arrow item in ((Scene)base.Level) [GameTags.Arrow]) {
-    //         if (item.CannotHit != this && item.Dangerous && item.Speed.Y > -2f && base.CollideCheck (item)) { // Flipped sign and comparison
-    //           if (item.PlayerIndex != -1) {
-    //             base.Level.Session.MatchStats [item.PlayerIndex].HatsShotOff += 1u;
-    //           }
-    //           this.LoseHat (item, true);
-    //           break;
-    //         }
-    //       }
-    //       base.Collider = collider;
-    //     }
-    //     if (this.Fire.OnFire && (bool)this.wingsFireCounter) {
-    //       this.wingsFireCounter.Update ();
-    //       if (!(bool)this.wingsFireCounter) {
-    //         Sounds.sfx_burn.Play (base.X, 1f);
-    //         this.HasWings = false;
-    //       }
-    //     }
-    //     this.UpdateAnimation ();
-    //     this.DisableSolids ();
-    //     if ((bool)this.Hair) {
-    //       this.Hair.Update ();
-    //     }
-    //     if (this.ArcherData.PurpleParticles && this.InvisOpacity >= 1f) {
-    //       if (this.State == PlayerStates.Ducking) {
-    //         if (base.Level.OnInterval (5)) {
-    //           Vector2 positionRange = new Vector2 (7f, 6f);
-    //           base.Level.ParticlesBG.Emit (Particles.PurpleAmbience, 1, base.Position + Vector2.UnitY * 4f, positionRange);
-    //         }
-    //       } else if (base.Level.OnInterval (3)) {
-    //         Vector2 positionRange = new Vector2 (7f, 11f);
-    //         base.Level.ParticlesBG.Emit (Particles.PurpleAmbience, 1, base.Position, positionRange);
-    //       }
-    //     }
-    //   }
-    // }
+    [MonoModLinkTo("TowerFall.LevelEntity", "Update")]
+    [MonoModIgnore]
+    public extern void base_Update();
 
-    public override void Jump (bool particles, bool canSuper, bool forceSuper, int ledgeDir, bool doubleJump)
+    public void patch_Update()
+    {
+      if ((bool)this.spamShotCounter) {
+        this.spamShotCounter.Update ();
+      }
+      base.Level.Session.MatchStats [this.PlayerIndex].FramesAlive += Engine.TimeMult;
+      this.EnableSolids ();
+      if (base.Level.Session.MatchSettings.Variants.RegeneratingArrows [this.PlayerIndex] && this.State != PlayerStates.Frozen) {
+        if (this.Arrows.HasArrows) {
+          this.arrowRegenCounter.Set (90);
+        } else {
+          this.arrowRegenCounter.Update ();
+          if (!(bool)this.arrowRegenCounter) {
+            Sounds.sfx_regenArrow.Play (base.X, 1f);
+            this.Arrows.AddArrows (base.Level.Session.GetRegenArrow (this.PlayerIndex));
+          }
+        }
+      }
+      if (base.Level.Session.MatchSettings.Variants.RegeneratingShields [this.PlayerIndex] && this.State != PlayerStates.Frozen) {
+        if (this.HasShield) {
+          this.shieldRegenCounter.Set (240);
+        } else {
+          this.shieldRegenCounter.Update ();
+          if (!(bool)this.shieldRegenCounter) {
+            this.HasShield = true;
+          }
+        }
+      }
+      if (this.Invisible) {
+        if (this.Aiming) {
+          this.InvisOpacity = 1f;
+        } else {
+          this.InvisOpacity = Math.Max (this.InvisOpacity - 0.02f * Engine.TimeMult, this.TargetInvisibleOpacity);
+        }
+      } else {
+        this.InvisOpacity = Math.Min (this.InvisOpacity + 0.05f * Engine.TimeMult, 1f);
+      }
+      if (this.State != PlayerStates.Dodging) {
+        if (Math.Abs (this.Speed.Y) > 2.8f) {
+          this.bodySprite.Scale.X = Calc.Approach (this.bodySprite.Scale.X, 0.8f, 0.04f * Engine.TimeMult);
+          this.bodySprite.Scale.Y = Calc.Approach (this.bodySprite.Scale.Y, 1.2f, 0.04f * Engine.TimeMult);
+        } else {
+          this.bodySprite.Scale.X = Calc.Approach (this.bodySprite.Scale.X, 1f, 0.04f * Engine.TimeMult);
+          this.bodySprite.Scale.Y = Calc.Approach (this.bodySprite.Scale.Y, 1f, 0.04f * Engine.TimeMult);
+        }
+      }
+      if (this.State == PlayerStates.Ducking && !base.Level.Session.MatchSettings.SoloMode) {
+        base.LightAlpha = Calc.Approach (base.LightAlpha, 0f, 0.05f * Engine.TimeMult);
+      } else {
+        base.LightAlpha = Calc.Approach (base.LightAlpha, 1f, 0.05f * Engine.TimeMult);
+      }
+      Platform below = base.GetBelow ();
+      this.OnGround = (below != null);
+      if (this.OnGround) {
+        this.slipperyControl = (float)((!base.Level.Session.MatchSettings.Variants.SlipperyFloors [this.PlayerIndex] && (base.Level.Session.MatchSettings.Variants.NoSlipping [this.PlayerIndex] || !base.CollideCheck (GameTags.Ice, base.Position + Vector2.UnitY))) ? 1 : 0);
+        this.lastPlatform = below;
+      } else {
+        this.slipperyControl = Math.Min (this.slipperyControl + 0.1f, 1f);
+      }
+      if (this.OnGround) {
+        this.onHotCoals = base.CollideCheck (GameTags.HotCoals, base.Position + Vector2.UnitY);
+      } else {
+        this.onHotCoals = false;
+      }
+      if (TFGame.PlayerInputs [this.PlayerIndex] != null) {
+        this.input = TFGame.PlayerInputs [this.PlayerIndex].GetState ();
+      }
+      this.moveAxis = new Vector2 ((float)this.input.MoveX, (float)this.input.MoveY);
+      this.AimDirection = (PlayerInput.GetAimDirection (this.input.AimAxis, !base.Level.Session.MatchSettings.Variants.FreeAiming [this.PlayerIndex]) ?? ((this.Facing == Facing.Right) ? 0f : 3.14159274f));
+      if (this.inMud == null) {
+        this.inMud = (base.CollideFirst (GameTags.Mud) as Mud);
+        if (this.inMud != null) {
+          this.inMud.SplashDown (base.X);
+          Sounds.env_mudPlayerLand.Play (base.X, 1f);
+        }
+      } else {
+        this.inMud = (base.CollideFirst (GameTags.Mud) as Mud);
+        if (this.inMud != null && this.Speed.X != 0f) {
+          this.inMud.ParticleSplash (base.X + this.Speed.X * 4f);
+        }
+      }
+      if (this.IsHyper && base.Level.OnInterval (1)) {
+        base.Level.Particles.Emit (this.HyperJumpParticleType, 2, base.Position, Vector2.One * 4f);
+      }
+      if (this.hyperDir != 0 && !this.IsHyper) {
+        float value = (this.hyperDir != 1) ? ((!(base.X > this.hyperStartX)) ? (this.hyperStartX - base.X) : (this.hyperStartX + (320f - base.X))) : ((!(base.X < this.hyperStartX)) ? (base.X - this.hyperStartX) : (320f - this.hyperStartX + base.X));
+        value = Math.Abs (value);
+        this.hyperDir = 0;
+        if (value >= 100f) {
+          UnlockData.UnlockAchievement ("SPEED_OF_LIGHT");
+        }
+      }
+      if (base.Level.Session.MatchSettings.Variants.DoubleJumping [this.PlayerIndex] && (this.OnGround || this.State == PlayerStates.LedgeGrab)) {
+        this.canDoubleJump = true;
+      }
+      if (this.State == PlayerStates.Frozen) {
+        base_Update ();
+        if (this.moveAxis.X != 0f) {
+          this.Facing = (Facing)Math.Sign (this.moveAxis.X);
+        }
+        this.UpdateAnimation ();
+        this.DisableSolids ();
+      } else {
+        this.jumpBufferCounter.Update ();
+        if (this.input.JumpPressed) {
+          this.jumpBufferCounter.Set (6);
+        }
+        if (this.Aiming) {
+          if (this.lastAimDirection != -1f && this.lastAimDirection != this.AimDirection) {
+            this.ArcherData.SFX.AimDir.Play (base.X, 1f);
+          }
+          this.lastAimDirection = this.AimDirection;
+        }
+        if (this.autoMove != 0) {
+          this.moveAxis.X = (float)this.autoMove;
+        }
+        if ((bool)this.canDetonateCounter) {
+          this.canDetonateCounter.Update ();
+        }
+        if (this.OnGround && (IsAntiGrav() ? this.Speed.Y < 0.02f : this.Speed.Y > -0.02f)) {
+          this.jumpGraceCounter.SetMax (6);
+          this.wallStickMax = 0.5f;
+          this.flapGravity = 1f;
+          this.graceLedgeDir = 0;
+        } else {
+          this.jumpGraceCounter.Update ();
+        }
+        if ((bool)this.flapBounceCounter) {
+          if (IsAntiGrav() ? this.Speed.Y >= 0f : this.Speed.Y <= 0f) {
+            this.flapBounceCounter.Set (0);
+          } else {
+            this.flapBounceCounter.Update ();
+          }
+        }
+        this.gliding = false;
+        if (this.input.ArrowsPressed && this.Arrows.ToggleSort ()) {
+          Sounds.sfx_arrowToggle.Play (base.X, 1f);
+        }
+        base_Update ();
+        if (this.canHyper && !this.IsHyper) {
+          this.canHyper = false;
+        }
+        Collider collider = base.Collider;
+        base.CollideDo (GameTags.PlayerCollectible, this.playerColliderDo);
+        if (base.TargetCollider != null) {
+          base.Collider = base.TargetCollider;
+        }
+        base.CollideDo (GameTags.PlayerCollider, this.playerColliderDo);
+        base.Collider = collider;
+        base.Collider = this.arrowPickupHitbox;
+        Entity entity = base.CollideFirst (GameTags.Arrow);
+        if (entity != null) {
+          (entity as Arrow).OnPlayerCollect (this, false);
+        }
+        base.Collider = collider;
+        if (!this.Dead && !this.HasShield && this.HatState != 0) {
+          this.hatHitbox.Bottom = base.Collider.Top;
+          base.Collider = this.hatHitbox;
+          foreach (Arrow item in ((Scene)base.Level) [GameTags.Arrow]) {
+            if (item.CannotHit != this && item.Dangerous && (IsAntiGrav() ? item.Speed.Y > -2f : this.Speed.Y < 2f) && base.CollideCheck (item)) {
+              if (item.PlayerIndex != -1) {
+                base.Level.Session.MatchStats [item.PlayerIndex].HatsShotOff += 1u;
+              }
+              this.LoseHat (item, true);
+              break;
+            }
+          }
+          base.Collider = collider;
+        }
+        if (this.Fire.OnFire && (bool)this.wingsFireCounter) {
+          this.wingsFireCounter.Update ();
+          if (!(bool)this.wingsFireCounter) {
+            Sounds.sfx_burn.Play (base.X, 1f);
+            this.HasWings = false;
+          }
+        }
+        this.UpdateAnimation ();
+        this.DisableSolids ();
+        if ((bool)this.Hair) {
+          this.Hair.Update ();
+        }
+        if (this.ArcherData.PurpleParticles && this.InvisOpacity >= 1f) {
+          if (this.State == PlayerStates.Ducking) {
+            if (base.Level.OnInterval (5)) {
+              Vector2 positionRange = new Vector2 (7f, 6f);
+              base.Level.ParticlesBG.Emit (Particles.PurpleAmbience, 1, base.Position + Vector2.UnitY * 4f, positionRange);
+            }
+          } else if (base.Level.OnInterval (3)) {
+            Vector2 positionRange = new Vector2 (7f, 11f);
+            base.Level.ParticlesBG.Emit (Particles.PurpleAmbience, 1, base.Position, positionRange);
+          }
+        }
+      }
+    }
+
+    public void patch_Jump (bool particles, bool canSuper, bool forceSuper, int ledgeDir, bool doubleJump)
     {
       this.autoBounce = false;
       this.jumpBufferCounter.Set (0);
@@ -736,7 +756,7 @@ namespace TowerFall
       SaveData.Instance.Stats.Jumps++;
     }
 
-    public override void WallJump (int dir)
+    public void patch_WallJump (int dir)
     {
       this.autoBounce = false;
       this.jumpBufferCounter.Set (0);
@@ -757,14 +777,14 @@ namespace TowerFall
       SaveData.Instance.Stats.Jumps++;
     }
 
-    public override void HotCoalsBounce ()
+    public void patch_HotCoalsBounce ()
     {
-      if (this.Speed.Y <= 0f) { // FLIPPED TO LTE
+      if (IsAntiGrav() ? this.Speed.Y <= 0f : this.Speed.Y >= 0f) {
         Sounds.sfx_coalBurn.Play (base.X, 1f);
         if (this.input.JumpCheck) {
-          this.Speed.Y = 2.87999988f; // FLIPPED
+          this.Speed.Y = IsAntiGrav() ? 2.87999988f : -2.87999988f;
         } else {
-          this.Speed.Y = 2.24f; // FLIPPED
+          this.Speed.Y = IsAntiGrav() ? 2.24f : -2.24f;
         }
         if (this.input.MoveX != 0) {
           this.Speed.X += (float)this.input.MoveX * 0.3f;
@@ -779,19 +799,75 @@ namespace TowerFall
       }
     }
 
+    public void patch_OnCollideV (Platform platform)
+    {
+      if (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f) {
+        this.ArcherData.SFX.Land.Play (base.X, 1f);
+        this.bodySprite.Scale.X = 1f + this.Speed.Y / GetMaxFall() * 0.5f;
+        this.bodySprite.Scale.Y = 1f - this.Speed.Y / GetMaxFall() * 0.5f;
+        this.Speed.X = MathHelper.Lerp (this.Speed.X, 0f, 0.6f * (this.Speed.Y / GetMaxFall()));
+        if (this.Speed.Y > GetMaxFall()) {
+          base.Level.Particles.Emit (this.DustParticleType, 5, base.Position + new Vector2 (-4f, 8f), Vector2.One * 3f);
+          base.Level.Particles.Emit (this.DustParticleType, 5, base.Position + new Vector2 (4f, 8f), Vector2.One * 3f);
+        }
+        if (IsAntiGrav() ? this.Speed.Y <= -1f : this.Speed.Y >= 1f) {
+          this.ColdBreath ();
+        }
+      } else if (
+        IsAntiGrav()
+          ? (this.flapGravity > -1f && this.Speed.Y > 0f)
+          : (this.flapGravity < 1f && this.Speed.Y < 0f)
+        ) {
+        this.Speed.Y = IsAntiGrav() ? -1.5f : 1.5f;
+        this.flapBounceCounter.Set (4);
+        return;
+      }
+      this.Speed.Y = 0f;
+    }
+
+    public void patch_BouncedOn (Player bouncer)
+    {
+      this.bodySprite.Scale.X = 1.3f;
+      this.bodySprite.Scale.Y = 0.7f;
+      this.Speed.Y = GetMaxFall();
+      if (this.IsEnemy (bouncer)) {
+        this.HurtBouncedOn (bouncer.PlayerIndex);
+      }
+    }
+
+    public bool IsAntiGrav()
+    {
+      return MyGlobals.IsAntiGrav;
+    }
+
     public float GetGravity()
     {
-      return -0.3f;
+      return IsAntiGrav() ? -0.3f : 0.3f;
     }
 
     public float GetJump()
     {
-      return 3.2f;
+      return IsAntiGrav() ? 3.2f : -3.2f;
     }
 
     public float GetJumpOnPad()
     {
-      return 4.3f;
+      return IsAntiGrav() ? 4.3f : -4.3f;
+    }
+
+    public float GetMaxFall()
+    {
+      return IsAntiGrav() ? -2.8f : 2.8f;
+    }
+
+    public float GetFastFall()
+    {
+      return IsAntiGrav() ? -3.5f : 3.5f;
+    }
+
+    public float GetWingsMaxFall()
+    {
+      return IsAntiGrav() ? -0.8f : 0.8f;
     }
   }
 }

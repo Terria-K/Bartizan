@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Monocle;
+using Mod;
 using System;
 
 namespace TowerFall
@@ -12,26 +13,46 @@ namespace TowerFall
       // No-op. MonoMod ignores this
     }
 
+    public bool IsAntiGrav()
+    {
+      return MyGlobals.IsAntiGrav;
+    }
+
     public override bool CheckBelow ()
     {
-      return base.CollideCheck (GameTags.Solid, base.Position - Vector2.UnitY) || (!this.IgnoreJumpThrus && base.CollideCheckOutside (GameTags.JumpThru, base.Position - Vector2.UnitY));
+      return IsAntiGrav()
+        ? base.CollideCheck (GameTags.Solid, base.Position - Vector2.UnitY) || (!this.IgnoreJumpThrus && base.CollideCheckOutside (GameTags.JumpThru, base.Position - Vector2.UnitY))
+        : base.CollideCheck (GameTags.Solid, base.Position + Vector2.UnitY) || (!this.IgnoreJumpThrus && base.CollideCheckOutside (GameTags.JumpThru, base.Position + Vector2.UnitY));
     }
 
     public override bool CheckBelow (int addX)
     {
-      return base.CollideCheck (GameTags.Solid, base.Position - new Vector2 ((float)addX, 1f)) || (!this.IgnoreJumpThrus && base.CollideCheckOutside (GameTags.JumpThru, base.Position - new Vector2 ((float)addX, 1f)));
+      return IsAntiGrav()
+        ? base.CollideCheck (GameTags.Solid, base.Position - new Vector2 ((float)addX, 1f)) || (!this.IgnoreJumpThrus && base.CollideCheckOutside (GameTags.JumpThru, base.Position - new Vector2 ((float)addX, 1f)))
+        : base.CollideCheck (GameTags.Solid, base.Position + new Vector2 ((float)addX, 1f)) || (!this.IgnoreJumpThrus && base.CollideCheckOutside (GameTags.JumpThru, base.Position + new Vector2 ((float)addX, 1f)));
     }
 
     public override Platform GetBelow ()
     {
-      Entity entity;
-      if ((entity = base.CollideFirst (GameTags.Solid, base.Position - Vector2.UnitY)) != null) {
-        return entity as Platform;
+      if (IsAntiGrav()) {
+        Entity entity;
+        if ((entity = base.CollideFirst (GameTags.Solid, base.Position - Vector2.UnitY)) != null) {
+          return entity as Platform;
+        }
+        if (!this.IgnoreJumpThrus && (entity = base.CollideFirstOutside (GameTags.JumpThru, base.Position - Vector2.UnitY)) != null) {
+          return entity as Platform;
+        }
+        return null;
+      } else {
+        Entity entity;
+        if ((entity = base.CollideFirst (GameTags.Solid, base.Position + Vector2.UnitY)) != null) {
+          return entity as Platform;
+        }
+        if (!this.IgnoreJumpThrus && (entity = base.CollideFirstOutside (GameTags.JumpThru, base.Position + Vector2.UnitY)) != null) {
+          return entity as Platform;
+        }
+        return null;
       }
-      if (!this.IgnoreJumpThrus && (entity = base.CollideFirstOutside (GameTags.JumpThru, base.Position - Vector2.UnitY)) != null) {
-        return entity as Platform;
-      }
-      return null;
     }
   }
 }

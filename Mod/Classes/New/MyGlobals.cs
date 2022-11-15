@@ -27,5 +27,7 @@ namespace Mod
     #else
       public const int MAX_PLAYERS = 4;
     #endif
+
+    public static bool IsAntiGrav = false;
   }
 }
