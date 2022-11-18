@@ -28,6 +28,6 @@ namespace Mod
       public const int MAX_PLAYERS = 4;
     #endif
 
-    public static bool IsAntiGrav = false;
+    public static bool IsAntiGrav = true;
   }
 }

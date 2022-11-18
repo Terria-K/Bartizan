@@ -1,4 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
+using MonoMod;
+using Mod;
+using Monocle;
+using System;
 
 namespace TowerFall
 {
@@ -39,6 +43,77 @@ namespace TowerFall
 
         TFGame.PlayerInputs[ghost.PlayerIndex].Rumble(0.5f, 12);
       }
+    }
+
+    [MonoModLinkTo("TowerFall.LevelEntity", "Update")]
+    [MonoModIgnore]
+    public extern void base_Update();
+
+    public void patch_Update ()
+    {
+      base_Update ();
+      if ((bool)this.shakeCounter) {
+        this.shakeCounter.Update ();
+        if ((bool)this.shakeCounter) {
+          this.sprite.X = (float)Calc.Choose (Calc.Random, -1, 0, 1);
+        } else {
+          this.sprite.X = 0f;
+        }
+      }
+      if (this.sprite.Scale != Vector2.One && this.State != States.Opening) {
+        this.sprite.Scale.X = Calc.Approach (this.sprite.Scale.X, 1f, 0.01f * Engine.TimeMult);
+        this.sprite.Scale.Y = Calc.Approach (this.sprite.Scale.Y, 1f, 0.01f * Engine.TimeMult);
+      }
+      switch (this.State) {
+      case States.Appearing:
+      case States.Opening:
+        break;
+      case States.WaitingToAppear:
+        if (this.ReadyToAppear ()) {
+          this.Appear ();
+        }
+        break;
+      case States.Closed:
+        if (base.Level.OnInterval (6)) {
+          if (this.type == Types.Large) {
+            base.Level.Particles.Emit (Particles.TreasureChestGlow, 1, base.Position, new Vector2 (10f, 5f));
+          } else {
+            base.Level.Particles.Emit (Particles.TreasureChestGlow, 1, base.Position, Vector2.One * 5f);
+          }
+        }
+        if (!base.CheckBelow ()) {
+          this.vSpeed = Calc.Approach (this.vSpeed, GetMaxFall(), GetGravity() * Engine.TimeMult);
+        } else if (this.type == Types.AutoOpen) {
+          this.OpenChest (-1);
+        }
+        if (this.vSpeed != 0f) {
+          base.MoveV (this.vSpeed * Engine.TimeMult, this.hitFloor);
+        }
+        break;
+      case States.Opened:
+        if (!base.CheckBelow ()) {
+          this.vSpeed = Calc.Approach (this.vSpeed, GetMaxFall(), GetGravity() * Engine.TimeMult);
+        }
+        if (this.vSpeed != 0f) {
+          base.MoveV (this.vSpeed * Engine.TimeMult, this.hitFloor);
+        }
+        break;
+      }
+    }
+
+    public bool IsAntiGrav()
+    {
+      return MyGlobals.IsAntiGrav;
+    }
+
+    public float GetGravity()
+    {
+      return 0.2f;
+    }
+
+    public float GetMaxFall()
+    {
+      return IsAntiGrav() ? -3.6f : 3.6f;
     }
   }
 }
