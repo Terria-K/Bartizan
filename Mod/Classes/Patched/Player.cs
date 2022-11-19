@@ -68,13 +68,26 @@ namespace TowerFall
       }
     }
 
-    public extern bool orig_CanGrabLedge(int a, int b);
-    public bool patch_CanGrabLedge(int a, int b)
+    public extern bool orig_CanGrabLedge(int targetY, int direction);
+    public bool patch_CanGrabLedge(int targetY, int direction)
     {
       if (((patch_MatchVariants)Level.Session.MatchSettings.Variants).NoLedgeGrab[this.PlayerIndex]) {
         return false;
       }
-      return orig_CanGrabLedge(a, b);
+      return IsAntiGrav() ? !base.CollideCheck(
+        GameTags.Solid,
+        base.X,
+        (float)(targetY - 2)
+      ) && !base.CollideCheck(
+        GameTags.Solid,
+        base.X,
+        base.Y - 5f
+      ) && !base.Scene.CollideCheck(
+        WrapMath.Vec(base.X + (float)(6 * direction), (float)(targetY + 1)),
+        GameTags.Solid
+      ) && base.Scene.CollideCheck(
+        WrapMath.Vec(base.X + (float)(6 * direction), (float)targetY), GameTags.Solid
+      ) : orig_CanGrabLedge(targetY, direction);
     }
 
     public extern int orig_GetDodgeExitState();
@@ -232,6 +245,95 @@ namespace TowerFall
       }
     }
 
+    public void patch_UpdateAnimation ()
+    {
+      this.aimer.Rotation = this.AimDirection;
+      this.SetBowRotation ();
+      if (this.State == PlayerStates.Dodging) {
+        if (this.DodgeSliding) {
+          switch (this.HatState) {
+          case HatStates.Normal:
+            this.bodySprite.Play ("slide_normal", false);
+            break;
+          case HatStates.NoHat:
+            this.bodySprite.Play ("slide_nohat", false);
+            break;
+          case HatStates.Crown:
+            this.bodySprite.Play ("slide_crown", false);
+            break;
+          }
+        } else {
+          this.bodySprite.Play ("dodge", false);
+        }
+        this.bowSprite.Visible = false;
+      } else if (this.State == PlayerStates.Ducking) {
+        this.bodySprite.Play ("duck", false);
+        this.bowSprite.Visible = false;
+      } else if (this.State == PlayerStates.LedgeGrab) {
+        this.bodySprite.Play ("ledge", false);
+        this.bowSprite.Visible = false;
+      } else {
+        this.bowSprite.Visible = (!this.hideBow || this.Aiming);
+        if (this.AimDirection == 1.57079637f) {
+          this.bowSprite.Y = (float)this.bowDownY;
+        } else {
+          this.bowSprite.Y = this.bowPosition.Y;
+        }
+        this.bowSprite.X = this.bowPosition.X;
+        if (this.bowXOffsets != null && this.bodySprite.CurrentFrame < this.bowXOffsets.Length) {
+          this.bowSprite.X += (float)(this.bowXOffsets [this.bodySprite.CurrentFrame] * (int)this.Facing);
+        }
+        if (this.bowYOffsets != null && this.bodySprite.CurrentFrame < this.bowYOffsets.Length) {
+          this.bowSprite.Y += (float)this.bowYOffsets [this.bodySprite.CurrentFrame];
+        }
+        if (this.Cling != 0 && (IsAntiGrav() ? this.Speed.Y <= 0f : this.Speed.Y >= 0f)) {
+          this.bowSprite.Visible = false;
+          this.bodySprite.Play ("ledge", false);
+        } else if (this.gliding) {
+          if (this.Aiming && this.bodySprite.ContainsAnimation ("glide_aim")) {
+            this.bodySprite.Play ("glide_aim", false);
+          } else {
+            this.bodySprite.Play ("glide", false);
+          }
+        } else if (this.OnGround) {
+          if (Math.Abs (this.Speed.X) <= 0.390000015f && (this.Aiming || this.input.MoveX == 0 || this.State == PlayerStates.Frozen)) {
+            if (this.hideBow) {
+              if (this.Aiming && this.bodySprite.ContainsAnimation ("stand_aim")) {
+                this.bodySprite.Play ("stand_aim", false);
+              } else {
+                this.bodySprite.Play ("stand", false);
+              }
+            } else {
+              this.bowSprite.Visible = true;
+              if (this.bodySprite.ContainsAnimation ("stand_aim")) {
+                this.bodySprite.Play ("stand_aim", false);
+              } else {
+                this.bodySprite.Play ("stand", false);
+              }
+            }
+          } else if (this.Aiming && this.bodySprite.ContainsAnimation ("run_aim")) {
+            this.bodySprite.Play ("run_aim", false);
+          } else {
+            this.bodySprite.Play ("run", false);
+          }
+        } else if (this.Speed.Y < 0f) {
+          if (this.Aiming && this.bodySprite.ContainsAnimation ("jump_aim")) {
+            this.bodySprite.Play ("jump_aim", false);
+          } else {
+            this.bodySprite.Play ("jump", false);
+          }
+        } else if (this.Aiming && this.bodySprite.ContainsAnimation ("fall_aim")) {
+          this.bodySprite.Play ("fall_aim", false);
+        } else {
+          this.bodySprite.Play ("fall", false);
+        }
+        if (this.Aiming) {
+          this.bowSprite.Play ((this.Arrows.Count > 0) ? "drawn" : "drawnEmpty", false);
+        } else {
+          this.bowSprite.Play ("idle", false);
+        }
+      }
+    }
     public int patch_DuckingUpdate()
     {
       if (this.headSprite.CurrentFrame == this.ArcherData.SleepHeadFrame) {
@@ -384,7 +486,7 @@ namespace TowerFall
         if (this.moveAxis.X != 0f && this.CanWallSlide ((Facing)(int)this.moveAxis.X)) {
           this.wings.Normal ();
           target = this.wallStickMax;
-          this.wallStickMax = Calc.Approach (this.wallStickMax, 1.6f, 0.01f * Engine.TimeMult);
+          this.wallStickMax = Calc.Approach (this.wallStickMax, IsAntiGrav() ? -1.6f : 1.6f, 0.01f * Engine.TimeMult);
           this.Cling = (int)this.moveAxis.X;
           if (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f) {
             this.ArcherData.SFX.WallSlide.Play (base.X, 1f);
@@ -624,7 +726,7 @@ namespace TowerFall
         }
         if (this.OnGround && (IsAntiGrav() ? this.Speed.Y < 0.02f : this.Speed.Y > -0.02f)) {
           this.jumpGraceCounter.SetMax (6);
-          this.wallStickMax = 0.5f;
+          this.wallStickMax = IsAntiGrav() ? -0.5f : 0.5f;
           this.flapGravity = 1f;
           this.graceLedgeDir = 0;
         } else {
@@ -767,7 +869,7 @@ namespace TowerFall
       this.canVarJump = true;
       this.bodySprite.Scale.X = 0.7f;
       this.bodySprite.Scale.Y = 1.3f;
-      this.wallStickMax = 0.5f;
+      this.wallStickMax = IsAntiGrav() ? -0.5f : 0.5f;
       this.flapGravity = 1f;
       this.Facing = (Facing)dir;
       this.autoMove = dir;
