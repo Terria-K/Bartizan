@@ -1,3 +1,5 @@
+#pragma warning disable CS0626 // Method, operator, or accessor is marked external and has no attributes on it
+
 using Microsoft.Xna.Framework;
 using MonoMod;
 using Mod;
@@ -16,6 +18,27 @@ namespace TowerFall
     public patch_TreasureChest(Vector2 position, Types graphic, AppearModes mode, Pickups[] pickups, int timer = 0) : base(position, graphic, mode, pickups, timer)
     {
       // no-op
+    }
+
+    public extern void orig_Added();
+    public void patch_Added()
+    {
+      orig_Added();
+      if (IsAntiGrav()) {
+        switch (this.type) {
+          case Types.Normal:
+          case Types.AutoOpen:
+          case Types.Special:
+            base.Collider = new WrapHitbox(10f, 10f, -5f, 5f);
+            break;
+          case Types.Large:
+          case Types.Bottomless:
+            base.Collider = new WrapHitbox(20f, 14f, -10f, 5f);
+            base.Position.Y -= 10;
+            break;
+        }
+        this.sprite.Rotation = 3.1415926536f;
+      }
     }
 
     public void patch_OnPlayerGhostCollide(PlayerGhost ghost)
