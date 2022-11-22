@@ -2,6 +2,7 @@
 
 using System;
 using Microsoft.Xna.Framework;
+using Monocle;
 using Mod;
 
 namespace TowerFall
@@ -11,6 +12,11 @@ namespace TowerFall
     public patch_Pickup(Vector2 position, Vector2 targetPosition) : base(position, targetPosition)
     {
       // no-op. MonoMod ignores this
+    }
+
+    private static bool IsAntiGrav()
+    {
+      return MyGlobals.IsAntiGrav;
     }
 
     public extern static Pickup orig_CreatePickup(Vector2 position, Vector2 targetPosition, Pickups type, int playerIndex);
@@ -24,6 +30,25 @@ namespace TowerFall
       } else {
         return orig_CreatePickup(position, targetPosition, type, playerIndex);
       }
+    }
+
+    public static Vector2 patch_GetTargetPositionFromChest(Level level, Vector2 position)
+    {
+      Vector2 vector = position;
+      for (int i = 0; i < 4; i++) {
+        Rectangle rect = patch_Pickup.IsAntiGrav()
+          ? new Rectangle ((int)vector.X - 2, (int)vector.Y + 8 + 4, 4, 8)
+          : new Rectangle ((int)vector.X - 2, (int)vector.Y - 8 - 4, 4, 8);
+        if (level.CollideCheck(rect, GameTags.Solid)) {
+          break;
+        }
+        if (patch_Pickup.IsAntiGrav()) {
+          vector += Vector2.UnitY * 8f;
+        } else {
+          vector -= Vector2.UnitY * 8f;
+        }
+      }
+      return vector;
     }
   }
 }

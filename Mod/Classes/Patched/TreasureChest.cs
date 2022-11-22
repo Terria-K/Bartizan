@@ -30,6 +30,7 @@ namespace TowerFall
           case Types.AutoOpen:
           case Types.Special:
             base.Collider = new WrapHitbox(10f, 10f, -5f, 5f);
+            base.Position.Y -= 5;
             break;
           case Types.Large:
           case Types.Bottomless:
