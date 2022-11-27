@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Mod;
 using MonoMod;
 using Monocle;
+using System.Xml;
 
 namespace TowerFall
 {
@@ -31,10 +32,60 @@ namespace TowerFall
       lastHatState = "UNSET";
     }
 
+    public extern void orig_InitHead();
+    public void patch_InitHead()
+    {
+      orig_InitHead();
+
+      XmlElement headDataXml;
+
+      if (IsAntiGrav()) {
+        switch (this.HatState) {
+          case HatStates.Normal:
+            headDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadNormal);
+            break;
+          case HatStates.NoHat:
+            headDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadNoHat);
+            break;
+          case HatStates.Crown:
+            headDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadCrown);
+            break;
+          default:
+            throw new Exception("Unknown HatState: " + this.HatState.ToString());
+        }
+
+        this.headSprite.Rotation = 3.1415926536f;
+        if (Calc.HasChild(headDataXml, "Y")) {
+          this.headSprite.Position.Y = Calc.ChildInt(headDataXml, "Y") * -1;
+        }
+        this.headSprite.FlipX = true;
+      }
+    }
+
+    public void InitBody()
+    {
+      if (IsAntiGrav()) {
+        XmlElement bodySpriteData = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.Body);
+        this.bodySprite.Rotation = 3.1415926536f;
+        if (Calc.HasChild(bodySpriteData, "Y")) {
+          this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y") * -1;
+        }
+        this.bodySprite.FlipX = true;
+
+        base.Collider = (this.normalHitbox = new WrapHitbox(8f, 14f, -4f, -8f));
+        // this.shieldHitbox = new WrapHitbox(16f, 18f, -8f, 10f);
+        // this.duckingHitbox = new WrapHitbox(8f, 6f, -4f, -2f);
+        // this.arrowPickupHitbox = new WrapHitbox(22f, 30f, -11f, 16f);
+        // this.dodgeCatchHitbox = new WrapHitbox(12f, 16f, -6f, 8f);
+        // this.hatHitbox = new WrapHitbox(8f, 7f, -4f, 2f);
+      }
+    }
+
     public extern void orig_Added();
     public void patch_Added()
     {
       orig_Added();
+      InitBody();
       this.spawningGhost = false;
       this.diedFromPrism = false;
       if (((patch_MatchVariants)Level.Session.MatchSettings.Variants).VarietyPack[this.PlayerIndex]) {
