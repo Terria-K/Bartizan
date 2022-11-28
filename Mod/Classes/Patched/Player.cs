@@ -73,8 +73,8 @@ namespace TowerFall
         this.bodySprite.FlipX = true;
 
         base.Collider = (this.normalHitbox = new WrapHitbox(8f, 14f, -4f, -8f));
+        this.duckingHitbox = new WrapHitbox(8f, 6f, -4f, -4f);
         // this.shieldHitbox = new WrapHitbox(16f, 18f, -8f, 10f);
-        // this.duckingHitbox = new WrapHitbox(8f, 6f, -4f, -2f);
         // this.arrowPickupHitbox = new WrapHitbox(22f, 30f, -11f, 16f);
         // this.dodgeCatchHitbox = new WrapHitbox(12f, 16f, -6f, 8f);
         // this.hatHitbox = new WrapHitbox(8f, 7f, -4f, 2f);
