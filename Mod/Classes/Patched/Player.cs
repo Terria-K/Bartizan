@@ -58,6 +58,7 @@ namespace TowerFall
         if (Calc.HasChild(headDataXml, "Y")) {
           this.headSprite.Position.Y = Calc.ChildInt(headDataXml, "Y") * -1;
         }
+        this.headSprite.Origin.X = this.headSprite.Width / 2f;
         this.headSprite.FlipX = true;
       }
     }
@@ -69,15 +70,13 @@ namespace TowerFall
         this.bodySprite.Rotation = 3.1415926536f;
         if (Calc.HasChild(bodySpriteData, "Y")) {
           this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y") * -1;
+          this.bodySprite.Position.Y += 2;
         }
+        this.bodySprite.Origin.X = this.bodySprite.Width / 2f;
         this.bodySprite.FlipX = true;
 
-        base.Collider = (this.normalHitbox = new WrapHitbox(8f, 14f, -4f, -8f));
-        this.duckingHitbox = new WrapHitbox(8f, 6f, -4f, -4f);
-        // this.shieldHitbox = new WrapHitbox(16f, 18f, -8f, 10f);
-        // this.arrowPickupHitbox = new WrapHitbox(22f, 30f, -11f, 16f);
-        // this.dodgeCatchHitbox = new WrapHitbox(12f, 16f, -6f, 8f);
-        // this.hatHitbox = new WrapHitbox(8f, 7f, -4f, 2f);
+        this.hatHitbox.Top = base.Collider.Bottom;
+        this.duckingHitbox.Top = base.Collider.Top;
       }
     }
 
@@ -423,7 +422,7 @@ namespace TowerFall
           this.Jump (true, true, false, 0, false);
           return 0;
         }
-        if (!this.OnGround || this.moveAxis.Y != 1f) {
+        if (!this.OnGround || (IsAntiGrav() ? this.moveAxis.Y != -1f : this.moveAxis.Y != 1f)) {
           return 0;
         }
       }
@@ -639,7 +638,7 @@ namespace TowerFall
         !this.Aiming &&
         (IsAntiGrav() ? this.Speed.Y <= 0f : this.Speed.Y >= 0f) &&
         this.moveAxis.X != 0f &&
-        this.moveAxis.Y <= 0f &&
+        (IsAntiGrav() ? this.moveAxis.Y >= 0f : this.moveAxis.Y <= 0f) &&
         base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitX * this.moveAxis.X * 2f)
       ) {
         int direction = Math.Sign (this.moveAxis.X);
@@ -812,7 +811,11 @@ namespace TowerFall
         }
         base.Collider = collider;
         if (!this.Dead && !this.HasShield && this.HatState != 0) {
-          this.hatHitbox.Bottom = base.Collider.Top;
+          if (IsAntiGrav()) {
+            this.hatHitbox.Top = base.Collider.Bottom;
+          } else {
+            this.hatHitbox.Bottom = base.Collider.Top;
+          }
           base.Collider = this.hatHitbox;
           foreach (Arrow item in ((Scene)base.Level) [GameTags.Arrow]) {
             if (item.CannotHit != this && item.Dangerous && (IsAntiGrav() ? item.Speed.Y > -2f : this.Speed.Y < 2f) && base.CollideCheck (item)) {
@@ -849,6 +852,22 @@ namespace TowerFall
           }
         }
       }
+    }
+
+    public extern void orig_DoWrapRender();
+
+    public override void DoWrapRender()
+    {
+      orig_DoWrapRender();
+
+      // Uncomment to see ducking hitbox
+      // Collider collider = base.Collider;
+      // base.Collider = this.duckingHitbox;
+      // this.duckingHitbox.Render(Color.Purple);
+      // base.Collider = collider;
+
+      // Uncomment to see hitboxes
+      // this.DebugRender();
     }
 
     public void patch_Jump (bool particles, bool canSuper, bool forceSuper, int ledgeDir, bool doubleJump)
@@ -985,6 +1004,12 @@ namespace TowerFall
       this.Speed.Y = GetMaxFall();
       if (this.IsEnemy (bouncer)) {
         this.HurtBouncedOn (bouncer.PlayerIndex);
+      }
+    }
+
+    public override bool InputDucking {
+      get {
+        return this.OnGround && this.moveAxis.X == 0f && (IsAntiGrav() ? this.moveAxis.Y == -1f : this.moveAxis.Y == 1f);
       }
     }
 
