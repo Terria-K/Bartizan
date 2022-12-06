@@ -1007,6 +1007,68 @@ namespace TowerFall
       }
     }
 
+    public static void PlayerOnPlayer (patch_Player a, patch_Player b)
+    {
+      bool isAntiGrav = a.IsAntiGrav() && b.IsAntiGrav();
+      a.InvisOpacity = (b.InvisOpacity = 1f);
+      float num = (isAntiGrav ? a.Bottom + a.Speed.Y : a.Top - a.Speed.Y);
+      float num2 = (isAntiGrav ? b.Bottom + b.Speed.Y : b.Top - b.Speed.Y);
+      if (Math.Abs (num - num2) > 200f) {
+        if (num > num2) {
+          num -= 240f;
+        } else {
+          num2 -= 240f;
+        }
+      }
+      if (Math.Abs (num - num2) >= 10f) {
+        patch_Player player;
+        patch_Player player2;
+        if (isAntiGrav ? num > num2 : num < num2) {
+          player = a;
+          player2 = b;
+        } else {
+          player = b;
+          player2 = a;
+        }
+        if (
+          (isAntiGrav
+            ? player.Speed.Y <= 0f
+            : player.Speed.Y >= 0f
+          ) || (isAntiGrav
+            ? player2.Speed.Y > 0f
+            : player2.Speed.Y < 0f
+          )
+        ) {
+          player2.BouncedOn (player);
+          player.Bounce (player2.Top, player2.State == PlayerStates.Ducking && !player.IsEnemy (player2));
+          if (a.Allegiance == b.Allegiance && a.Allegiance != Allegiance.Neutral) {
+            a.TradeArrow (b);
+          }
+          TFGame.PlayerInputs [player.PlayerIndex].Rumble (0.4f, 15);
+          if (player.State == PlayerStates.Dodging) {
+            player.dodgeCurseSatisfied = true;
+            player.Level.Session.MatchStats [player.PlayerIndex].DodgeStomps += 1u;
+          } else if (player.IsHyper) {
+            player.Level.Session.MatchStats [player.PlayerIndex].HyperStomps += 1u;
+          }
+        }
+      } else {
+        if (Player.collideCounter <= 0f) {
+          Sounds.sfx_collide.Play (a.X, 1f);
+          Player.collideCounter = 5f;
+        }
+        a.SideBouncePlayer (b);
+        b.SideBouncePlayer (a);
+        if (a.Allegiance == b.Allegiance && a.Allegiance != Allegiance.Neutral) {
+          a.TradeArrow (b);
+        } else if (a.Arrows.Count == 0 && b.Arrows.Count > 0 && a.input.MoveX == Math.Sign (WrapMath.DiffX (a.X, b.X))) {
+          a.StealArrow (b);
+        } else if (a.Arrows.Count > 0 && b.Arrows.Count == 0 && b.input.MoveX == Math.Sign (WrapMath.DiffX (b.X, a.X))) {
+          b.StealArrow (a);
+        }
+      }
+    }
+
     public override bool InputDucking {
       get {
         return this.OnGround && this.moveAxis.X == 0f && (IsAntiGrav() ? this.moveAxis.Y == -1f : this.moveAxis.Y == 1f);
