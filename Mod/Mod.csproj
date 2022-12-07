@@ -117,6 +117,7 @@
     <Compile Include="Classes\Patched\ChaliceGhost.cs" />
     <Compile Include="Classes\Patched\HeadhuntersRoundLogic.cs" />
     <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
+    <Compile Include="Classes\Patched\Level.cs" />
     <Compile Include="Classes\Patched\MainMenu.cs" />
     <Compile Include="Classes\Patched\MapScene.cs" />
     <Compile Include="Classes\Patched\MatchSettings.cs" />

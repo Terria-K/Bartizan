@@ -43,6 +43,20 @@ namespace TowerFall
         // Fix bug where rumble always initializes to enabled
         MInput.GamepadVibration = SaveData.Instance.Options.GamepadVibration;
       #endif
+
+      InitCustomCommands();
+    }
+
+    public void InitCustomCommands()
+    {
+      Commands commands = Engine.Instance.Commands;
+      commands.RegisterCommand("gravity", delegate {
+        if (Engine.Instance.Scene is Level) {
+          commands.Log("DOING COMMAND: gravity");
+        } else {
+          commands.Log("Command can only be used during gameplay!");
+        }
+      });
     }
 
     public extern void orig_LoadContent();
