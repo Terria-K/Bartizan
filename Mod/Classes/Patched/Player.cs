@@ -855,7 +855,6 @@ namespace TowerFall
     }
 
     public extern void orig_DoWrapRender();
-
     public override void DoWrapRender()
     {
       orig_DoWrapRender();
