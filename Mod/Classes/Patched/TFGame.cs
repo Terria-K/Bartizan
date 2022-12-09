@@ -51,8 +51,14 @@ namespace TowerFall
     {
       Commands commands = Engine.Instance.Commands;
       commands.RegisterCommand("gravity", delegate {
-        if (Engine.Instance.Scene is Level) {
-          commands.Log("DOING COMMAND: gravity");
+        if (base.Scene is Level) {
+          patch_Level level = ((patch_Level)(base.Scene));
+          bool antiGravEnabled = level.ToggleGravity();
+          if (antiGravEnabled) {
+            commands.Log("Anti-Gravity Enabled");
+          } else {
+            commands.Log("Anti-Gravity Disabled");
+          }
         } else {
           commands.Log("Command can only be used during gameplay!");
         }

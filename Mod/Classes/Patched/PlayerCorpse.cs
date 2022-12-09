@@ -304,7 +304,7 @@ namespace TowerFall
 
     public bool IsAntiGrav()
     {
-      return ((patch_Level)(base.Level)).IsAntiGrav();
+      return patch_Level.IsAntiGrav();
     }
 
     public float GetGravity()

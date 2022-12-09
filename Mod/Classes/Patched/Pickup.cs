@@ -16,7 +16,7 @@ namespace TowerFall
 
     private static bool IsAntiGrav()
     {
-      return MyGlobals.IsAntiGrav;
+      return patch_Level.IsAntiGrav();
     }
 
     public extern static Pickup orig_CreatePickup(Vector2 position, Vector2 targetPosition, Pickups type, int playerIndex);

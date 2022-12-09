@@ -33,6 +33,7 @@ namespace TowerFall
     }
 
     public extern void orig_InitHead();
+    [MonoModPublic]
     public void patch_InitHead()
     {
       orig_InitHead();
@@ -65,8 +66,9 @@ namespace TowerFall
 
     public void InitBody()
     {
+      XmlElement bodySpriteData = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.Body);
+      XmlElement bowSpriteData = TFGame.SpriteData.GetXML (this.ArcherData.Sprites.Bow);
       if (IsAntiGrav()) {
-        XmlElement bodySpriteData = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.Body);
         this.bodySprite.Rotation = 3.1415926536f;
         if (Calc.HasChild(bodySpriteData, "Y")) {
           this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y") * -1;
@@ -77,6 +79,18 @@ namespace TowerFall
 
         this.hatHitbox.Top = base.Collider.Bottom;
         this.duckingHitbox.Top = base.Collider.Top;
+      } else {
+        this.bodySprite.Rotation = 0;
+        if (Calc.HasChild(bodySpriteData, "Y")) {
+          this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y");
+        }
+        if (Calc.HasChild(bodySpriteData, "OriginX")) {
+          Console.WriteLine("Updating OriginX");
+          this.bodySprite.Origin.X = Calc.ChildInt(bodySpriteData, "OriginX");
+        }
+        this.bodySprite.FlipX = false;
+        this.hatHitbox.Bottom = base.Collider.Top;
+        this.duckingHitbox.Bottom = base.Collider.Bottom;
       }
     }
 
@@ -85,6 +99,7 @@ namespace TowerFall
     {
       orig_Added();
       InitBody();
+      InitHead();
       this.spawningGhost = false;
       this.diedFromPrism = false;
       if (((patch_MatchVariants)Level.Session.MatchSettings.Variants).VarietyPack[this.PlayerIndex]) {
@@ -1076,7 +1091,7 @@ namespace TowerFall
 
     public bool IsAntiGrav()
     {
-      return MyGlobals.IsAntiGrav;
+      return patch_Level.IsAntiGrav();
     }
 
     public float GetGravity()
