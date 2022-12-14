@@ -24,21 +24,45 @@ namespace TowerFall
     public void patch_Added()
     {
       orig_Added();
-      if (IsAntiGrav()) {
+      flipSprite();
+    }
+
+    public void flipSprite()
+    {
+      bool isRotated = this.sprite.Rotation != 0;
+      if (IsAntiGrav() && !isRotated) {
         switch (this.type) {
           case Types.Normal:
           case Types.AutoOpen:
           case Types.Special:
             base.Collider = new WrapHitbox(10f, 10f, -5f, 5f);
-            base.Position.Y -= 5;
             break;
           case Types.Large:
           case Types.Bottomless:
             base.Collider = new WrapHitbox(20f, 14f, -10f, 5f);
-            base.Position.Y -= 10;
             break;
         }
+        while (base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitY)) {
+          base.Position -= Vector2.UnitY;
+        }
         this.sprite.Rotation = 3.1415926536f;
+      } else if (isRotated) {
+        Console.WriteLine("Rotating back to normal 3");
+        switch (this.type) {
+          case Types.Normal:
+          case Types.AutoOpen:
+          case Types.Special:
+            base.Collider = new WrapHitbox (10f, 10f, -5f, -5f);
+            break;
+          case Types.Large:
+          case Types.Bottomless:
+            base.Collider = new WrapHitbox(20f, 14f, -10f, -9f);
+            break;
+        }
+        while (base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitY)) {
+          base.Position += Vector2.UnitY;
+        }
+        this.sprite.Rotation = 0;
       }
     }
 

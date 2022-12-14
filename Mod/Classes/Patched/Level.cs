@@ -22,7 +22,8 @@ namespace TowerFall
     public void ctor(Session session, XmlElement xml)
     {
       orig_ctor(session, xml);
-      antiGravEnabled = true;
+      antiGravEnabled = false;
+      this.ToggleGravity();
     }
 
     public bool ToggleGravity()
@@ -32,6 +33,10 @@ namespace TowerFall
       foreach (patch_Player player in this.Players) {
         player.InitHead();
         player.InitBody();
+      }
+
+      foreach(patch_TreasureChest chest in ((Scene)this)[GameTags.TreasureChest]) {
+        chest.flipSprite();
       }
 
       return antiGravEnabled;

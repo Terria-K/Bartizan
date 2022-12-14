@@ -85,7 +85,6 @@ namespace TowerFall
           this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y");
         }
         if (Calc.HasChild(bodySpriteData, "OriginX")) {
-          Console.WriteLine("Updating OriginX");
           this.bodySprite.Origin.X = Calc.ChildInt(bodySpriteData, "OriginX");
         }
         this.bodySprite.FlipX = false;
