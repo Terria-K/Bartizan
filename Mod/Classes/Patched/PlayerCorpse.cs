@@ -20,14 +20,30 @@ namespace TowerFall
       // no-op. MonoMod ignores this
     }
 
-    public void FlipSprite(bool isAntiGrav)
+    public extern void orig_DoWrapRender();
+    public override void DoWrapRender()
     {
-      if (isAntiGrav) {
+      orig_DoWrapRender();
+
+      // Uncomment to see hitboxes
+      // this.DebugRender();
+    }
+
+    public void FlipSprite()
+    {
+      bool isRotated = this.sprite.Rotation != 0;
+      if (IsAntiGrav() && !isRotated) {
         this.sprite.Rotation = 3.1415926536f;
         base.Collider = new WrapHitbox (8f, 8f, -4f, 8f);
-      } else {
+        while (base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitY)) {
+          base.Position -= Vector2.UnitY;
+        }
+      } else if (!IsAntiGrav() && isRotated) {
         this.sprite.Rotation = 0;
         base.Collider = new WrapHitbox (8f, 8f, -4f, 0f);
+        while (base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitY)) {
+          base.Position += Vector2.UnitY;
+        }
       }
     }
 
@@ -44,9 +60,7 @@ namespace TowerFall
         }
       }
 
-      if (IsAntiGrav()) {
-        FlipSprite(true);
-      }
+      FlipSprite();
     }
 
     public extern void orig_DieByArrow(Arrow arrow, int ledge);

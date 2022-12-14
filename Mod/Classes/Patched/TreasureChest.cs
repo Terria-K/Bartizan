@@ -24,10 +24,10 @@ namespace TowerFall
     public void patch_Added()
     {
       orig_Added();
-      flipSprite();
+      FlipSprite();
     }
 
-    public void flipSprite()
+    public void FlipSprite()
     {
       bool isRotated = this.sprite.Rotation != 0;
       if (IsAntiGrav() && !isRotated) {
@@ -46,8 +46,7 @@ namespace TowerFall
           base.Position -= Vector2.UnitY;
         }
         this.sprite.Rotation = 3.1415926536f;
-      } else if (isRotated) {
-        Console.WriteLine("Rotating back to normal 3");
+      } else if (!IsAntiGrav() && isRotated) {
         switch (this.type) {
           case Types.Normal:
           case Types.AutoOpen:

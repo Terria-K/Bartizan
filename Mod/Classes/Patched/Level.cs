@@ -36,7 +36,11 @@ namespace TowerFall
       }
 
       foreach(patch_TreasureChest chest in ((Scene)this)[GameTags.TreasureChest]) {
-        chest.flipSprite();
+        chest.FlipSprite();
+      }
+
+      foreach(patch_PlayerCorpse corpse in ((Scene)this)[GameTags.Corpse]) {
+        corpse.FlipSprite();
       }
 
       return antiGravEnabled;
