@@ -33,17 +33,49 @@ namespace TowerFall
     {
       bool isRotated = this.sprite.Rotation != 0;
       if (IsAntiGrav() && !isRotated) {
+        this.sprite.FlipX = true;
         this.sprite.Rotation = 3.1415926536f;
-        base.Collider = new WrapHitbox (8f, 8f, -4f, 8f);
+        this.sprite.Position.Y -= 8f;
         while (base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitY)) {
           base.Position -= Vector2.UnitY;
         }
+
+        SetBuriedForAnimID(this.sprite.CurrentAnimID);
+
       } else if (!IsAntiGrav() && isRotated) {
+        this.sprite.FlipX = false;;
         this.sprite.Rotation = 0;
-        base.Collider = new WrapHitbox (8f, 8f, -4f, 0f);
+        this.sprite.Position.Y += 8f;
+
+        SetBuriedForAnimID(this.sprite.CurrentAnimID);
+
         while (base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitY)) {
           base.Position += Vector2.UnitY;
         }
+      }
+    }
+
+    private void SetBuriedForAnimID(string animID)
+    {
+      switch (animID) {
+        case "ground":
+          this.SetBuried (new Vector2 (7f, 17f), 1.57079637f);
+          break;
+        case "pinned":
+          this.SetBuried (new Vector2 (4f, 13f), 3.14159274f);
+          break;
+        case "ledge":
+          this.SetBuried (new Vector2 (9f, 12f), 0.7853982f);
+          break;
+        case "flying":
+          this.SetBuried (new Vector2 (4f, 13f), 3.14159274f);
+          break;
+        case "slouched":
+          this.SetBuried (new Vector2 (6f, 16f), 2.3561945f);
+          break;
+        case "fall":
+          this.SetBuried (new Vector2 (6f, 14f), 2.3561945f);
+          break;
       }
     }
 
@@ -79,7 +111,6 @@ namespace TowerFall
     public void patch_Update ()
     {
       bool flag = false;
-      this.sprite.FlipY = false;
       this.inMud = base.CollideCheck (GameTags.Mud);
       if (this.PrismHit && base.Level.OnInterval (1)) {
         base.Level.ParticlesFG.Emit (Particles.PrismCorpse, 2, this.Position, Vector2.One * 6f);
@@ -145,14 +176,14 @@ namespace TowerFall
       if (this.Squished != Vector2.Zero) {
         if (this.Squished == Vector2.UnitY) {
           this.sprite.Play ("ground", false);
-          this.SetBuried (new Vector2 (7f, 17f), 1.57079637f);
+          SetBuriedForAnimID("ground");
         } else if (this.Squished == -Vector2.UnitY) {
           this.sprite.Play ("ground", false);
           this.sprite.FlipY = true;
-          this.SetBuried (new Vector2 (7f, 17f), 1.57079637f);
+          SetBuriedForAnimID("ground");
         } else {
           this.sprite.Play ("pinned", false);
-          this.SetBuried (new Vector2 (4f, 13f), 3.14159274f);
+          SetBuriedForAnimID("pinned");
         }
         this.Speed = Vector2.Zero;
         if (base.CollideCheck (GameTags.Solid)) {
@@ -184,7 +215,7 @@ namespace TowerFall
         }
       } else if (this.Ledge != 0) {
         this.sprite.Play ("ledge", false);
-        this.SetBuried (new Vector2 (9f, 12f), 0.7853982f);
+        SetBuriedForAnimID("ledge");
         this.ArrowCushion.Update ();
         if (!base.CollideCheck (GameTags.Solid, base.X + (float)this.Ledge, base.Y)) {
           this.Ledge = 0;
@@ -269,24 +300,24 @@ namespace TowerFall
         }
         if (Math.Abs (this.Speed.X) >= 2.5f) {
           this.sprite.Play ("flying", false);
-          this.SetBuried (new Vector2 (4f, 13f), 3.14159274f);
+          SetBuriedForAnimID("flying");
         } else if (flag3 && !this.Reviving) {
           if (this.againstWall) {
             this.sprite.Play ("slouched", false);
-            this.SetBuried (new Vector2 (6f, 16f), 2.3561945f);
+            SetBuriedForAnimID("slouched");
           } else {
             this.sprite.Play ("ground", false);
-            this.SetBuried (new Vector2 (7f, 17f), 1.57079637f);
+            SetBuriedForAnimID("ground");
           }
         } else if (this.againstWall || this.Reviving) {
           this.sprite.Play ("pinned", false);
-          this.SetBuried (new Vector2 (4f, 13f), 3.14159274f);
+          SetBuriedForAnimID("pinned");
         } else if (this.fallSpriteCounter > 0f) {
           this.sprite.Play ("ground", false);
-          this.SetBuried (new Vector2 (7f, 17f), 1.57079637f);
+          SetBuriedForAnimID("ground");
         } else {
           this.sprite.Play ("fall", false);
-          this.SetBuried (new Vector2 (6f, 14f), 2.3561945f);
+          SetBuriedForAnimID("fall");
         }
       }
       if (this.Hair != null) {
