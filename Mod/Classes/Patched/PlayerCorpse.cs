@@ -68,28 +68,22 @@ namespace TowerFall
     {
       switch (animID) {
         case "ground":
-          // Console.WriteLine("Buried ground");
-          this.SetBuried(new Vector2 (7f, 17f), 1.57079637f);
+          this.SetBuried(new Vector2(7f, 17f), IsAntiGrav() ? Calc.ReflectAngle(1.57079637f, 0f) : 1.57079637f);
           break;
         case "pinned":
-          // Console.WriteLine("Buried pinned");
-          this.SetBuried(new Vector2 (4f, 13f), 3.14159274f);
+          this.SetBuried(new Vector2(4f, 13f), IsAntiGrav() ? Calc.ReflectAngle(3.14159274f, 0f) : 3.14159274f);
           break;
         case "ledge":
-          // Console.WriteLine("Buried ledge");
-          this.SetBuried(new Vector2 (9f, 12f), 0.7853982f);
+          this.SetBuried(new Vector2(9f, 12f), IsAntiGrav() ? Calc.ReflectAngle(0.7853982f, 0f) : 0.7853982f);
           break;
         case "flying":
-          // Console.WriteLine("Buried flying");
-          this.SetBuried(new Vector2 (4f, 13f), 3.14159274f);
+          this.SetBuried(new Vector2(4f, 13f), IsAntiGrav() ? Calc.ReflectAngle(3.14159274f, 0f) : 3.14159274f);
           break;
         case "slouched":
-          // Console.WriteLine("Buried slouched");
-          this.SetBuried(new Vector2 (6f, 16f), 2.3561945f);
+          this.SetBuried(new Vector2(6f, 16f), IsAntiGrav() ? Calc.ReflectAngle(2.3561945f, 0f) : 2.3561945f);
           break;
         case "fall":
-          // Console.WriteLine("Buried fall");
-          this.SetBuried(new Vector2 (6f, 14f), 2.3561945f);
+          this.SetBuried(new Vector2(6f, 14f), IsAntiGrav() ? Calc.ReflectAngle(2.3561945f, 0f) : 2.3561945f);
           break;
       }
     }
