@@ -20,6 +20,15 @@ namespace TowerFall
       // no-op. MonoMod ignores this
     }
 
+    public extern void orig_ctor(PlayerCorpse.EnemyCorpses enemyCorpse, Vector2 position, Facing facing, int killerIndex);
+    [MonoModConstructor]
+    public void ctor(PlayerCorpse.EnemyCorpses enemyCorpse, Vector2 position, Facing facing, int killerIndex)
+    {
+      orig_ctor(enemyCorpse, position, facing, killerIndex);
+
+      this.sprite.FlipX = (this.Facing == Facing.Left) && !IsAntiGrav();
+    }
+
     public extern void orig_DoWrapRender();
     public override void DoWrapRender()
     {
@@ -33,7 +42,7 @@ namespace TowerFall
     {
       bool isRotated = this.sprite.Rotation != 0;
       if (IsAntiGrav() && !isRotated) {
-        this.sprite.FlipX = true;
+        this.sprite.FlipX = this.Facing == Facing.Right;
         this.sprite.Rotation = 3.1415926536f;
         this.sprite.Position.Y -= 8f;
         while (base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitY)) {
@@ -43,7 +52,7 @@ namespace TowerFall
         SetBuriedForAnimID(this.sprite.CurrentAnimID);
 
       } else if (!IsAntiGrav() && isRotated) {
-        this.sprite.FlipX = false;;
+        this.sprite.FlipX = this.Facing == Facing.Left;
         this.sprite.Rotation = 0;
         this.sprite.Position.Y += 8f;
 
@@ -59,28 +68,34 @@ namespace TowerFall
     {
       switch (animID) {
         case "ground":
-          this.SetBuried (new Vector2 (7f, 17f), 1.57079637f);
+          // Console.WriteLine("Buried ground");
+          this.SetBuried(new Vector2 (7f, 17f), 1.57079637f);
           break;
         case "pinned":
-          this.SetBuried (new Vector2 (4f, 13f), 3.14159274f);
+          // Console.WriteLine("Buried pinned");
+          this.SetBuried(new Vector2 (4f, 13f), 3.14159274f);
           break;
         case "ledge":
-          this.SetBuried (new Vector2 (9f, 12f), 0.7853982f);
+          // Console.WriteLine("Buried ledge");
+          this.SetBuried(new Vector2 (9f, 12f), 0.7853982f);
           break;
         case "flying":
-          this.SetBuried (new Vector2 (4f, 13f), 3.14159274f);
+          // Console.WriteLine("Buried flying");
+          this.SetBuried(new Vector2 (4f, 13f), 3.14159274f);
           break;
         case "slouched":
-          this.SetBuried (new Vector2 (6f, 16f), 2.3561945f);
+          // Console.WriteLine("Buried slouched");
+          this.SetBuried(new Vector2 (6f, 16f), 2.3561945f);
           break;
         case "fall":
-          this.SetBuried (new Vector2 (6f, 14f), 2.3561945f);
+          // Console.WriteLine("Buried fall");
+          this.SetBuried(new Vector2 (6f, 14f), 2.3561945f);
           break;
       }
     }
 
     public extern void orig_Added();
-    public void patch_Added ()
+    public void patch_Added()
     {
       this.spawningGhost = true;
       this.hasGhost = false;
@@ -96,19 +111,39 @@ namespace TowerFall
     }
 
     public extern void orig_DieByArrow(Arrow arrow, int ledge);
-    public void patch_DieByArrow (Arrow arrow, int ledge)
+    public void patch_DieByArrow(Arrow arrow, int ledge)
     {
       if (this.CanDoPrismHit (arrow)) {
         this.spawningGhost = false;
       }
       orig_DieByArrow(arrow, ledge);
+
+      if (IsAntiGrav() && arrow.Speed.X != 0f) {
+        this.sprite.FlipX = (this.Facing == Facing.Right);
+      }
+    }
+
+    public extern void orig_DieByExplosion(Explosion explosion, Vector2 normal);
+    public void patch_DieByExplosion(Explosion explosion, Vector2 normal)
+    {
+      orig_DieByExplosion(explosion, normal);
+      if (IsAntiGrav() && this.Speed.X != 0f) {
+        this.sprite.FlipX = (this.Facing == Facing.Right);
+      }
+    }
+
+    public extern void orig_DieBySquish(Vector2 direction, bool ducking);
+    public void patch_DieBySquish(Vector2 direction, bool ducking)
+    {
+      orig_DieBySquish(direction, ducking);
+      this.sprite.FlipX = (this.Facing == Facing.Left) && !IsAntiGrav();
     }
 
     [MonoModLinkTo("TowerFall.LevelEntity", "Update")]
     [MonoModIgnore]
     public extern void base_Update();
 
-    public void patch_Update ()
+    public void patch_Update()
     {
       bool flag = false;
       this.inMud = base.CollideCheck (GameTags.Mud);
