@@ -314,7 +314,11 @@ namespace TowerFall
             if (this.prismFall) {
               num3 *= 0.3f;
             }
-            this.Speed.Y = Math.Min (this.Speed.Y + GetGravity() * ((Math.Abs (this.Speed.Y) < 0.5f) ? 0.5f : 1f) * num3 * Engine.TimeMult, 2.8f * num3);
+            if (IsAntiGrav()) {
+              this.Speed.Y = Math.Max(this.Speed.Y + GetGravity() * ((Math.Abs (this.Speed.Y) < 0.5f) ? 0.5f : 1f) * num3 * Engine.TimeMult, GetMaxFall() * num3);
+            } else {
+              this.Speed.Y = Math.Min(this.Speed.Y + GetGravity() * ((Math.Abs (this.Speed.Y) < 0.5f) ? 0.5f : 1f) * num3 * Engine.TimeMult, GetMaxFall() * num3);
+            }
           }
         }
         base.MoveH (this.Speed.X * Engine.TimeMult, this.onCollideH);
@@ -376,14 +380,19 @@ namespace TowerFall
       }
     }
 
-    public bool IsAntiGrav()
+    private bool IsAntiGrav()
     {
       return patch_Level.IsAntiGrav();
     }
 
-    public float GetGravity()
+    private float GetGravity()
     {
       return IsAntiGrav() ? -0.3f : 0.3f;
+    }
+
+    private float GetMaxFall()
+    {
+      return IsAntiGrav() ? -2.8f : 2.8f;
     }
   }
 }
