@@ -82,20 +82,46 @@ namespace TowerFall
     }
 
     public extern void orig_ArrowUpdate();
+
+    private void my_ArrowUpdate()
+    {
+      if (!patch_Level.IsAntiGrav()) {
+        orig_ArrowUpdate();
+        return;
+      }
+      switch (this.State) {
+        case ArrowStates.Gravity:
+          if (this.State < ArrowStates.Stuck) {
+            this.TravelFrames += Engine.TimeMult;
+          }
+          this.Speed.X = Calc.Approach (this.Speed.X, 0f, 0.03f * Engine.TimeMult);
+          this.Speed.Y = Math.Max(this.Speed.Y + GetGravity() * Engine.TimeMult, GetMaxFall());
+          if (this.Speed != Vector2.Zero) {
+            this.Direction = Calc.Angle (this.Speed);
+          }
+          base.MoveH (this.Speed.X * Engine.TimeMult, this.onCollideH);
+          base.MoveV (this.Speed.Y * Engine.TimeMult, this.onCollideV);
+          break;
+        default:
+          orig_ArrowUpdate();
+          break;
+      }
+    }
+
     public void patch_ArrowUpdate()
     {
       if (((patch_MatchVariants)Level.Session.MatchSettings.Variants).AwfullySlowArrows) {
         // Engine.TimeMult *= AwfullySlowArrowMult;
         typeof(Engine).GetProperty("TimeMult").SetValue(null, Engine.TimeMult * AwfullySlowArrowMult, null);
-        orig_ArrowUpdate();
+        my_ArrowUpdate();
         // Engine.TimeMult /= AwfullySlowArrowMult;
         typeof(Engine).GetProperty("TimeMult").SetValue(null, Engine.TimeMult / AwfullySlowArrowMult, null);
       } else if (((patch_MatchVariants)Level.Session.MatchSettings.Variants).AwfullyFastArrows) {
         typeof(Engine).GetProperty("TimeMult").SetValue(null, Engine.TimeMult * AwfullyFastArrowMult, null);
-        orig_ArrowUpdate();
+        my_ArrowUpdate();
         typeof(Engine).GetProperty("TimeMult").SetValue(null, Engine.TimeMult / AwfullyFastArrowMult, null);
       } else
-        orig_ArrowUpdate();
+        my_ArrowUpdate();
     }
 
     public new static Arrow Create (ArrowTypes type, LevelEntity owner, Vector2 position, float direction, int? overrideCharacterIndex = default(int?), int? overridePlayerIndex = default(int?))
@@ -150,6 +176,16 @@ namespace TowerFall
       arrow.OverridePlayerIndex = overridePlayerIndex;
       arrow.Init (owner, position, direction);
       return arrow;
+    }
+
+    private float GetGravity()
+    {
+      return patch_Level.IsAntiGrav() ? -0.2f : 0.2f;
+    }
+
+    private float GetMaxFall()
+    {
+      return patch_Level.IsAntiGrav() ? -5.5f : 5.5f;
     }
   }
 }
