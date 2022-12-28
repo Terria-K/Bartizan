@@ -558,14 +558,14 @@ namespace TowerFall
           if (base.Level.OnInterval (3)) {
             base.Level.Particles.Emit (this.DustParticleType, 1, base.Position + new Vector2 ((float)(3 * this.Cling), 0f), new Vector2 (1f, 3f));
           }
-        } else if (this.input.MoveY == 1 && (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f)) {
+        } else if (this.input.MoveY == (IsAntiGrav() ? -1 : 1) && (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f)) {
           this.wings.FallFast ();
-          target = IsAntiGrav() ? -3.5f : 3.5f;
+          target = GetFastFall();
           base.Level.Session.MatchStats [this.PlayerIndex].FastFallFrames += Engine.TimeMult;
         } else if (this.input.JumpCheck && this.HasWings && (IsAntiGrav() ? this.Speed.Y <= 1f : this.Speed.Y >= -1f)) {
           this.wings.Glide ();
           this.gliding = true;
-          target = IsAntiGrav() ? -0.8f : 0.8f;
+          target = GetWingsMaxFall();
         } else {
           this.wings.Normal ();
         }
