@@ -132,6 +132,7 @@
     <Compile Include="Classes\Patched\PlayerCorpse.cs" />
     <Compile Include="Classes\Patched\PlayerGhost.cs" />
     <Compile Include="Classes\Patched\PlayerIndicator.cs" />
+    <Compile Include="Classes\Patched\PlayerWings.cs" />
     <Compile Include="Classes\Patched\QuestSpawnPortal.cs" />
     <Compile Include="Classes\Patched\ReplayFrame.cs" />
     <Compile Include="Classes\Patched\RollcallElement.cs" />

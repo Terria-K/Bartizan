@@ -22,13 +22,13 @@ namespace TowerFall
     public void ctor(Session session, XmlElement xml)
     {
       orig_ctor(session, xml);
-      antiGravEnabled = false;
+      this.antiGravEnabled = false;
       this.ToggleGravity();
     }
 
     public bool ToggleGravity()
     {
-      antiGravEnabled = !antiGravEnabled;
+      this.antiGravEnabled = !antiGravEnabled;
 
       foreach (patch_Player player in this.Players) {
         player.InitHead();
