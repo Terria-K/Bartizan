@@ -984,6 +984,13 @@ namespace TowerFall
       }
     }
 
+    public extern void orig_WingsJump();
+    public void patch_WingsJump ()
+    {
+      orig_WingsJump();
+      this.Speed.Y = IsAntiGrav() ? 1.4f : -1.4f;
+    }
+
     public void patch_OnCollideV (Platform platform)
     {
       if (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f) {
