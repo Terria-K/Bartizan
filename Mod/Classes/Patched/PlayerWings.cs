@@ -26,12 +26,12 @@ namespace TowerFall
       bool isAntiGrav = patch_Level.IsAntiGrav();
       if (!isRotated && isAntiGrav) {
         this.sprite.FlipY = true;
-        this.sprite.Origin.Y -= 6;
-        this.sprite.Origin.X -= 1;
+        this.sprite.Origin.Y -= 4;
+        this.sprite.Origin.X -= 2f;
       } else if (isRotated && !isAntiGrav) {
         this.sprite.FlipY = false;
-        this.sprite.Origin.Y += 6;
-        this.sprite.Origin.X += 1;
+        this.sprite.Origin.Y += 4;
+        this.sprite.Origin.X += 2f;
       }
     }
   }
