@@ -115,6 +115,7 @@
     <Compile Include="Classes\Patched\ArrowHUD.cs" />
     <Compile Include="Classes\Patched\ArrowTypePickup.cs" />
     <Compile Include="Classes\Patched\ChaliceGhost.cs" />
+    <Compile Include="Classes\Patched\Crown.cs" />
     <Compile Include="Classes\Patched\HeadhuntersRoundLogic.cs" />
     <Compile Include="Classes\Patched\Lantern.cs" />
     <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
