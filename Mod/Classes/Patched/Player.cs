@@ -32,35 +32,41 @@ namespace TowerFall
       lastHatState = "UNSET";
     }
 
+    private XmlElement GetHeadDataXml()
+    {
+      XmlElement headDataXml;
+
+      switch (this.HatState) {
+        case HatStates.Normal:
+          headDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadNormal);
+          break;
+        case HatStates.NoHat:
+          headDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadNoHat);
+          break;
+        case HatStates.Crown:
+          headDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadCrown);
+          break;
+        default:
+          throw new Exception("Unknown HatState: " + this.HatState.ToString());
+      }
+
+      return headDataXml;
+    }
+
     public extern void orig_InitHead();
     [MonoModPublic]
     public void patch_InitHead()
     {
       orig_InitHead();
 
-      XmlElement headDataXml;
-
       if (IsAntiGrav()) {
-        switch (this.HatState) {
-          case HatStates.Normal:
-            headDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadNormal);
-            break;
-          case HatStates.NoHat:
-            headDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadNoHat);
-            break;
-          case HatStates.Crown:
-            headDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadCrown);
-            break;
-          default:
-            throw new Exception("Unknown HatState: " + this.HatState.ToString());
-        }
-
-        this.headSprite.Rotation = 3.1415926536f;
+        XmlElement headDataXml = GetHeadDataXml();
+        this.headSprite.FlipY = true;
         if (Calc.HasChild(headDataXml, "Y")) {
-          this.headSprite.Position.Y = Calc.ChildInt(headDataXml, "Y") * -1;
+          this.headSprite.Position.Y = Calc.ChildInt(headDataXml, "Y");
+          // @TODO this adjustment doesn't work for all characters. Blue archer has a gap. Find out reliable way to adjust.
+          this.headSprite.Position.Y += 18;
         }
-        this.headSprite.Origin.X = this.headSprite.Width / 2f;
-        this.headSprite.FlipX = true;
       }
     }
 
@@ -68,26 +74,24 @@ namespace TowerFall
     {
       XmlElement bodySpriteData = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.Body);
       XmlElement bowSpriteData = TFGame.SpriteData.GetXML (this.ArcherData.Sprites.Bow);
-      if (IsAntiGrav()) {
-        this.bodySprite.Rotation = 3.1415926536f;
+      bool isRotated = this.bodySprite.FlipY;
+      if (IsAntiGrav() && !isRotated) {
+        this.bodySprite.FlipY = true;
         if (Calc.HasChild(bodySpriteData, "Y")) {
-          this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y") * -1;
-          this.bodySprite.Position.Y += 2;
+          this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y");
+          this.bodySprite.Position.Y += 8;
         }
-        this.bodySprite.Origin.X = this.bodySprite.Width / 2f;
-        this.bodySprite.FlipX = true;
 
         this.hatHitbox.Top = base.Collider.Bottom;
         this.duckingHitbox.Top = base.Collider.Top;
-      } else {
-        this.bodySprite.Rotation = 0;
+      } else if (!IsAntiGrav() && isRotated) {
+        this.bodySprite.FlipY = false;
         if (Calc.HasChild(bodySpriteData, "Y")) {
           this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y");
         }
         if (Calc.HasChild(bodySpriteData, "OriginX")) {
           this.bodySprite.Origin.X = Calc.ChildInt(bodySpriteData, "OriginX");
         }
-        this.bodySprite.FlipX = false;
         this.hatHitbox.Bottom = base.Collider.Top;
         this.duckingHitbox.Bottom = base.Collider.Bottom;
       }
@@ -219,6 +223,42 @@ namespace TowerFall
         }
       }
       return orig_DodgingUpdate();
+    }
+
+    public extern void orig_EnterDucking();
+    public void patch_EnterDucking()
+    {
+      orig_EnterDucking();
+      if (IsAntiGrav()) {
+        XmlElement headDataXml = GetHeadDataXml();
+        if (Calc.HasChild(headDataXml, "Y")) {
+          this.headSprite.Position.Y = Calc.ChildInt(headDataXml, "Y");
+          this.headSprite.Position.Y += 10;
+        }
+        XmlElement bodySpriteData = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.Body);
+        if (Calc.HasChild(bodySpriteData, "Y")) {
+          this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y");
+          this.bodySprite.Position.Y += 4;
+        }
+      }
+    }
+
+    public extern void orig_LeaveDucking();
+    public void patch_LeaveDucking()
+    {
+      orig_LeaveDucking();
+      if (IsAntiGrav()) {
+        XmlElement headDataXml = GetHeadDataXml();
+        if (Calc.HasChild(headDataXml, "Y")) {
+          this.headSprite.Position.Y = Calc.ChildInt(headDataXml, "Y");
+          this.headSprite.Position.Y += 18;
+        }
+        XmlElement bodySpriteData = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.Body);
+        if (Calc.HasChild(bodySpriteData, "Y")) {
+          this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y");
+          this.bodySprite.Position.Y += 8;
+        }
+      }
     }
 
     // Commented out because we've overwritten below. Will need to add chalice ghost code later
@@ -874,13 +914,13 @@ namespace TowerFall
       orig_DoWrapRender();
 
       // Uncomment to see ducking hitbox
-      // Collider collider = base.Collider;
-      // base.Collider = this.duckingHitbox;
-      // this.duckingHitbox.Render(Color.Purple);
-      // base.Collider = collider;
+      Collider collider = base.Collider;
+      base.Collider = this.duckingHitbox;
+      this.duckingHitbox.Render(Color.Purple);
+      base.Collider = collider;
 
       // Uncomment to see hitboxes
-      // this.DebugRender();
+      this.DebugRender();
     }
 
     public void patch_Jump (bool particles, bool canSuper, bool forceSuper, int ledgeDir, bool doubleJump)
