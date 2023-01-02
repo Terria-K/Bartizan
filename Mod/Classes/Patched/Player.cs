@@ -202,7 +202,7 @@ namespace TowerFall
           Alarm.Set(this, 10, delegate {
             if (((GhostArrow)(arrow)).wasMiracled) {
               arrow.OnPlayerCollect(this, true);
-              this.HasShield = true;
+              // this.HasShield = true; // Getting a shield for miracling is too OP
             } else if (arrow.PlayerIndex > -1) {
               Player player = base.Level.GetPlayer(arrow.PlayerIndex);
               if (player != null) {
