@@ -76,6 +76,9 @@ namespace TowerFall
       XmlElement bowSpriteData = TFGame.SpriteData.GetXML (this.ArcherData.Sprites.Bow);
       bool isRotated = this.bodySprite.FlipY;
       if (IsAntiGrav() && !isRotated) {
+        if (Calc.HasChild(bowSpriteData, "Y")) {
+          this.bowPosition.Y = Calc.ChildInt(bowSpriteData, "Y") * -1;
+        }
         this.bodySprite.FlipY = true;
         if (Calc.HasChild(bodySpriteData, "Y")) {
           this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y");
@@ -85,6 +88,9 @@ namespace TowerFall
         this.hatHitbox.Top = base.Collider.Bottom;
         this.duckingHitbox.Top = base.Collider.Top;
       } else if (!IsAntiGrav() && isRotated) {
+        if (Calc.HasChild(bowSpriteData, "Y")) {
+          this.bowPosition.Y = Calc.ChildInt(bowSpriteData, "Y");
+        }
         this.bodySprite.FlipY = false;
         if (Calc.HasChild(bodySpriteData, "Y")) {
           this.bodySprite.Position.Y = Calc.ChildInt(bodySpriteData, "Y");
