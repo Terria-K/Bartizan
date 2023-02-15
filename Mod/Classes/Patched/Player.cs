@@ -85,6 +85,7 @@ namespace TowerFall
           this.bodySprite.Position.Y += 8;
         }
 
+        base.Collider = (this.normalHitbox = new WrapHitbox (8f, 14f, -4f, -9f));
         this.hatHitbox.Top = base.Collider.Bottom;
         this.duckingHitbox.Top = base.Collider.Top;
       } else if (!IsAntiGrav() && isRotated) {
@@ -98,6 +99,8 @@ namespace TowerFall
         if (Calc.HasChild(bodySpriteData, "OriginX")) {
           this.bodySprite.Origin.X = Calc.ChildInt(bodySpriteData, "OriginX");
         }
+
+        base.Collider = (this.normalHitbox = new WrapHitbox (8f, 14f, -4f, -6f));
         this.hatHitbox.Bottom = base.Collider.Top;
         this.duckingHitbox.Bottom = base.Collider.Bottom;
       }
