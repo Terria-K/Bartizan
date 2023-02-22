@@ -81,7 +81,7 @@ namespace TowerFall
         }
         this.headSprite.FlipX = true;
         if (Calc.HasChild(headDataXml, "Y")) {
-          this.headSprite.Position.Y = Calc.ChildInt(headDataXml, "Y") * -1;
+          this.headSprite.Position.Y = (Calc.ChildInt(headDataXml, "Y") * -1) - 3;
           if (Calc.ChildInt(headDataXml, "Y") == 6) {
             this.headSprite.Position.Y += 2;
           } else if (Calc.ChildInt(headDataXml, "Y") == 7) {
@@ -120,6 +120,7 @@ namespace TowerFall
               Console.WriteLine("Unknown bow position:" + Calc.HasChild(bowDataXml, "Y").ToString());
               break;
           }
+          this.bowPosition.Y -= 3;
         }
         this.bodySprite.Rotation = 3.1415926536f;
         if (Calc.HasChild(bodyDataXml, "OriginX")) {
@@ -135,10 +136,11 @@ namespace TowerFall
           }
         }
         this.bodySprite.FlipX = true;
-        if (Calc.HasChild(headDataXml, "Y")) {
-          this.bodySprite.Position.Y = Calc.ChildInt(headDataXml, "Y") * -1;
+        if (Calc.HasChild(bodyDataXml, "Y")) {
+          this.bodySprite.Position.Y = (Calc.ChildInt(bodyDataXml, "Y") * -1) - 3;
         }
-        base.Collider = (this.normalHitbox = new WrapHitbox (8f, 14f, -4f, -9f));
+        base.Collider = (this.normalHitbox = new WrapHitbox (8f, 14f, -4f, -12f));
+        this.arrowPickupHitbox = new WrapHitbox (22f, 30f, -11f, -19f);
         this.hatHitbox.Top = base.Collider.Bottom;
         this.duckingHitbox.Top = base.Collider.Top;
       } else if (!IsAntiGrav() && isRotated) {
@@ -154,6 +156,7 @@ namespace TowerFall
           this.bodySprite.Position.Y = Calc.ChildInt(bodyDataXml, "Y");
         }
         base.Collider = (this.normalHitbox = new WrapHitbox (8f, 14f, -4f, -6f));
+        this.arrowPickupHitbox = new WrapHitbox (22f, 30f, -11f, -16f);
         this.hatHitbox.Bottom = base.Collider.Top;
         this.duckingHitbox.Bottom = base.Collider.Bottom;
       }
