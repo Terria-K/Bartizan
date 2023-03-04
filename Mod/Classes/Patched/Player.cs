@@ -6,6 +6,7 @@ using Mod;
 using MonoMod;
 using Monocle;
 using System.Xml;
+using System.Collections.Generic;
 
 namespace TowerFall
 {
@@ -17,6 +18,35 @@ namespace TowerFall
     public Arrow lastArrowCaught;
 
     ChaliceGhost summonedChaliceGhost;
+
+    public int GetYAdjustment() {
+      Console.WriteLine(this.ArcherData.Sprites.Body);
+      switch (this.ArcherData.Sprites.Body) {
+        case "PlayerBody0": // green
+        case "Green_Alt":
+        case "PlayerBody7": // purple
+        case "Purple_Alt":
+        case "PlayerBody6": // cyan
+        case "Cyan_Alt":
+        case "PlayerBody1": // blue
+        case "Blue_Alt":
+        case "PlayerBody2": // pink
+        case "Pink_Alt":
+        case "PlayerBody3": // orange
+        case "Orange_Alt":
+          return -2;
+        case "PlayerBody5": // yellow
+        case "Yellow_Alt":
+        case "PlayerBody8": // red
+        case "Red_Alt":
+          return -3;
+        case "PlayerBody4": // white
+        case "White_Alt":
+          return -2;
+        default:
+          return 1;
+      }
+    }
 
     public patch_Player(int playerIndex, Vector2 position, Allegiance allegiance, Allegiance teamColor, PlayerInventory inventory, Player.HatStates hatState, bool frozen, bool flash, bool indicator)
       : base(playerIndex, position, allegiance, teamColor, inventory, hatState, frozen, flash, indicator)
@@ -77,51 +107,56 @@ namespace TowerFall
               // includes: yellow, green
               this.headSprite.Origin.X = 3;
               break;
+            case 8:
+              // includes: alt-cyan
+              this.headSprite.Origin.X = 4;
+              break;
           }
         }
         this.headSprite.FlipX = true;
         if (Calc.HasChild(headDataXml, "Y")) {
-          this.headSprite.Position.Y = (Calc.ChildInt(headDataXml, "Y") * -1) - 3;
-          if (Calc.ChildInt(headDataXml, "Y") == 6) {
-            this.headSprite.Position.Y += 2;
-          } else if (Calc.ChildInt(headDataXml, "Y") == 7) {
-            this.headSprite.Position.Y += 1;
-          } else if (Calc.ChildInt(headDataXml, "Y") == 5) {
-            this.headSprite.Position.Y += 3;
-          }
+          this.headSprite.Position.Y = (Calc.ChildInt(headDataXml, "Y") * -1) + GetYAdjustment();
         }
       }
     }
 
     public void InitBody()
     {
-
       XmlElement bodyDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.Body);
       XmlElement bowDataXml = TFGame.SpriteData.GetXML (this.ArcherData.Sprites.Bow);
       XmlElement headDataXml = GetHeadDataXml();
 
       bool isRotated = this.bodySprite.Rotation == 3.1415926536f;
       if (IsAntiGrav() && !isRotated) {
-        if (Calc.HasChild(bowDataXml, "Y")) {
-          switch (Calc.ChildInt(bowDataXml, "Y")) {
-            case -1:
-              // includes: blue, cyan
-              this.bowPosition.Y = 2;
-              break;
-            case -2:
-              // includes: green
-              this.bowPosition.Y = 3;
-              break;
-            case -3:
-              // includes: white
-              this.bowPosition.Y = 4;
-              break;
-            default:
-              Console.WriteLine("Unknown bow position:" + Calc.HasChild(bowDataXml, "Y").ToString());
-              break;
-          }
-          this.bowPosition.Y -= 3;
+        this.bowSprite.FlipY = true;
+        if (this.ArcherData.Sprites.Body == "Red_Alt") {
+          this.bowSprite.Origin.X = 4;
         }
+
+        if (Calc.HasChild(bowDataXml, "Y")) {
+          Dictionary<string, int> playerBowAdjustmentsY = new Dictionary<string, int>();
+          playerBowAdjustmentsY.Add("PlayerBody0", 4); // green
+          playerBowAdjustmentsY.Add("PlayerBody1", 4); // blue
+          playerBowAdjustmentsY.Add("PlayerBody2", 4); // pink
+          playerBowAdjustmentsY.Add("PlayerBody3", 2); // orange
+          playerBowAdjustmentsY.Add("PlayerBody4", 4); // white
+          playerBowAdjustmentsY.Add("PlayerBody5", 0); // yellow
+          playerBowAdjustmentsY.Add("PlayerBody6", 2); // cyan
+          playerBowAdjustmentsY.Add("PlayerBody7", 2); // purple
+          playerBowAdjustmentsY.Add("PlayerBody8", 5); // red
+          playerBowAdjustmentsY.Add("Green_Alt", 2);
+          playerBowAdjustmentsY.Add("Blue_Alt", 4);
+          playerBowAdjustmentsY.Add("Pink_Alt", 4);
+          playerBowAdjustmentsY.Add("Orange_Alt", 2);
+          playerBowAdjustmentsY.Add("White_Alt", 3);
+          playerBowAdjustmentsY.Add("Cyan_Alt", 2);
+          playerBowAdjustmentsY.Add("Purple_Alt", 2);
+          playerBowAdjustmentsY.Add("Red_Alt", 10);
+
+          this.bowPosition.Y += playerBowAdjustmentsY[this.ArcherData.Sprites.Body];
+          this.bowPosition.Y += GetYAdjustment();
+        }
+
         this.bodySprite.Rotation = 3.1415926536f;
         if (Calc.HasChild(bodyDataXml, "OriginX")) {
           switch (Calc.ChildInt(bodyDataXml, "OriginX")) {
@@ -137,15 +172,19 @@ namespace TowerFall
         }
         this.bodySprite.FlipX = true;
         if (Calc.HasChild(bodyDataXml, "Y")) {
-          this.bodySprite.Position.Y = (Calc.ChildInt(bodyDataXml, "Y") * -1) - 3;
+          this.bodySprite.Position.Y = (Calc.ChildInt(bodyDataXml, "Y") * -1) + GetYAdjustment();
         }
-        base.Collider = (this.normalHitbox = new WrapHitbox (8f, 14f, -4f, -12f));
-        this.arrowPickupHitbox = new WrapHitbox (22f, 30f, -11f, -19f);
+        base.Collider = (this.normalHitbox = new WrapHitbox (8f, 14f, -4f, -8f + (float)GetYAdjustment()));
+        this.arrowPickupHitbox = new WrapHitbox (22f, 30f, -11f, -16f + (float)GetYAdjustment());
         this.hatHitbox.Top = base.Collider.Bottom;
         this.duckingHitbox.Top = base.Collider.Top;
       } else if (!IsAntiGrav() && isRotated) {
+        this.bowSprite.FlipY = false;
         if (Calc.HasChild(bowDataXml, "Y")) {
           this.bowPosition.Y = Calc.ChildInt(bowDataXml, "Y");
+        }
+        if (Calc.HasChild(bowDataXml, "OriginX")) {
+          this.bowSprite.Origin.X = Calc.ChildInt(bowDataXml, "OriginX");
         }
         this.bodySprite.Rotation = 0;
         if (Calc.HasChild(bodyDataXml, "OriginX")) {
