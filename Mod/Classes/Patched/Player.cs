@@ -26,7 +26,7 @@ namespace TowerFall
       playerYAdjustment.Add("PlayerBody2", -2); // pink
       playerYAdjustment.Add("PlayerBody3", -2); // orange
       playerYAdjustment.Add("PlayerBody4", -2); // white
-      playerYAdjustment.Add("PlayerBody5", -3); // yellow
+      playerYAdjustment.Add("PlayerBody5", -2); // yellow
       playerYAdjustment.Add("PlayerBody6", -2); // cyan
       playerYAdjustment.Add("PlayerBody7", -2); // purple
       playerYAdjustment.Add("PlayerBody8", -3); // red
@@ -35,7 +35,7 @@ namespace TowerFall
       playerYAdjustment.Add("Pink_Alt", -2);
       playerYAdjustment.Add("Orange_Alt", -2);
       playerYAdjustment.Add("White_Alt", -2);
-      playerYAdjustment.Add("Yellow_Alt", -3);
+      playerYAdjustment.Add("Yellow_Alt", -2);
       playerYAdjustment.Add("Cyan_Alt", -2);
       playerYAdjustment.Add("Purple_Alt", -2);
       playerYAdjustment.Add("Red_Alt", -3);
@@ -134,7 +134,7 @@ namespace TowerFall
           playerBowAdjustmentsY.Add("PlayerBody2", 4); // pink
           playerBowAdjustmentsY.Add("PlayerBody3", 2); // orange
           playerBowAdjustmentsY.Add("PlayerBody4", 4); // white
-          playerBowAdjustmentsY.Add("PlayerBody5", 0); // yellow
+          playerBowAdjustmentsY.Add("PlayerBody5", 2); // yellow
           playerBowAdjustmentsY.Add("PlayerBody6", 2); // cyan
           playerBowAdjustmentsY.Add("PlayerBody7", 2); // purple
           playerBowAdjustmentsY.Add("PlayerBody8", 5); // red
@@ -143,6 +143,7 @@ namespace TowerFall
           playerBowAdjustmentsY.Add("Pink_Alt", 4);
           playerBowAdjustmentsY.Add("Orange_Alt", 2);
           playerBowAdjustmentsY.Add("White_Alt", 3);
+          playerBowAdjustmentsY.Add("Yellow_Alt", 2);
           playerBowAdjustmentsY.Add("Cyan_Alt", 2);
           playerBowAdjustmentsY.Add("Purple_Alt", 2);
           playerBowAdjustmentsY.Add("Red_Alt", 10);
