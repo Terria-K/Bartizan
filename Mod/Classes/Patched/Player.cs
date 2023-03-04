@@ -20,32 +20,26 @@ namespace TowerFall
     ChaliceGhost summonedChaliceGhost;
 
     public int GetYAdjustment() {
-      Console.WriteLine(this.ArcherData.Sprites.Body);
-      switch (this.ArcherData.Sprites.Body) {
-        case "PlayerBody0": // green
-        case "Green_Alt":
-        case "PlayerBody7": // purple
-        case "Purple_Alt":
-        case "PlayerBody6": // cyan
-        case "Cyan_Alt":
-        case "PlayerBody1": // blue
-        case "Blue_Alt":
-        case "PlayerBody2": // pink
-        case "Pink_Alt":
-        case "PlayerBody3": // orange
-        case "Orange_Alt":
-          return -2;
-        case "PlayerBody5": // yellow
-        case "Yellow_Alt":
-        case "PlayerBody8": // red
-        case "Red_Alt":
-          return -3;
-        case "PlayerBody4": // white
-        case "White_Alt":
-          return -2;
-        default:
-          return 1;
-      }
+      Dictionary<string, int> playerYAdjustment = new Dictionary<string, int>();
+      playerYAdjustment.Add("PlayerBody0", -2); // green
+      playerYAdjustment.Add("PlayerBody1", -2); // blue
+      playerYAdjustment.Add("PlayerBody2", -2); // pink
+      playerYAdjustment.Add("PlayerBody3", -2); // orange
+      playerYAdjustment.Add("PlayerBody4", -2); // white
+      playerYAdjustment.Add("PlayerBody5", -3); // yellow
+      playerYAdjustment.Add("PlayerBody6", -2); // cyan
+      playerYAdjustment.Add("PlayerBody7", -2); // purple
+      playerYAdjustment.Add("PlayerBody8", -3); // red
+      playerYAdjustment.Add("Green_Alt", -2);
+      playerYAdjustment.Add("Blue_Alt", -2);
+      playerYAdjustment.Add("Pink_Alt", -2);
+      playerYAdjustment.Add("Orange_Alt", -2);
+      playerYAdjustment.Add("White_Alt", -2);
+      playerYAdjustment.Add("Yellow_Alt", -3);
+      playerYAdjustment.Add("Cyan_Alt", -2);
+      playerYAdjustment.Add("Purple_Alt", -2);
+      playerYAdjustment.Add("Red_Alt", -3);
+      return playerYAdjustment[this.ArcherData.Sprites.Body];
     }
 
     public patch_Player(int playerIndex, Vector2 position, Allegiance allegiance, Allegiance teamColor, PlayerInventory inventory, Player.HatStates hatState, bool frozen, bool flash, bool indicator)
