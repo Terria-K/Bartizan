@@ -173,6 +173,8 @@ namespace TowerFall
         this.arrowPickupHitbox = new WrapHitbox (22f, 30f, -11f, -16f + (float)GetYAdjustment());
         this.hatHitbox.Top = base.Collider.Bottom;
         this.duckingHitbox.Top = base.Collider.Top;
+
+        this.shield.sprite.Y -= GetYAdjustment();
       } else if (!IsAntiGrav() && isRotated) {
         this.bowSprite.FlipY = false;
         if (Calc.HasChild(bowDataXml, "Y")) {
@@ -193,6 +195,8 @@ namespace TowerFall
         this.arrowPickupHitbox = new WrapHitbox (22f, 30f, -11f, -16f);
         this.hatHitbox.Bottom = base.Collider.Top;
         this.duckingHitbox.Bottom = base.Collider.Bottom;
+
+        this.shield.sprite.Y += GetYAdjustment();
       }
     }
 
@@ -1011,6 +1015,12 @@ namespace TowerFall
       // Collider collider = base.Collider;
       // base.Collider = this.duckingHitbox;
       // this.duckingHitbox.Render(Color.Purple);
+      // base.Collider = collider;
+
+      // Uncomment to see shield hitbox
+      // Collider collider = base.Collider;
+      // base.Collider = this.shieldHitbox;
+      // this.shieldHitbox.Render(Color.Purple);
       // base.Collider = collider;
 
       // Uncomment to see hitboxes
