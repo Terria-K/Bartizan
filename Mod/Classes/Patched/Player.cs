@@ -210,20 +210,38 @@ namespace TowerFall
           this.headSprite.Origin.X = (float)this.headXOrigins [this.bodySprite.CurrentFrame];
           if (this.ArcherData.Sprites.Body == "PlayerBody8") { // Red archer needs head position adjustment
             switch (this.headSprite.Origin.X) {
-              case 10:
+              case 10: // Stand
                 this.headSprite.Origin.X = 6;
                 break;
-              case 9:
+              case 9: // Fall, Koala
                 this.headSprite.Origin.X = 6;
                 break;
-              case 8:
+              case 8: // Jump
                 this.headSprite.Origin.X = 5;
                 break;
-              case 6:
+              case 6: // Walk
+                this.headSprite.Origin.X = 8;
+                break;
+              case 5: // Walk
                 this.headSprite.Origin.X = 9;
                 break;
-              case 5:
-                this.headSprite.Origin.X = 10;
+            }
+          } else if (this.ArcherData.Sprites.Body == "Red_Alt") {
+            switch (this.headSprite.Origin.X) {
+              case 6: // Koala
+                this.headSprite.Origin.X = 4;
+                break;
+              case 5: // Stand
+                this.headSprite.Origin.X = 3;
+                break;
+              case 4: // Jump
+                this.headSprite.Origin.X = 4;
+                break;
+              case 3: // Dash
+                this.headSprite.Origin.X = 5;
+                break;
+              case 1: // Walk
+                this.headSprite.Origin.X = 7;
                 break;
             }
           }
