@@ -132,6 +132,7 @@
     <Compile Include="Classes\Patched\Player.cs" />
     <Compile Include="Classes\Patched\PlayerCorpse.cs" />
     <Compile Include="Classes\Patched\PlayerGhost.cs" />
+    <Compile Include="Classes\Patched\PlayerHair.cs" />
     <Compile Include="Classes\Patched\PlayerIndicator.cs" />
     <Compile Include="Classes\Patched\PlayerShield.cs" />
     <Compile Include="Classes\Patched\PlayerWings.cs" />
