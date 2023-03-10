@@ -71,7 +71,10 @@ namespace TowerFall
                 new Vector2 (x, patch_Level.IsAntiGrav() ? 10f : -22f) +
                 new Vector2((float)(4 * (i + amountOfTriggerArrowsActive)), 0f)
               ),
-              patch_Arrow.GetColor(arrowTypeInt)
+              patch_Arrow.GetColor(arrowTypeInt),
+              patch_Level.IsAntiGrav() ? new Vector2(5f, 11f) : Vector2.Zero, // Origin
+              1f, // Scale
+              patch_Level.IsAntiGrav() ? 3.1415926536f : 0f //Rotation
             );
           }
         }
