@@ -145,6 +145,7 @@
     <Compile Include="Classes\Patched\Session.cs" />
     <Compile Include="Classes\Patched\ShieldPickup.cs" />
     <Compile Include="Classes\Patched\SpeedBootsPickup.cs" />
+    <Compile Include="Classes\Patched\Sprite.cs" />
     <Compile Include="Classes\Patched\TeamDeathmatchRoundLogic.cs" />
     <Compile Include="Classes\Patched\TeamReviver.cs" />
     <Compile Include="Classes\Patched\TFGame.cs" />
