@@ -87,6 +87,12 @@ namespace TowerFall
         XmlElement headDataXml = GetHeadDataXml();
         XmlElement bodyDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.Body);
         this.headSprite.Rotation = 3.1415926536f;
+        if (this.headBackSprite) {
+          XmlElement headBackDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadBack);
+          this.headBackSprite.Rotation = 3.1415926536f;
+          this.headBackSprite.Position.Y = (Calc.ChildInt(headBackDataXml, "Y") * -1) + GetYAdjustment();
+          this.headBackSprite.Origin.X = 5;
+        }
         if (Calc.HasChild(headDataXml, "OriginX")) {
           switch (Calc.ChildInt(headDataXml, "OriginX")) {
             case 5:
@@ -94,7 +100,7 @@ namespace TowerFall
               this.headSprite.Origin.X = 3;
               break;
             case 6:
-              // includes: white, blue
+              // includes: white, blue, alt-pink
               this.headSprite.Origin.X = 4;
               break;
             case 7:
@@ -110,6 +116,13 @@ namespace TowerFall
         this.headSprite.FlipX = true;
         if (Calc.HasChild(headDataXml, "Y")) {
           this.headSprite.Position.Y = (Calc.ChildInt(headDataXml, "Y") * -1) + GetYAdjustment();
+        }
+      } else {
+        if (this.headBackSprite) {
+          XmlElement headBackDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.HeadBack);
+          this.headBackSprite.Rotation = 0;
+          this.headBackSprite.Position.Y = Calc.ChildInt(headBackDataXml, "Y");
+          this.headBackSprite.Origin.X = Calc.ChildInt(headBackDataXml, "OriginX");
         }
       }
     }
@@ -200,10 +213,67 @@ namespace TowerFall
       }
     }
 
-    public extern void orig_UpdateHead();
     public void patch_UpdateHead()
     {
-      orig_UpdateHead();
+      // Begin original with AntiGrav sprinkled in
+      if ((bool)this.Hair) {
+        this.Hair.Position.X = (float)((0 - this.Facing) * 3);
+        this.Hair.Position.Y = 12f - (float)this.headYOrigins[this.bodySprite.CurrentFrame] * this.bodySprite.Scale.Y;
+        if (this.baseHeadScale == 2f) {
+          this.Hair.Position.X -= (float)((int)this.Facing * 2);
+          this.Hair.Position.Y -= 6f;
+        }
+      }
+      if (this.headXOrigins != null && this.bodySprite.CurrentFrame < this.headXOrigins.Length) {
+        this.headSprite.Origin.X = (float)this.headXOrigins [this.bodySprite.CurrentFrame];
+      }
+      this.headSprite.Origin.Y = (float)this.headYOrigins[this.bodySprite.CurrentFrame];
+      if (this.State == PlayerStates.Ducking) {
+        this.headSprite.Play ("duck", false);
+      } else if (this.OnGround || this.State == PlayerStates.LedgeGrab || Math.Abs (this.Speed.Y) < 1f) {
+        if (Math.Sign (this.input.AimAxis.X) == 0 - this.Facing) {
+          this.headSprite.Play("lookBack", false);
+        } else if (IsAntiGrav() ? this.input.AimAxis.Y >= 0.5f : this.input.AimAxis.Y <= -0.5f) {
+          this.headSprite.Play("lookUp", false);
+        } else if (IsAntiGrav() ? this.input.AimAxis.Y <= -0.5f : this.input.AimAxis.Y >= 0.5f) {
+          this.headSprite.Play("lookDown", false);
+        } else {
+          this.headSprite.Play("idle", false);
+        }
+      } else if (IsAntiGrav() ? this.Speed.Y > 0f : this.Speed.Y < 0f) {
+        if (Math.Sign (this.input.AimAxis.X) == 0 - this.Facing) {
+          this.headSprite.Play("lookBackJump", false);
+        } else if (IsAntiGrav() ? this.input.AimAxis.Y >= 0.5f : this.input.AimAxis.Y <= -0.5f) {
+          this.headSprite.Play("lookUpJump", false);
+        } else if (IsAntiGrav() ? this.input.AimAxis.Y <= -0.5f : this.input.AimAxis.Y >= 0.5f) {
+          this.headSprite.Play("lookDownJump", false);
+        } else {
+          this.headSprite.Play("idleJump", false);
+        }
+      } else if (Math.Sign (this.input.AimAxis.X) == 0 - this.Facing) {
+        this.headSprite.Play("lookBackFall", false);
+      } else if (IsAntiGrav() ? this.input.AimAxis.Y >= 0.5f : this.input.AimAxis.Y <= -0.5f) {
+        this.headSprite.Play("lookUpFall", false);
+      } else if (IsAntiGrav() ? this.input.AimAxis.Y <= -0.5f : this.input.AimAxis.Y >= 0.5f) {
+        this.headSprite.Play("lookDownFall", false);
+      } else {
+        this.headSprite.Play("idleFall", false);
+      }
+      if (this.headBackSprite != null) {
+        this.headBackSprite.Play (this.headSprite.CurrentAnimID, false);
+        if (this.headXOrigins != null && this.bodySprite.CurrentFrame < this.headXOrigins.Length) {
+          this.headBackSprite.Origin.X = (float)this.headXOrigins [this.bodySprite.CurrentFrame] + this.headBackOriginOffset.X;
+        } else {
+          if (IsAntiGrav()) {
+            this.headBackSprite.Origin.X = 5f;
+          } else {
+            this.headBackSprite.Origin.X = this.headBackOriginOffset.X;
+          }
+        }
+        this.headBackSprite.Origin.Y = (float)this.headYOrigins [this.bodySprite.CurrentFrame] + this.headBackOriginOffset.Y;
+        this.headBackSprite.Scale = this.headSprite.Scale;
+      }
+      // End original
 
       if (IsAntiGrav()) {
         if (this.headXOrigins != null && this.bodySprite.CurrentFrame < this.headXOrigins.Length) {
