@@ -113,6 +113,15 @@ namespace TowerFall
               break;
           }
         }
+
+        // Purple archer's head off-center with crown for some reason
+        if (
+          (this.ArcherData.Sprites.Body == "PlayerBody7" || this.ArcherData.Sprites.Body == "Purple_Alt") &&
+          this.HatState == HatStates.Crown
+        ) {
+          this.headSprite.Origin.X = 6;
+        }
+
         this.headSprite.FlipX = true;
         if (Calc.HasChild(headDataXml, "Y")) {
           this.headSprite.Position.Y = (Calc.ChildInt(headDataXml, "Y") * -1) + GetYAdjustment();
