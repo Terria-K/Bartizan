@@ -27,7 +27,9 @@ namespace TowerFall
     {
       if (this.falling) {
         if (!base.CheckBelow ()) {
-          this.vSpeed = Math.Min (this.vSpeed + GetGravity() * Engine.TimeMult, GetMaxFall());
+          this.vSpeed = patch_Level.IsAntiGrav()
+            ? Math.Max(this.vSpeed + GetGravity() * Engine.TimeMult, GetMaxFall())
+            : Math.Min(this.vSpeed + GetGravity() * Engine.TimeMult, GetMaxFall());
           this.sprite.Rotation += MathHelper.Clamp (Calc.AngleDiff (this.sprite.Rotation, -1.57079637f), -0.08726647f, 0.08726647f) * Engine.TimeMult;
         }
         base.MoveV (this.vSpeed * Engine.TimeMult, this.onFallCollide);
