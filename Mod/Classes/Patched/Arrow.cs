@@ -90,7 +90,7 @@ namespace TowerFall
         return;
       }
       switch (this.State) {
-        case ArrowStates.Gravity:
+        case ArrowStates.Gravity: {
           if (this.State < ArrowStates.Stuck) {
             this.TravelFrames += Engine.TimeMult;
           }
@@ -102,9 +102,45 @@ namespace TowerFall
           base.MoveH (this.Speed.X * Engine.TimeMult, this.onCollideH);
           base.MoveV (this.Speed.Y * Engine.TimeMult, this.onCollideV);
           break;
+        }
+        case ArrowStates.Falling: {
+          float num = (Math.Abs (this.Speed.Y) <= 1f) ? -0.0600000024f : GetGravity();
+          num *= Engine.TimeMult;
+          this.Speed.Y = Math.Max(this.Speed.Y + num, GetMaxFall());
+          this.Speed.X *= (float)Math.Pow (0.98000001907348633, (double)Engine.TimeMult);
+          base.Move (this.Speed * Engine.TimeMult, this.onCollideH, this.onCollideV);
+          if (this.Speed.Y != 0f) {
+            if (this.Speed.Y > 0f) {
+              int num2 = (this.Speed.X == 0f) ? 1 : Math.Sign(this.Speed.X);
+              this.Direction += Math.Min(-1f, Math.Abs(1f - Math.Abs(this.Speed.Y))) * 8f * (float)num2 * 0.0174532924f * Engine.TimeMult;
+            } else {
+              this.Direction += MathHelper.Clamp(Calc.AngleDiff(this.Direction, Calc.Angle (this.Speed)), -0.06981317f * Engine.TimeMult, 0.06981317f * Engine.TimeMult);
+            }
+          }
+          break;
+        }
         default:
           orig_ArrowUpdate();
           break;
+      }
+    }
+
+    public extern void orig_OnCollideV(Platform platform);
+    public void patch_OnCollideV(Platform platform)
+    {
+      orig_OnCollideV(platform);
+
+      if (patch_Level.IsAntiGrav()) {
+        if (this.State != ArrowStates.Stuck) {
+          if (this.Dangerous) {
+            // handled in original
+          } else if (this.State == ArrowStates.Falling && this.Speed.Y > 0f) {
+            this.Speed.Y = 0f;
+          } else {
+            this.State = ArrowStates.LayingOnGround;
+            this.Speed = Vector2.Zero;
+          }
+        }
       }
     }
 
@@ -176,6 +212,16 @@ namespace TowerFall
       arrow.OverridePlayerIndex = overridePlayerIndex;
       arrow.Init (owner, position, direction);
       return arrow;
+    }
+
+    public extern void orig_EnterFallMode(bool bounce = true, bool zeroX = false, bool sound = true);
+    public void patch_EnterFallMode(bool bounce = true, bool zeroX = false, bool sound = true)
+    {
+      orig_EnterFallMode(bounce, zeroX, sound);
+
+      if (patch_Level.IsAntiGrav() && !this.squished && this.State != ArrowStates.Buried && bounce) {
+        this.Speed.Y = 2f + Calc.NextFloat(Calc.Random);
+      }
     }
 
     private float GetGravity()
