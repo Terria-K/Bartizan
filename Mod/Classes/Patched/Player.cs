@@ -1103,6 +1103,33 @@ namespace TowerFall
       }
     }
 
+    public extern int orig_LedgeGrabUpdate();
+    public int patch_LedgeGrabUpdate()
+    {
+      int returnValue = orig_LedgeGrabUpdate();
+      if (IsAntiGrav()) {
+        if (
+          (!this.dodgeCooldown &&
+          this.input.DodgePressed &&
+          !base.Level.Session.MatchSettings.Variants.NoDodging[this.PlayerIndex]) ||
+          this.input.ShootPressed ||
+          (this.input.AltShootPressed && this.triggerArrows.Count <= 0)
+        ) {
+          // Handled in original
+          return returnValue;
+        }
+        if (this.moveAxis.Y <= -0.5f || Math.Sign(this.moveAxis.X) != (int)this.Facing) {
+          this.graceLedgeDir = 0 - this.Facing;
+          this.jumpGraceCounter.Set (12);
+          return 0;
+        } else if (this.moveAxis.Y >= 0.5f && returnValue == 0) {
+          // Original tries to return to state 0 when down pressed. Stay in ledge grab state instead
+          return 1;
+        }
+      }
+      return returnValue;
+    }
+
     public extern void orig_DoWrapRender();
     public override void DoWrapRender()
     {
