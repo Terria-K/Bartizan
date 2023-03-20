@@ -705,14 +705,14 @@ namespace TowerFall
         this.duckSlipCounter -= Engine.TimeMult;
       } else if (this.OnGround) {
         if (!base.CheckBelow (-3)) {
-          base.MoveH (-1f * Engine.TimeMult, null);
+          base.MoveH (IsAntiGrav() ? 1f : -1f * Engine.TimeMult, null);
           if (!base.CheckBelow ()) {
-            base.MoveV (1f, null);
+            base.MoveV (IsAntiGrav() ? -1f : 1f, null);
           }
         } else if (!base.CheckBelow (3)) {
-          base.MoveH (1f * Engine.TimeMult, null);
+          base.MoveH (IsAntiGrav() ? -1f : 1f * Engine.TimeMult, null);
           if (!base.CheckBelow ()) {
-            base.MoveV (1f, null);
+            base.MoveV (IsAntiGrav() ? -1f : 1f, null);
           }
         }
       }
