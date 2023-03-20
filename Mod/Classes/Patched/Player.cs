@@ -1209,6 +1209,13 @@ namespace TowerFall
       SaveData.Instance.Stats.Jumps++;
     }
 
+    public bool patch_CanWallSlide(Facing dir)
+    {
+      return !this.Aiming
+        && (IsAntiGrav() ? this.input.MoveY != -1 : this.input.MoveY != 1)
+        && this.CanWallJump(dir);
+    }
+
     public void patch_WallJump (int dir)
     {
       this.autoBounce = false;
