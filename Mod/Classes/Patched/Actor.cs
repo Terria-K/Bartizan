@@ -54,5 +54,14 @@ namespace TowerFall
         return null;
       }
     }
+
+    public bool patch_IsRiding(Solid solid)
+    {
+      if (patch_Level.IsAntiGrav()) {
+        return base.CollideCheck(solid, base.X, base.Y - base.Height);
+      } else {
+        return base.CollideCheck(solid, base.X, base.Y + 1f);
+      }
+    }
   }
 }
