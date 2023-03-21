@@ -133,6 +133,13 @@ namespace TowerFall
       this.sprite.FlipX = (this.Facing == Facing.Left) && !IsAntiGrav();
     }
 
+    public void patch_DieByJumpedOn ()
+    {
+      this.Speed.X = 0f;
+      this.Speed.Y = IsAntiGrav() ? -2.8f : 2.8f;
+      this.DeathAngle = 1.57079637f;
+    }
+
     [MonoModLinkTo("TowerFall.LevelEntity", "Update")]
     [MonoModIgnore]
     public extern void base_Update();
