@@ -58,7 +58,7 @@ namespace TowerFall
     public bool patch_IsRiding(Solid solid)
     {
       if (patch_Level.IsAntiGrav()) {
-        return base.CollideCheck(solid, base.X, base.Y - base.Height);
+        return base.CollideCheck(solid, base.X, base.Y - (base.Height / 2));
       } else {
         return base.CollideCheck(solid, base.X, base.Y + 1f);
       }
