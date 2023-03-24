@@ -95,7 +95,7 @@ namespace TowerFall
     extern public Player orig_FinishReviving();
     public Player patch_FinishReviving()
     {
-      Player result = orig_FinishReviving();
+      Player player = orig_FinishReviving();
       // If ghost revives is on, then a revive can cancel a level ending
       if (this.ghostRevives && base.Level.Session.MatchSettings.Mode == TowerFall.Modes.TeamDeathmatch) {
           Allegiance allegiance;
@@ -104,7 +104,7 @@ namespace TowerFall
               this.roundEndCounter.Reset();
           }
       }
-      return result;
+      return player;
     }
 
     [MonoModLinkTo("TowerFall.LevelEntity", "Update")]
@@ -112,12 +112,15 @@ namespace TowerFall
     public extern void base_Update();
 
     // This is pasted code from the original class, except where it calls functions defined in this class
+    // (plus a few inline edits for the reverse gravity effect)
     private void ReviveUpdateOriginalWithAdditions()
     {
       this.LightAlpha = Calc.Approach (this.LightAlpha, this.targetLightAlpha, 0.1f * Engine.TimeMult);
       base_Update ();
       if (this.levitateCorpse) {
-        float num = this.targetPosition.Y + this.sine.Value * 2f;
+        float num = patch_Level.IsAntiGrav()
+          ? this.targetPosition.Y - this.sine.Value * 2f
+          : this.targetPosition.Y + this.sine.Value * 2f;
         Vector2 zero = Vector2.Zero;
         zero.Y = MathHelper.Clamp (num - this.Corpse.ActualPosition.Y, -0.6f, 0.6f);
         if (!this.Finished && !this.AutoRevive) {
@@ -259,6 +262,43 @@ namespace TowerFall
     public void patch_ReviveUpdate()
     {
       ReviveUpdateOriginalWithAdditions();
+    }
+
+    public extern void orig_StartReviving();
+    public void patch_StartReviving()
+    {
+      orig_StartReviving();
+      if (patch_Level.IsAntiGrav()) {
+        this.targetPosition = this.Corpse.Position - Vector2.UnitY * -6f;
+      }
+    }
+
+    public bool patch_CanReviveAtThisPosition (ref Vector2 revivePoint)
+    {
+      Collider collider = base.Collider;
+      Vector2 position = this.Position;
+      base.Collider = this.playerNomralHitbox;
+      base.BottomCenter = this.Corpse.BottomCenter;
+      Vector2 position2 = this.Position;
+      bool result;
+      for (int i = 0; i < 10; i += 2) {
+        this.Position = position2 + Vector2.UnitY * (float)i;
+        if (!base.CollideCheck (GameTags.Solid)) {
+          revivePoint = this.Position;
+          if (patch_Level.IsAntiGrav()) {
+            float added = 8f;
+            revivePoint.Y = revivePoint.Y + added;
+          }
+          base.Collider = collider;
+          this.Position = position;
+          result = true;
+          return result;
+        }
+      }
+      base.Collider = collider;
+      this.Position = position;
+      result = false;
+      return result;
     }
   }
 }

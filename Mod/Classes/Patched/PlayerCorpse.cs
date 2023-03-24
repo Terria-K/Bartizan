@@ -27,6 +27,7 @@ namespace TowerFall
       orig_ctor(enemyCorpse, position, facing, killerIndex);
 
       this.sprite.FlipX = (this.Facing == Facing.Left) && !IsAntiGrav();
+      this.flashSprite.FlipX = (this.Facing == Facing.Left) && !IsAntiGrav();
     }
 
     public extern void orig_DoWrapRender();
@@ -45,6 +46,11 @@ namespace TowerFall
         this.sprite.FlipX = this.Facing == Facing.Right;
         this.sprite.Rotation = 3.1415926536f;
         this.sprite.Position.Y -= 8f;
+        if (this.flashSprite != null) {
+          this.flashSprite.FlipX = this.Facing == Facing.Right;
+          this.flashSprite.Rotation = 3.1415926536f;
+          this.flashSprite.Position.Y -= 8f;
+        }
         while (base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitY)) {
           base.Position -= Vector2.UnitY;
         }
@@ -55,6 +61,11 @@ namespace TowerFall
         this.sprite.FlipX = this.Facing == Facing.Left;
         this.sprite.Rotation = 0;
         this.sprite.Position.Y += 8f;
+        if (this.flashSprite != null) {
+          this.flashSprite.FlipX = this.Facing == Facing.Left;
+          this.flashSprite.Rotation = 0;
+          this.flashSprite.Position.Y += 8f;
+        }
 
         SetBuriedForAnimID(this.sprite.CurrentAnimID);
 
