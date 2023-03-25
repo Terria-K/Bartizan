@@ -87,8 +87,18 @@ namespace TowerFall
     {
       if (!this.Finished && !base.Level.Ending && !this.Corpse.PrismHit && this.Mode != TeamReviver.Modes.Quest) {
         float num = MathHelper.Lerp(-1f, this.arrowSine.Value, this.reviveCounter / (float)this.ReviveTime) * 2f;
-        Draw.OutlineTextureCentered(TFGame.Atlas["versus/playerIndicator"], this.Position + new Vector2 (0f, -18f + num), this.arrowColor);
-        Draw.OutlineTextureCentered(TFGame.Atlas["versus/teamRevive"], this.Position + new Vector2 (0f, -28f + num), this.arrowColor);
+        MyDraw.OutlineTextureCentered(
+          TFGame.Atlas["versus/playerIndicator"],
+          this.Position + new Vector2(0f, patch_Level.IsAntiGrav() ? 10f + num : -18f + num),
+          this.arrowColor,
+          patch_Level.IsAntiGrav() ? 3.1415926536f : 0f
+        );
+        MyDraw.OutlineTextureCentered(
+          TFGame.Atlas["versus/teamRevive"],
+          this.Position + new Vector2(0f, patch_Level.IsAntiGrav() ? 20f + num : -28f + num),
+          this.arrowColor,
+          patch_Level.IsAntiGrav() ? 3.1415926536f : 0f
+        );
       }
     }
 

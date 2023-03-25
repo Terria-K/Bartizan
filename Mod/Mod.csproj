@@ -102,6 +102,7 @@
     <Compile Include="Classes\New\GhostArrow.cs" />
     <Compile Include="Classes\New\GhostDeathInterface.cs" />
     <Compile Include="Classes\New\MobRoundLogic.cs" />
+    <Compile Include="Classes\New\MyDraw.cs" />
     <Compile Include="Classes\New\MyGlobals.cs" />
     <Compile Include="Classes\New\MyMatchStats.cs" />
     <Compile Include="Classes\New\PlayerGhostShield.cs" />
