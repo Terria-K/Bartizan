@@ -158,6 +158,7 @@ namespace TowerFall
     public void patch_Update()
     {
       bool flag = false;
+      this.sprite.FlipY = false;
       this.inMud = base.CollideCheck (GameTags.Mud);
       if (this.PrismHit && base.Level.OnInterval (1)) {
         base.Level.ParticlesFG.Emit (Particles.PrismCorpse, 2, this.Position, Vector2.One * 6f);
