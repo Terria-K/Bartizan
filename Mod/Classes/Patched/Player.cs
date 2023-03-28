@@ -1103,31 +1103,41 @@ namespace TowerFall
       }
     }
 
-    public extern int orig_LedgeGrabUpdate();
     public int patch_LedgeGrabUpdate()
     {
-      int returnValue = orig_LedgeGrabUpdate();
-      if (IsAntiGrav()) {
-        if (
-          (!this.dodgeCooldown &&
-          this.input.DodgePressed &&
-          !base.Level.Session.MatchSettings.Variants.NoDodging[this.PlayerIndex]) ||
-          this.input.ShootPressed ||
-          (this.input.AltShootPressed && this.triggerArrows.Count <= 0)
-        ) {
-          // Handled in original
-          return returnValue;
-        }
-        if (this.moveAxis.Y <= -0.5f || Math.Sign(this.moveAxis.X) != (int)this.Facing) {
-          this.graceLedgeDir = 0 - this.Facing;
-          this.jumpGraceCounter.Set (12);
-          return 0;
-        } else if (this.moveAxis.Y >= 0.5f && returnValue == 0) {
-          // Original tries to return to state 0 when down pressed. Stay in ledge grab state instead
-          return 1;
-        }
+      base.Level.Session.MatchStats [this.PlayerIndex].LedgeFrames += Engine.TimeMult;
+      this.wings.Normal ();
+      if (!this.dodgeCooldown && this.input.DodgePressed && !base.Level.Session.MatchSettings.Variants.NoDodging [this.PlayerIndex]) {
+        return 3;
       }
-      return returnValue;
+      if (this.input.ShootPressed) {
+        this.Aiming = true;
+        return 0;
+      }
+      if (this.input.AltShootPressed) {
+        if (this.triggerArrows.Count <= 0) {
+          this.Aiming = true;
+          return 0;
+        }
+        this.DetonateTriggerArrows ();
+      }
+      if (IsAntiGrav() ? this.moveAxis.Y <= -0.5f : this.moveAxis.Y >= 0.5f || Math.Sign (this.moveAxis.X) != (int)this.Facing) {
+        this.graceLedgeDir = 0 - this.Facing;
+        this.jumpGraceCounter.Set (12);
+        return 0;
+      }
+      if (this.input.JumpPressed) {
+        if (this.moveAxis.X == (float)(0 - this.Facing)) {
+          this.Jump (true, false, false, 0 - this.Facing, false);
+        } else if (this.moveAxis != Vector2.UnitY) {
+          this.Jump (false, false, false, 0, false);
+        }
+        return 0;
+      }
+      if (!this.CanGrabLedge ((int)base.Y - 2, (int)this.Facing)) {
+        return 0;
+      }
+      return 1;
     }
 
     public extern void orig_DoWrapRender();
