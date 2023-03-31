@@ -27,6 +27,10 @@ namespace TowerFall
         pickup = new ArrowTypePickup(position, targetPosition, (ArrowTypes)(MyGlobals.ArrowTypes.Ghost));
         pickup.PickupType = type;
         return pickup;
+      } else if (type == (Pickups)(MyGlobals.Pickups.ReverseGravityOrb)) {
+        Pickup pickup;
+        pickup = new OrbPickup(position, targetPosition, (OrbPickup.OrbTypes)patch_OrbPickup.MyOrbTypes.ReverseGravity);
+        return pickup;
       } else {
         return orig_CreatePickup(position, targetPosition, type, playerIndex);
       }

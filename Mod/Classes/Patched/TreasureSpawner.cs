@@ -94,10 +94,15 @@ namespace TowerFall
         } else {
           treasureMask.Add(0); // Ghost Arrows
         }
+        treasureMask.Add(1); // Reverse Gravity Orb
         mask = treasureMask.ToArray();
         OriginalConstructorHandleModdedMask(session, mask, arrowChance, arrowShuffle);
       } else {
-        orig_ctor(session, mask, arrowChance, arrowShuffle);
+        List<int> treasureMask = new List<int>(mask);
+        treasureMask.Add(0); // Gems
+        treasureMask.Add(0); // Ghost Arrows
+        treasureMask.Add(1); // Reverse Gravity Orb
+        OriginalConstructorHandleModdedMask(session, treasureMask.ToArray(), arrowChance, arrowShuffle);
       }
     }
 
@@ -106,6 +111,8 @@ namespace TowerFall
       List<float> treasureChances = new List<float>(TreasureSpawner.DefaultTreasureChances);
       treasureChances.Add(0f); // Gems
       treasureChances.Add(1f); // Ghost Arrows
+      // @TODO set chance of rev grav orb to 0.15f to match other orbs
+      treasureChances.Add(1f); // Reverse Gravity Orb
       return treasureChances.ToArray();
     }
 

@@ -129,6 +129,7 @@
     <Compile Include="Classes\Patched\MirrorPickup.cs" />
     <Compile Include="Classes\Patched\OptionsButton.cs" />
     <Compile Include="Classes\Patched\Orb.cs" />
+    <Compile Include="Classes\Patched\OrbLogic.cs" />
     <Compile Include="Classes\Patched\OrbPickup.cs" />
     <Compile Include="Classes\Patched\Pickup.cs" />
     <Compile Include="Classes\Patched\Player.cs" />
@@ -252,6 +253,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Atlas\modAtlas\pickups\ghostArrows.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\pickups\reverseGravityOrb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

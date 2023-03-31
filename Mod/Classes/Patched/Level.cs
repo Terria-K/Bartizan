@@ -23,7 +23,6 @@ namespace TowerFall
     {
       orig_ctor(session, xml);
       this.antiGravEnabled = false;
-      this.ToggleGravity();
     }
 
     public bool ToggleGravity()
@@ -49,6 +48,15 @@ namespace TowerFall
     public bool IsAntiGravEnabled()
     {
       return this.antiGravEnabled;
+    }
+
+    public static void SetReverseGravity(bool enabled)
+    {
+      patch_Level level = (Engine.Instance.Scene as patch_Level);
+      if (level.IsAntiGravEnabled() == enabled) {
+        return;
+      }
+      level.ToggleGravity();
     }
 
     public static bool IsAntiGrav()
