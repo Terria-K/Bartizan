@@ -34,6 +34,7 @@ namespace TowerFall
     public override void DoWrapRender()
     {
       orig_DoWrapRender();
+      FlipSprite();
 
       // Uncomment to see hitboxes
       // this.DebugRender();
@@ -111,8 +112,6 @@ namespace TowerFall
           reviverAdded = true;
         }
       }
-
-      FlipSprite();
     }
 
     public extern void orig_DieByArrow(Arrow arrow, int ledge);

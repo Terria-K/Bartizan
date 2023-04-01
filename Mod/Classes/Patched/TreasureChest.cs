@@ -20,10 +20,10 @@ namespace TowerFall
       // no-op
     }
 
-    public extern void orig_Added();
-    public void patch_Added()
+    public extern void orig_Render();
+    public void patch_Render()
     {
-      orig_Added();
+      orig_Render();
       FlipSprite();
     }
 
