@@ -456,34 +456,6 @@ namespace TowerFall
       return orig_DodgingUpdate();
     }
 
-    // Commented out because we've overwritten below. Will need to add chalice ghost code later
-    // public extern void orig_Update();
-    // public void patch_Update()
-    // {
-    //   orig_Update();
-    //   if (((patch_MatchVariants)Level.Session.MatchSettings.Variants).CrownSummonsChaliceGhost) {
-    //     if (lastHatState == "UNSET") {
-    //       lastHatState = HatState.ToString();
-    //     } else if (lastHatState != HatState.ToString()) {
-    //       if (lastHatState != "Crown" && HatState.ToString() == "Crown") {
-    //         ChalicePad chalicePad = new ChalicePad(ActualPosition, 40);
-    //         Chalice chalice = new Chalice(chalicePad);
-    //         summonedChaliceGhost = new patch_ChaliceGhost(
-    //           PlayerIndex,
-    //           chalice,
-    //           ((patch_MatchVariants)Level.Session.MatchSettings.Variants).ChaliceGhostsHuntGhosts
-    //         );
-    //         Level.Layers[summonedChaliceGhost.LayerIndex].Add(summonedChaliceGhost, false);
-    //       } else if (summonedChaliceGhost && lastHatState == "Crown" && HatState.ToString() != "Crown") {
-    //         // Ghost vanishes when player loses the crown
-    //         summonedChaliceGhost.Vanish();
-    //         summonedChaliceGhost = null;
-    //       }
-    //       lastHatState = HatState.ToString();
-    //     }
-    //   }
-    // }
-
     public void patch_CatchArrow(Arrow arrow)
     {
       this.lastArrowCaught = arrow;
@@ -1099,6 +1071,28 @@ namespace TowerFall
             Vector2 positionRange = new Vector2 (7f, 11f);
             base.Level.ParticlesBG.Emit (Particles.PurpleAmbience, 1, base.Position, positionRange);
           }
+        }
+      }
+
+      if (((patch_MatchVariants)Level.Session.MatchSettings.Variants).CrownSummonsChaliceGhost) {
+        if (lastHatState == "UNSET") {
+          lastHatState = HatState.ToString();
+        } else if (lastHatState != HatState.ToString()) {
+          if (lastHatState != "Crown" && HatState.ToString() == "Crown") {
+            ChalicePad chalicePad = new ChalicePad(ActualPosition, 40);
+            Chalice chalice = new Chalice(chalicePad);
+            summonedChaliceGhost = new patch_ChaliceGhost(
+              PlayerIndex,
+              chalice,
+              ((patch_MatchVariants)Level.Session.MatchSettings.Variants).ChaliceGhostsHuntGhosts
+            );
+            Level.Layers[summonedChaliceGhost.LayerIndex].Add(summonedChaliceGhost, false);
+          } else if (summonedChaliceGhost && lastHatState == "Crown" && HatState.ToString() != "Crown") {
+            // Ghost vanishes when player loses the crown
+            summonedChaliceGhost.Vanish();
+            summonedChaliceGhost = null;
+          }
+          lastHatState = HatState.ToString();
         }
       }
     }
