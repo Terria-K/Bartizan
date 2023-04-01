@@ -258,6 +258,9 @@
     <None Include="Content\Atlas\modAtlas\pickups\reverseGravityOrb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Atlas\modAtlas\variants\enableReverseGravityOrb.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

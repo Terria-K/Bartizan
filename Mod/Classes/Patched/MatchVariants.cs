@@ -31,6 +31,7 @@ namespace TowerFall
       "MeanerMonsters",
       "StartWithGhostArrows",
       "EnableGhostArrows",
+      "EnableReverseGravityOrb",
     };
 
     [Header("MODS")]
@@ -82,6 +83,9 @@ namespace TowerFall
 
     [CanRandom, Description("FIND THEM ON AMARANTH")]
     public Variant EnableGhostArrows;
+
+    [CanRandom]
+    public Variant EnableReverseGravityOrb;
 
     public extern void orig_ctor(bool noPerPlayer);
     [MonoModConstructor]
