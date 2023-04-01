@@ -110,8 +110,7 @@ namespace TowerFall
       List<float> treasureChances = new List<float>(TreasureSpawner.DefaultTreasureChances);
       treasureChances.Add(0f); // Gems
       treasureChances.Add(1f); // Ghost Arrows
-      // @TODO set chance of rev grav orb to 0.15f to match other orbs
-      treasureChances.Add(1f); // Reverse Gravity Orb
+      treasureChances.Add(0.15f); // Reverse Gravity Orb
       return treasureChances.ToArray();
     }
 
