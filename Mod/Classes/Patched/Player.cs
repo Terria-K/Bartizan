@@ -1115,7 +1115,7 @@ namespace TowerFall
         }
         this.DetonateTriggerArrows ();
       }
-      if (IsAntiGrav() ? this.moveAxis.Y <= -0.5f : this.moveAxis.Y >= 0.5f || Math.Sign (this.moveAxis.X) != (int)this.Facing) {
+      if ((IsAntiGrav() ? this.moveAxis.Y <= -0.5f : this.moveAxis.Y >= 0.5f) || Math.Sign(this.moveAxis.X) != (int)this.Facing) {
         this.graceLedgeDir = 0 - this.Facing;
         this.jumpGraceCounter.Set (12);
         return 0;
