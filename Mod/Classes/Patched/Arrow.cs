@@ -85,7 +85,7 @@ namespace TowerFall
 
     private void my_ArrowUpdate()
     {
-      if (!patch_Level.IsAntiGrav()) {
+      if (!patch_Level.IsReverseGrav()) {
         orig_ArrowUpdate();
         return;
       }
@@ -130,7 +130,7 @@ namespace TowerFall
     {
       orig_OnCollideV(platform);
 
-      if (patch_Level.IsAntiGrav()) {
+      if (patch_Level.IsReverseGrav()) {
         if (this.State != ArrowStates.Stuck) {
           if (this.Dangerous) {
             // handled in original
@@ -219,19 +219,19 @@ namespace TowerFall
     {
       orig_EnterFallMode(bounce, zeroX, sound);
 
-      if (patch_Level.IsAntiGrav() && !this.squished && this.State != ArrowStates.Buried && bounce) {
+      if (patch_Level.IsReverseGrav() && !this.squished && this.State != ArrowStates.Buried && bounce) {
         this.Speed.Y = 2f + Calc.NextFloat(Calc.Random);
       }
     }
 
     private float GetGravity()
     {
-      return patch_Level.IsAntiGrav() ? -0.2f : 0.2f;
+      return patch_Level.IsReverseGrav() ? -0.2f : 0.2f;
     }
 
     private float GetMaxFall()
     {
-      return patch_Level.IsAntiGrav() ? -5.5f : 5.5f;
+      return patch_Level.IsReverseGrav() ? -5.5f : 5.5f;
     }
   }
 }

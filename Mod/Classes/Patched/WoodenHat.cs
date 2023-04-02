@@ -24,7 +24,7 @@ namespace TowerFall
         float radiansB = Calc.ShorterAngleDifference(this.image.Rotation, 0f, 3.14159274f);
         this.image.Rotation += MathHelper.Clamp(Calc.AngleDiff (this.image.Rotation, radiansB), -0.104719758f, 0.104719758f) * Engine.TimeMult;
       } else {
-        if (patch_Level.IsAntiGrav()) {
+        if (patch_Level.IsReverseGrav()) {
           base.Speed.Y = Math.Max(base.Speed.Y + GetGravity() * ((Math.Abs (base.Speed.Y) <= 0.5f) ? 0.5f : 1f) * Engine.TimeMult, GetMaxFall());
         } else {
           base.Speed.Y = Math.Min(base.Speed.Y + GetGravity() * ((Math.Abs (base.Speed.Y) <= 0.5f) ? 0.5f : 1f) * Engine.TimeMult, GetMaxFall());
@@ -38,12 +38,12 @@ namespace TowerFall
 
     private float GetGravity()
     {
-      return patch_Level.IsAntiGrav() ? -0.3f : 0.3f;
+      return patch_Level.IsReverseGrav() ? -0.3f : 0.3f;
     }
 
     private float GetMaxFall()
     {
-      return patch_Level.IsAntiGrav() ? -3f : 3f;
+      return patch_Level.IsReverseGrav() ? -3f : 3f;
     }
   }
 }

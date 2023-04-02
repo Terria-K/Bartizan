@@ -15,7 +15,7 @@ namespace TowerFall
       // no-op. MonoMod ignores this
     }
 
-    public int GetAntiGravAdjustment()
+    public int GetReverseGravAdjustment()
     {
       return 12 - ((int)(this.Position.Y)) * 2 - 14;
     }
@@ -42,7 +42,7 @@ namespace TowerFall
           Vector2 vector3 = -vector * scaleFactor * 0.5f;
           vector3 = Vector2.Lerp (vector3, this.offsets [i] - vector2, (float)i / (float)this.offsets.Length * 0.3f);
 
-          if (patch_Level.IsAntiGrav()) {
+          if (patch_Level.IsReverseGrav()) {
             vector3.Y -= 0.06f + 0.04f * this.sine.Value * Math.Abs (value.X);
           } else {
             vector3.Y += 0.06f + 0.04f * this.sine.Value * Math.Abs (value.X);
@@ -63,8 +63,8 @@ namespace TowerFall
       for (int i = 0; i < this.links; i++) {
         Vector2 position = this.Follow.Position + this.Position + this.offsets [i];
 
-        if (patch_Level.IsAntiGrav()) {
-          position.Y += GetAntiGravAdjustment();
+        if (patch_Level.IsReverseGrav()) {
+          position.Y += GetReverseGravAdjustment();
         }
 
         float rotation = (i == 0) ? 0f : Calc.Angle (this.offsets [i], this.offsets [i - 1]);
@@ -77,8 +77,8 @@ namespace TowerFall
       for (int i = 0; i < this.links; i++) {
         Vector2 position = this.Follow.Position + this.Position + this.offsets [i];
 
-        if (patch_Level.IsAntiGrav()) {
-          position.Y += GetAntiGravAdjustment();
+        if (patch_Level.IsReverseGrav()) {
+          position.Y += GetReverseGravAdjustment();
         }
 
         float rotation = (i == 0) ? 0f : Calc.Angle (this.offsets [i], this.offsets [i - 1]);
@@ -91,8 +91,8 @@ namespace TowerFall
       for (int i = 0; i < this.links; i++) {
         Vector2 value = this.Follow.Position + this.Position + this.offsets [i];
 
-        if (patch_Level.IsAntiGrav()) {
-          value.Y += GetAntiGravAdjustment();
+        if (patch_Level.IsReverseGrav()) {
+          value.Y += GetReverseGravAdjustment();
         }
 
         float rotation = (i == 0) ? 0f : Calc.Angle (this.offsets [i], this.offsets [i - 1]);

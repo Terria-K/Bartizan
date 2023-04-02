@@ -26,8 +26,8 @@ namespace TowerFall
     {
       orig_ctor(enemyCorpse, position, facing, killerIndex);
 
-      this.sprite.FlipX = (this.Facing == Facing.Left) && !IsAntiGrav();
-      this.flashSprite.FlipX = (this.Facing == Facing.Left) && !IsAntiGrav();
+      this.sprite.FlipX = (this.Facing == Facing.Left) && !IsReverseGrav();
+      this.flashSprite.FlipX = (this.Facing == Facing.Left) && !IsReverseGrav();
     }
 
     public extern void orig_DoWrapRender();
@@ -43,7 +43,7 @@ namespace TowerFall
     public void FlipSprite()
     {
       bool isRotated = this.sprite.Rotation != 0;
-      if (IsAntiGrav() && !isRotated) {
+      if (IsReverseGrav() && !isRotated) {
         this.sprite.FlipX = this.Facing == Facing.Right;
         this.sprite.Rotation = 3.1415926536f;
         this.sprite.Position.Y -= 8f;
@@ -58,7 +58,7 @@ namespace TowerFall
 
         SetBuriedForAnimID(this.sprite.CurrentAnimID);
 
-      } else if (!IsAntiGrav() && isRotated) {
+      } else if (!IsReverseGrav() && isRotated) {
         this.sprite.FlipX = this.Facing == Facing.Left;
         this.sprite.Rotation = 0;
         this.sprite.Position.Y += 8f;
@@ -80,22 +80,22 @@ namespace TowerFall
     {
       switch (animID) {
         case "ground":
-          this.SetBuried(new Vector2(7f, 17f), IsAntiGrav() ? Calc.ReflectAngle(1.57079637f, 0f) : 1.57079637f);
+          this.SetBuried(new Vector2(7f, 17f), IsReverseGrav() ? Calc.ReflectAngle(1.57079637f, 0f) : 1.57079637f);
           break;
         case "pinned":
-          this.SetBuried(new Vector2(4f, 13f), IsAntiGrav() ? Calc.ReflectAngle(3.14159274f, 0f) : 3.14159274f);
+          this.SetBuried(new Vector2(4f, 13f), IsReverseGrav() ? Calc.ReflectAngle(3.14159274f, 0f) : 3.14159274f);
           break;
         case "ledge":
-          this.SetBuried(new Vector2(9f, 12f), IsAntiGrav() ? Calc.ReflectAngle(0.7853982f, 0f) : 0.7853982f);
+          this.SetBuried(new Vector2(9f, 12f), IsReverseGrav() ? Calc.ReflectAngle(0.7853982f, 0f) : 0.7853982f);
           break;
         case "flying":
-          this.SetBuried(new Vector2(4f, 13f), IsAntiGrav() ? Calc.ReflectAngle(3.14159274f, 0f) : 3.14159274f);
+          this.SetBuried(new Vector2(4f, 13f), IsReverseGrav() ? Calc.ReflectAngle(3.14159274f, 0f) : 3.14159274f);
           break;
         case "slouched":
-          this.SetBuried(new Vector2(6f, 16f), IsAntiGrav() ? Calc.ReflectAngle(2.3561945f, 0f) : 2.3561945f);
+          this.SetBuried(new Vector2(6f, 16f), IsReverseGrav() ? Calc.ReflectAngle(2.3561945f, 0f) : 2.3561945f);
           break;
         case "fall":
-          this.SetBuried(new Vector2(6f, 14f), IsAntiGrav() ? Calc.ReflectAngle(2.3561945f, 0f) : 2.3561945f);
+          this.SetBuried(new Vector2(6f, 14f), IsReverseGrav() ? Calc.ReflectAngle(2.3561945f, 0f) : 2.3561945f);
           break;
       }
     }
@@ -122,7 +122,7 @@ namespace TowerFall
       }
       orig_DieByArrow(arrow, ledge);
 
-      if (IsAntiGrav() && arrow.Speed.X != 0f) {
+      if (IsReverseGrav() && arrow.Speed.X != 0f) {
         this.sprite.FlipX = (this.Facing == Facing.Right);
       }
     }
@@ -131,7 +131,7 @@ namespace TowerFall
     public void patch_DieByExplosion(Explosion explosion, Vector2 normal)
     {
       orig_DieByExplosion(explosion, normal);
-      if (IsAntiGrav() && this.Speed.X != 0f) {
+      if (IsReverseGrav() && this.Speed.X != 0f) {
         this.sprite.FlipX = (this.Facing == Facing.Right);
       }
     }
@@ -140,13 +140,13 @@ namespace TowerFall
     public void patch_DieBySquish(Vector2 direction, bool ducking)
     {
       orig_DieBySquish(direction, ducking);
-      this.sprite.FlipX = (this.Facing == Facing.Left) && !IsAntiGrav();
+      this.sprite.FlipX = (this.Facing == Facing.Left) && !IsReverseGrav();
     }
 
     public void patch_DieByJumpedOn ()
     {
       this.Speed.X = 0f;
-      this.Speed.Y = IsAntiGrav() ? -2.8f : 2.8f;
+      this.Speed.Y = IsReverseGrav() ? -2.8f : 2.8f;
       this.DeathAngle = 1.57079637f;
     }
 
@@ -332,7 +332,7 @@ namespace TowerFall
             if (this.prismFall) {
               num3 *= 0.3f;
             }
-            if (IsAntiGrav()) {
+            if (IsReverseGrav()) {
               this.Speed.Y = Math.Max(this.Speed.Y + GetGravity() * ((Math.Abs (this.Speed.Y) < 0.5f) ? 0.5f : 1f) * num3 * Engine.TimeMult, GetMaxFall() * num3);
             } else {
               this.Speed.Y = Math.Min(this.Speed.Y + GetGravity() * ((Math.Abs (this.Speed.Y) < 0.5f) ? 0.5f : 1f) * num3 * Engine.TimeMult, GetMaxFall() * num3);
@@ -398,19 +398,19 @@ namespace TowerFall
       }
     }
 
-    private bool IsAntiGrav()
+    private bool IsReverseGrav()
     {
-      return patch_Level.IsAntiGrav();
+      return patch_Level.IsReverseGrav();
     }
 
     private float GetGravity()
     {
-      return IsAntiGrav() ? -0.3f : 0.3f;
+      return IsReverseGrav() ? -0.3f : 0.3f;
     }
 
     private float GetMaxFall()
     {
-      return IsAntiGrav() ? -2.8f : 2.8f;
+      return IsReverseGrav() ? -2.8f : 2.8f;
     }
   }
 }

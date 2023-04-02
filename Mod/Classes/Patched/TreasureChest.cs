@@ -30,7 +30,7 @@ namespace TowerFall
     public void FlipSprite()
     {
       bool isRotated = this.sprite.Rotation != 0;
-      if (IsAntiGrav() && !isRotated) {
+      if (IsReverseGrav() && !isRotated) {
         switch (this.type) {
           case Types.Normal:
           case Types.AutoOpen:
@@ -46,7 +46,7 @@ namespace TowerFall
           base.Position -= Vector2.UnitY;
         }
         this.sprite.Rotation = 3.1415926536f;
-      } else if (!IsAntiGrav() && isRotated) {
+      } else if (!IsReverseGrav() && isRotated) {
         switch (this.type) {
           case Types.Normal:
           case Types.AutoOpen:
@@ -148,9 +148,9 @@ namespace TowerFall
       }
     }
 
-    public bool IsAntiGrav()
+    public bool IsReverseGrav()
     {
-      return patch_Level.IsAntiGrav();
+      return patch_Level.IsReverseGrav();
     }
 
     public float GetGravity()
@@ -160,7 +160,7 @@ namespace TowerFall
 
     public float GetMaxFall()
     {
-      return IsAntiGrav() ? -3.6f : 3.6f;
+      return IsReverseGrav() ? -3.6f : 3.6f;
     }
   }
 }

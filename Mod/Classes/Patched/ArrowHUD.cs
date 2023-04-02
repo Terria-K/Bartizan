@@ -55,7 +55,7 @@ namespace TowerFall
               this.triggerImage,
               Calc.Floor(
                 this.player.Position +
-                new Vector2(x, patch_Level.IsAntiGrav() ? 12f : -20f) +
+                new Vector2(x, patch_Level.IsReverseGrav() ? 12f : -20f) +
                 new Vector2 ((float)(4 * i), 0f)
               ),
               this.triggerColor
@@ -68,13 +68,13 @@ namespace TowerFall
               this.images[arrowTypeInt],
               Calc.Floor(
                 this.player.Position +
-                new Vector2 (x, patch_Level.IsAntiGrav() ? 10f : -22f) +
+                new Vector2 (x, patch_Level.IsReverseGrav() ? 10f : -22f) +
                 new Vector2((float)(4 * (i + amountOfTriggerArrowsActive)), 0f)
               ),
               patch_Arrow.GetColor(arrowTypeInt),
-              patch_Level.IsAntiGrav() ? new Vector2(5f, 11f) : Vector2.Zero, // Origin
+              patch_Level.IsReverseGrav() ? new Vector2(5f, 11f) : Vector2.Zero, // Origin
               1f, // Scale
-              patch_Level.IsAntiGrav() ? 3.1415926536f : 0f //Rotation
+              patch_Level.IsReverseGrav() ? 3.1415926536f : 0f //Rotation
             );
           }
         }
@@ -82,7 +82,7 @@ namespace TowerFall
         Draw.TextureCentered(
           this.emptyImage,
           this.player.Position +
-          new Vector2 (0f, patch_Level.IsAntiGrav() ? 16f : -18f),
+          new Vector2 (0f, patch_Level.IsReverseGrav() ? 16f : -18f),
           Arrow.NoneColors[(int)this.player.Level.FrameCounter / 6 % Arrow.NoneColors.Length]
         );
       }

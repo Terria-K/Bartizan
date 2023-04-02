@@ -53,11 +53,11 @@ namespace TowerFall
       commands.RegisterCommand("gravity", delegate {
         if (base.Scene is Level) {
           patch_Level level = ((patch_Level)(base.Scene));
-          bool antiGravEnabled = level.ToggleGravity();
-          if (antiGravEnabled) {
-            commands.Log("Anti-Gravity Enabled");
+          bool reverseGravEnabled = level.ToggleGravity();
+          if (reverseGravEnabled) {
+            commands.Log("Reverse-Gravity Enabled");
           } else {
-            commands.Log("Anti-Gravity Disabled");
+            commands.Log("Reverse-Gravity Disabled");
           }
         } else {
           commands.Log("Command can only be used during gameplay!");

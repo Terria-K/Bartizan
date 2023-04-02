@@ -13,28 +13,28 @@ namespace TowerFall
       // No-op. MonoMod ignores this
     }
 
-    public bool IsAntiGrav()
+    public bool IsReverseGrav()
     {
-      return patch_Level.IsAntiGrav();
+      return patch_Level.IsReverseGrav();
     }
 
     public override bool CheckBelow ()
     {
-      return IsAntiGrav()
+      return IsReverseGrav()
         ? base.CollideCheck (GameTags.Solid, base.Position - Vector2.UnitY) || (!this.IgnoreJumpThrus && base.CollideCheckOutside (GameTags.JumpThru, base.Position - Vector2.UnitY))
         : base.CollideCheck (GameTags.Solid, base.Position + Vector2.UnitY) || (!this.IgnoreJumpThrus && base.CollideCheckOutside (GameTags.JumpThru, base.Position + Vector2.UnitY));
     }
 
     public override bool CheckBelow (int addX)
     {
-      return IsAntiGrav()
+      return IsReverseGrav()
         ? base.CollideCheck (GameTags.Solid, base.Position - new Vector2 ((float)addX, 1f)) || (!this.IgnoreJumpThrus && base.CollideCheckOutside (GameTags.JumpThru, base.Position - new Vector2 ((float)addX, 1f)))
         : base.CollideCheck (GameTags.Solid, base.Position + new Vector2 ((float)addX, 1f)) || (!this.IgnoreJumpThrus && base.CollideCheckOutside (GameTags.JumpThru, base.Position + new Vector2 ((float)addX, 1f)));
     }
 
     public override Platform GetBelow ()
     {
-      if (IsAntiGrav()) {
+      if (IsReverseGrav()) {
         Entity entity;
         if ((entity = base.CollideFirst (GameTags.Solid, base.Position - Vector2.UnitY)) != null) {
           return entity as Platform;
@@ -57,7 +57,7 @@ namespace TowerFall
 
     public bool patch_IsRiding(Solid solid)
     {
-      if (patch_Level.IsAntiGrav()) {
+      if (patch_Level.IsReverseGrav()) {
         return base.CollideCheck(solid, base.X, base.Y - (base.Height / 2));
       } else {
         return base.CollideCheck(solid, base.X, base.Y + 1f);

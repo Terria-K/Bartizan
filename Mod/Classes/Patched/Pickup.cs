@@ -14,9 +14,9 @@ namespace TowerFall
       // no-op. MonoMod ignores this
     }
 
-    private static bool IsAntiGrav()
+    private static bool IsReverseGrav()
     {
-      return patch_Level.IsAntiGrav();
+      return patch_Level.IsReverseGrav();
     }
 
     public extern static Pickup orig_CreatePickup(Vector2 position, Vector2 targetPosition, Pickups type, int playerIndex);
@@ -40,13 +40,13 @@ namespace TowerFall
     {
       Vector2 vector = position;
       for (int i = 0; i < 4; i++) {
-        Rectangle rect = patch_Pickup.IsAntiGrav()
+        Rectangle rect = patch_Pickup.IsReverseGrav()
           ? new Rectangle ((int)vector.X - 2, (int)vector.Y + 8 + 4, 4, 8)
           : new Rectangle ((int)vector.X - 2, (int)vector.Y - 8 - 4, 4, 8);
         if (level.CollideCheck(rect, GameTags.Solid)) {
           break;
         }
-        if (patch_Pickup.IsAntiGrav()) {
+        if (patch_Pickup.IsReverseGrav()) {
           vector += Vector2.UnitY * 8f;
         } else {
           vector -= Vector2.UnitY * 8f;

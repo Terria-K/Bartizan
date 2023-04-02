@@ -14,9 +14,9 @@ namespace TowerFall
       // No-op. MonoMod ignores this
     }
 
-    public bool IsAntiGrav()
+    public bool IsReverseGrav()
     {
-      return patch_Level.IsAntiGrav();
+      return patch_Level.IsReverseGrav();
     }
 
     [MonoModLinkTo("TowerFall.LevelEntity", "Update")]
@@ -27,7 +27,7 @@ namespace TowerFall
     {
       if (this.falling) {
         if (!base.CheckBelow ()) {
-          this.vSpeed = patch_Level.IsAntiGrav()
+          this.vSpeed = patch_Level.IsReverseGrav()
             ? Math.Max(this.vSpeed + GetGravity() * Engine.TimeMult, GetMaxFall())
             : Math.Min(this.vSpeed + GetGravity() * Engine.TimeMult, GetMaxFall());
           this.sprite.Rotation += MathHelper.Clamp (Calc.AngleDiff (this.sprite.Rotation, -1.57079637f), -0.08726647f, 0.08726647f) * Engine.TimeMult;
@@ -44,12 +44,12 @@ namespace TowerFall
 
     public float GetGravity()
     {
-      return IsAntiGrav() ? -0.2f : 0.2f;
+      return IsReverseGrav() ? -0.2f : 0.2f;
     }
 
     public float GetMaxFall()
     {
-      return IsAntiGrav() ? -4f : 4f;
+      return IsReverseGrav() ? -4f : 4f;
     }
  }
 }

@@ -89,15 +89,15 @@ namespace TowerFall
         float num = MathHelper.Lerp(-1f, this.arrowSine.Value, this.reviveCounter / (float)this.ReviveTime) * 2f;
         MyDraw.OutlineTextureCentered(
           TFGame.Atlas["versus/playerIndicator"],
-          this.Position + new Vector2(0f, patch_Level.IsAntiGrav() ? 10f + num : -18f + num),
+          this.Position + new Vector2(0f, patch_Level.IsReverseGrav() ? 10f + num : -18f + num),
           this.arrowColor,
-          patch_Level.IsAntiGrav() ? 3.1415926536f : 0f
+          patch_Level.IsReverseGrav() ? 3.1415926536f : 0f
         );
         MyDraw.OutlineTextureCentered(
           TFGame.Atlas["versus/teamRevive"],
-          this.Position + new Vector2(0f, patch_Level.IsAntiGrav() ? 20f + num : -28f + num),
+          this.Position + new Vector2(0f, patch_Level.IsReverseGrav() ? 20f + num : -28f + num),
           this.arrowColor,
-          patch_Level.IsAntiGrav() ? 3.1415926536f : 0f
+          patch_Level.IsReverseGrav() ? 3.1415926536f : 0f
         );
       }
     }
@@ -128,7 +128,7 @@ namespace TowerFall
       this.LightAlpha = Calc.Approach (this.LightAlpha, this.targetLightAlpha, 0.1f * Engine.TimeMult);
       base_Update ();
       if (this.levitateCorpse) {
-        float num = patch_Level.IsAntiGrav()
+        float num = patch_Level.IsReverseGrav()
           ? this.targetPosition.Y - this.sine.Value * 2f
           : this.targetPosition.Y + this.sine.Value * 2f;
         Vector2 zero = Vector2.Zero;
@@ -278,7 +278,7 @@ namespace TowerFall
     public void patch_StartReviving()
     {
       orig_StartReviving();
-      if (patch_Level.IsAntiGrav()) {
+      if (patch_Level.IsReverseGrav()) {
         this.targetPosition = this.Corpse.Position - Vector2.UnitY * -6f;
       }
     }
@@ -295,7 +295,7 @@ namespace TowerFall
         this.Position = position2 + Vector2.UnitY * (float)i;
         if (!base.CollideCheck (GameTags.Solid)) {
           revivePoint = this.Position;
-          if (patch_Level.IsAntiGrav()) {
+          if (patch_Level.IsReverseGrav()) {
             float added = 8f;
             revivePoint.Y = revivePoint.Y + added;
           }

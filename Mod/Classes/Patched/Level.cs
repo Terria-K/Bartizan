@@ -10,7 +10,7 @@ namespace TowerFall
 {
   public class patch_Level : Level
   {
-    private bool antiGravEnabled;
+    private bool reverseGravEnabled;
 
     public patch_Level(Session session, XmlElement xml) : base (session, xml)
     {
@@ -22,39 +22,39 @@ namespace TowerFall
     public void ctor(Session session, XmlElement xml)
     {
       orig_ctor(session, xml);
-      this.antiGravEnabled = false;
+      this.reverseGravEnabled = false;
     }
 
     public bool ToggleGravity()
     {
-      this.antiGravEnabled = !antiGravEnabled;
+      this.reverseGravEnabled = !reverseGravEnabled;
 
       foreach (patch_Player player in this.Players) {
         player.InitHead();
         player.InitBody();
       }
 
-      return antiGravEnabled;
+      return reverseGravEnabled;
     }
 
-    public bool IsAntiGravEnabled()
+    public bool IsReverseGravEnabled()
     {
-      return this.antiGravEnabled;
+      return this.reverseGravEnabled;
     }
 
     public static void SetReverseGravity(bool enabled)
     {
       patch_Level level = (Engine.Instance.Scene as patch_Level);
-      if (level.IsAntiGravEnabled() == enabled) {
+      if (level.IsReverseGravEnabled() == enabled) {
         return;
       }
       level.ToggleGravity();
     }
 
-    public static bool IsAntiGrav()
+    public static bool IsReverseGrav()
     {
       if (Engine.Instance.Scene is Level) {
-        return (Engine.Instance.Scene as patch_Level).IsAntiGravEnabled();
+        return (Engine.Instance.Scene as patch_Level).IsReverseGravEnabled();
       }
       return false;
     }

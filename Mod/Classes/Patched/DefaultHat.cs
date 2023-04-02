@@ -25,7 +25,7 @@ namespace TowerFall
       } else {
         base.Speed.X = Calc.Approach (base.Speed.X, this.sine.Value * 1f, 1f * Engine.TimeMult);
         this.image.Rotation = base.Speed.X * -40f * 0.0174532924f;
-        if (patch_Level.IsAntiGrav()) {
+        if (patch_Level.IsReverseGrav()) {
           base.Speed.Y = Math.Max(base.Speed.Y + GetGravity() * Engine.TimeMult, GetMaxFall());
         } else {
           base.Speed.Y = Math.Min(base.Speed.Y + GetGravity() * Engine.TimeMult, GetMaxFall());
@@ -38,12 +38,12 @@ namespace TowerFall
 
     private float GetGravity()
     {
-      return patch_Level.IsAntiGrav() ? -0.08f : 0.08f;
+      return patch_Level.IsReverseGrav() ? -0.08f : 0.08f;
     }
 
     private float GetMaxFall()
     {
-      return patch_Level.IsAntiGrav() ? -1.2f : 1.2f;
+      return patch_Level.IsReverseGrav() ? -1.2f : 1.2f;
     }
   }
 }

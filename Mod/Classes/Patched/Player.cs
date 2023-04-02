@@ -83,7 +83,7 @@ namespace TowerFall
     {
       orig_InitHead();
 
-      if (IsAntiGrav()) {
+      if (IsReverseGrav()) {
         XmlElement headDataXml = GetHeadDataXml();
         XmlElement bodyDataXml = TFGame.SpriteData.GetXML(this.ArcherData.Sprites.Body);
         this.headSprite.Rotation = 3.1415926536f;
@@ -143,7 +143,7 @@ namespace TowerFall
       XmlElement headDataXml = GetHeadDataXml();
 
       bool isRotated = this.bodySprite.Rotation == 3.1415926536f;
-      if (IsAntiGrav() && !isRotated) {
+      if (IsReverseGrav() && !isRotated) {
         this.bowSprite.FlipY = true;
         if (this.ArcherData.Sprites.Body == "Red_Alt") {
           this.bowSprite.Origin.X = 4;
@@ -197,7 +197,7 @@ namespace TowerFall
         this.duckingHitbox.Top = base.Collider.Top;
 
         this.shield.sprite.Y -= GetYAdjustment();
-      } else if (!IsAntiGrav() && isRotated) {
+      } else if (!IsReverseGrav() && isRotated) {
         this.bowSprite.FlipY = false;
         if (Calc.HasChild(bowDataXml, "Y")) {
           this.bowPosition.Y = Calc.ChildInt(bowDataXml, "Y");
@@ -224,7 +224,7 @@ namespace TowerFall
 
     public void patch_UpdateHead()
     {
-      // Begin original with AntiGrav sprinkled in
+      // Begin original with Reverse Grav sprinkled in
       if ((bool)this.Hair) {
         this.Hair.Position.X = (float)((0 - this.Facing) * 3);
         this.Hair.Position.Y = 12f - (float)this.headYOrigins[this.bodySprite.CurrentFrame] * this.bodySprite.Scale.Y;
@@ -242,28 +242,28 @@ namespace TowerFall
       } else if (this.OnGround || this.State == PlayerStates.LedgeGrab || Math.Abs (this.Speed.Y) < 1f) {
         if (Math.Sign (this.input.AimAxis.X) == 0 - this.Facing) {
           this.headSprite.Play("lookBack", false);
-        } else if (IsAntiGrav() ? this.input.AimAxis.Y >= 0.5f : this.input.AimAxis.Y <= -0.5f) {
+        } else if (IsReverseGrav() ? this.input.AimAxis.Y >= 0.5f : this.input.AimAxis.Y <= -0.5f) {
           this.headSprite.Play("lookUp", false);
-        } else if (IsAntiGrav() ? this.input.AimAxis.Y <= -0.5f : this.input.AimAxis.Y >= 0.5f) {
+        } else if (IsReverseGrav() ? this.input.AimAxis.Y <= -0.5f : this.input.AimAxis.Y >= 0.5f) {
           this.headSprite.Play("lookDown", false);
         } else {
           this.headSprite.Play("idle", false);
         }
-      } else if (IsAntiGrav() ? this.Speed.Y > 0f : this.Speed.Y < 0f) {
+      } else if (IsReverseGrav() ? this.Speed.Y > 0f : this.Speed.Y < 0f) {
         if (Math.Sign (this.input.AimAxis.X) == 0 - this.Facing) {
           this.headSprite.Play("lookBackJump", false);
-        } else if (IsAntiGrav() ? this.input.AimAxis.Y >= 0.5f : this.input.AimAxis.Y <= -0.5f) {
+        } else if (IsReverseGrav() ? this.input.AimAxis.Y >= 0.5f : this.input.AimAxis.Y <= -0.5f) {
           this.headSprite.Play("lookUpJump", false);
-        } else if (IsAntiGrav() ? this.input.AimAxis.Y <= -0.5f : this.input.AimAxis.Y >= 0.5f) {
+        } else if (IsReverseGrav() ? this.input.AimAxis.Y <= -0.5f : this.input.AimAxis.Y >= 0.5f) {
           this.headSprite.Play("lookDownJump", false);
         } else {
           this.headSprite.Play("idleJump", false);
         }
       } else if (Math.Sign (this.input.AimAxis.X) == 0 - this.Facing) {
         this.headSprite.Play("lookBackFall", false);
-      } else if (IsAntiGrav() ? this.input.AimAxis.Y >= 0.5f : this.input.AimAxis.Y <= -0.5f) {
+      } else if (IsReverseGrav() ? this.input.AimAxis.Y >= 0.5f : this.input.AimAxis.Y <= -0.5f) {
         this.headSprite.Play("lookUpFall", false);
-      } else if (IsAntiGrav() ? this.input.AimAxis.Y <= -0.5f : this.input.AimAxis.Y >= 0.5f) {
+      } else if (IsReverseGrav() ? this.input.AimAxis.Y <= -0.5f : this.input.AimAxis.Y >= 0.5f) {
         this.headSprite.Play("lookDownFall", false);
       } else {
         this.headSprite.Play("idleFall", false);
@@ -273,7 +273,7 @@ namespace TowerFall
         if (this.headXOrigins != null && this.bodySprite.CurrentFrame < this.headXOrigins.Length) {
           this.headBackSprite.Origin.X = (float)this.headXOrigins [this.bodySprite.CurrentFrame] + this.headBackOriginOffset.X;
         } else {
-          if (IsAntiGrav()) {
+          if (IsReverseGrav()) {
             this.headBackSprite.Origin.X = 5f;
           } else {
             this.headBackSprite.Origin.X = this.headBackOriginOffset.X;
@@ -284,7 +284,7 @@ namespace TowerFall
       }
       // End original
 
-      if (IsAntiGrav()) {
+      if (IsReverseGrav()) {
         if (this.headXOrigins != null && this.bodySprite.CurrentFrame < this.headXOrigins.Length) {
           this.headSprite.Origin.X = (float)this.headXOrigins [this.bodySprite.CurrentFrame];
           if (this.ArcherData.Sprites.Body == "PlayerBody8") { // Red archer needs head position adjustment
@@ -373,7 +373,7 @@ namespace TowerFall
       if (((patch_MatchVariants)Level.Session.MatchSettings.Variants).NoLedgeGrab[this.PlayerIndex]) {
         return false;
       }
-      return IsAntiGrav() ? !base.CollideCheck(
+      return IsReverseGrav() ? !base.CollideCheck(
         GameTags.Solid,
         base.X,
         (float)(targetY - 2)
@@ -557,7 +557,7 @@ namespace TowerFall
         if (this.bowYOffsets != null && this.bodySprite.CurrentFrame < this.bowYOffsets.Length) {
           this.bowSprite.Y += (float)this.bowYOffsets [this.bodySprite.CurrentFrame];
         }
-        if (this.Cling != 0 && (IsAntiGrav() ? this.Speed.Y <= 0f : this.Speed.Y >= 0f)) {
+        if (this.Cling != 0 && (IsReverseGrav() ? this.Speed.Y <= 0f : this.Speed.Y >= 0f)) {
           this.bowSprite.Visible = false;
           this.bodySprite.Play ("ledge", false);
         } else if (this.gliding) {
@@ -643,7 +643,7 @@ namespace TowerFall
           this.Jump (true, true, false, 0, false);
           return 0;
         }
-        if (!this.OnGround || (IsAntiGrav() ? this.moveAxis.Y != -1f : this.moveAxis.Y != 1f)) {
+        if (!this.OnGround || (IsReverseGrav() ? this.moveAxis.Y != -1f : this.moveAxis.Y != 1f)) {
           return 0;
         }
       }
@@ -677,14 +677,14 @@ namespace TowerFall
         this.duckSlipCounter -= Engine.TimeMult;
       } else if (this.OnGround) {
         if (!base.CheckBelow (-3)) {
-          base.MoveH (IsAntiGrav() ? 1f : -1f * Engine.TimeMult, null);
+          base.MoveH (IsReverseGrav() ? 1f : -1f * Engine.TimeMult, null);
           if (!base.CheckBelow ()) {
-            base.MoveV (IsAntiGrav() ? -1f : 1f, null);
+            base.MoveV (IsReverseGrav() ? -1f : 1f, null);
           }
         } else if (!base.CheckBelow (3)) {
-          base.MoveH (IsAntiGrav() ? -1f : 1f * Engine.TimeMult, null);
+          base.MoveH (IsReverseGrav() ? -1f : 1f * Engine.TimeMult, null);
           if (!base.CheckBelow ()) {
-            base.MoveV (IsAntiGrav() ? -1f : 1f, null);
+            base.MoveV (IsReverseGrav() ? -1f : 1f, null);
           }
         }
       }
@@ -732,7 +732,7 @@ namespace TowerFall
           this.Speed.X = Calc.Approach (this.Speed.X, this.MaxRunSpeed * this.moveAxis.X, num2 * Engine.TimeMult);
         }
       }
-      if (IsAntiGrav() ? this.Speed.Y > GetJump() : this.Speed.Y < GetJump()) {
+      if (IsReverseGrav() ? this.Speed.Y > GetJump() : this.Speed.Y < GetJump()) {
         if (this.canPadParticles && base.Level.OnInterval (1)) {
           base.Level.Particles.Emit (Particles.JumpPadTrail, Calc.Range (Calc.Random, base.Position, Vector2.One * 4f));
         }
@@ -744,39 +744,39 @@ namespace TowerFall
         this.wings.Normal ();
       } else {
         this.flapGravity = Calc.Approach (this.flapGravity, 1f, ((this.flapGravity < 0.5f) ? 0.012f : 0.048f) * Engine.TimeMult);
-        if (this.autoBounce && (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f)) {
+        if (this.autoBounce && (IsReverseGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f)) {
           this.autoBounce = false;
         }
         float num3 = (
-          (IsAntiGrav() ? this.Speed.Y >= -1f : this.Speed.Y <= 1f)
+          (IsReverseGrav() ? this.Speed.Y >= -1f : this.Speed.Y <= 1f)
           && (this.input.JumpCheck || this.autoBounce)
           && this.canVarJump
         ) ? 0.15f : 0.3f;
         num3 *= this.flapGravity;
-        float target = IsAntiGrav() ? -2.8f : 2.8f;
+        float target = IsReverseGrav() ? -2.8f : 2.8f;
         if (this.moveAxis.X != 0f && this.CanWallSlide ((Facing)(int)this.moveAxis.X)) {
           this.wings.Normal ();
           target = this.wallStickMax;
-          this.wallStickMax = Calc.Approach (this.wallStickMax, IsAntiGrav() ? -1.6f : 1.6f, 0.01f * Engine.TimeMult);
+          this.wallStickMax = Calc.Approach (this.wallStickMax, IsReverseGrav() ? -1.6f : 1.6f, 0.01f * Engine.TimeMult);
           this.Cling = (int)this.moveAxis.X;
-          if (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f) {
+          if (IsReverseGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f) {
             this.ArcherData.SFX.WallSlide.Play (base.X, 1f);
           }
           if (base.Level.OnInterval (3)) {
             base.Level.Particles.Emit (this.DustParticleType, 1, base.Position + new Vector2 ((float)(3 * this.Cling), 0f), new Vector2 (1f, 3f));
           }
-        } else if (this.input.MoveY == (IsAntiGrav() ? -1 : 1) && (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f)) {
+        } else if (this.input.MoveY == (IsReverseGrav() ? -1 : 1) && (IsReverseGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f)) {
           this.wings.FallFast ();
           target = GetFastFall();
           base.Level.Session.MatchStats [this.PlayerIndex].FastFallFrames += Engine.TimeMult;
-        } else if (this.input.JumpCheck && this.HasWings && (IsAntiGrav() ? this.Speed.Y <= 1f : this.Speed.Y >= -1f)) {
+        } else if (this.input.JumpCheck && this.HasWings && (IsReverseGrav() ? this.Speed.Y <= 1f : this.Speed.Y >= -1f)) {
           this.wings.Glide ();
           this.gliding = true;
           target = GetWingsMaxFall();
         } else {
           this.wings.Normal ();
         }
-        if (this.Cling == 0 || (IsAntiGrav() ? this.Speed.Y >= 0f : this.Speed.Y <= 0f)) {
+        if (this.Cling == 0 || (IsReverseGrav() ? this.Speed.Y >= 0f : this.Speed.Y <= 0f)) {
           this.ArcherData.SFX.WallSlide.Stop (true);
         }
         this.Speed.Y = Calc.Approach (this.Speed.Y, target, num3 * Engine.TimeMult);
@@ -835,8 +835,8 @@ namespace TowerFall
       float num5 = 0f;
       Entity entity = null;
       bool flag = (
-        (IsAntiGrav() ? this.Speed.Y > 1f : this.Speed.Y < -1f) &&
-        (IsAntiGrav() ? this.Speed.Y < GetJump() : this.Speed.Y > GetJump()) &&
+        (IsReverseGrav() ? this.Speed.Y > 1f : this.Speed.Y < -1f) &&
+        (IsReverseGrav() ? this.Speed.Y < GetJump() : this.Speed.Y > GetJump()) &&
         this.input.JumpCheck &&
         (entity = base.CollideFirst (GameTags.JumpThru)) != null
       );
@@ -857,9 +857,9 @@ namespace TowerFall
         this.Prism == null &&
         !this.OnGround &&
         !this.Aiming &&
-        (IsAntiGrav() ? this.Speed.Y <= 0f : this.Speed.Y >= 0f) &&
+        (IsReverseGrav() ? this.Speed.Y <= 0f : this.Speed.Y >= 0f) &&
         this.moveAxis.X != 0f &&
-        (IsAntiGrav() ? this.moveAxis.Y >= 0f : this.moveAxis.Y <= 0f) &&
+        (IsReverseGrav() ? this.moveAxis.Y >= 0f : this.moveAxis.Y <= 0f) &&
         base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitX * this.moveAxis.X * 2f)
       ) {
         int direction = Math.Sign (this.moveAxis.X);
@@ -995,16 +995,16 @@ namespace TowerFall
         if ((bool)this.canDetonateCounter) {
           this.canDetonateCounter.Update ();
         }
-        if (this.OnGround && (IsAntiGrav() ? this.Speed.Y < 0.02f : this.Speed.Y > -0.02f)) {
+        if (this.OnGround && (IsReverseGrav() ? this.Speed.Y < 0.02f : this.Speed.Y > -0.02f)) {
           this.jumpGraceCounter.SetMax (6);
-          this.wallStickMax = IsAntiGrav() ? -0.5f : 0.5f;
+          this.wallStickMax = IsReverseGrav() ? -0.5f : 0.5f;
           this.flapGravity = 1f;
           this.graceLedgeDir = 0;
         } else {
           this.jumpGraceCounter.Update ();
         }
         if ((bool)this.flapBounceCounter) {
-          if (IsAntiGrav() ? this.Speed.Y >= 0f : this.Speed.Y <= 0f) {
+          if (IsReverseGrav() ? this.Speed.Y >= 0f : this.Speed.Y <= 0f) {
             this.flapBounceCounter.Set (0);
           } else {
             this.flapBounceCounter.Update ();
@@ -1032,14 +1032,14 @@ namespace TowerFall
         }
         base.Collider = collider;
         if (!this.Dead && !this.HasShield && this.HatState != 0) {
-          if (IsAntiGrav()) {
+          if (IsReverseGrav()) {
             this.hatHitbox.Top = base.Collider.Bottom;
           } else {
             this.hatHitbox.Bottom = base.Collider.Top;
           }
           base.Collider = this.hatHitbox;
           foreach (Arrow item in ((Scene)base.Level) [GameTags.Arrow]) {
-            if (item.CannotHit != this && item.Dangerous && (IsAntiGrav() ? item.Speed.Y > -2f : this.Speed.Y < 2f) && base.CollideCheck (item)) {
+            if (item.CannotHit != this && item.Dangerous && (IsReverseGrav() ? item.Speed.Y > -2f : this.Speed.Y < 2f) && base.CollideCheck (item)) {
               if (item.PlayerIndex != -1) {
                 base.Level.Session.MatchStats [item.PlayerIndex].HatsShotOff += 1u;
               }
@@ -1115,7 +1115,7 @@ namespace TowerFall
         }
         this.DetonateTriggerArrows ();
       }
-      if ((IsAntiGrav() ? this.moveAxis.Y <= -0.5f : this.moveAxis.Y >= 0.5f) || Math.Sign(this.moveAxis.X) != (int)this.Facing) {
+      if ((IsReverseGrav() ? this.moveAxis.Y <= -0.5f : this.moveAxis.Y >= 0.5f) || Math.Sign(this.moveAxis.X) != (int)this.Facing) {
         this.graceLedgeDir = 0 - this.Facing;
         this.jumpGraceCounter.Set (12);
         return 0;
@@ -1216,7 +1216,7 @@ namespace TowerFall
     public bool patch_CanWallSlide(Facing dir)
     {
       return !this.Aiming
-        && (IsAntiGrav() ? this.input.MoveY != -1 : this.input.MoveY != 1)
+        && (IsReverseGrav() ? this.input.MoveY != -1 : this.input.MoveY != 1)
         && this.CanWallJump(dir);
     }
 
@@ -1231,7 +1231,7 @@ namespace TowerFall
       this.canVarJump = true;
       this.bodySprite.Scale.X = 0.7f;
       this.bodySprite.Scale.Y = 1.3f;
-      this.wallStickMax = IsAntiGrav() ? -0.5f : 0.5f;
+      this.wallStickMax = IsReverseGrav() ? -0.5f : 0.5f;
       this.flapGravity = 1f;
       this.Facing = (Facing)dir;
       this.autoMove = dir;
@@ -1243,12 +1243,12 @@ namespace TowerFall
 
     public void patch_HotCoalsBounce ()
     {
-      if (IsAntiGrav() ? this.Speed.Y <= 0f : this.Speed.Y >= 0f) {
+      if (IsReverseGrav() ? this.Speed.Y <= 0f : this.Speed.Y >= 0f) {
         Sounds.sfx_coalBurn.Play (base.X, 1f);
         if (this.input.JumpCheck) {
-          this.Speed.Y = IsAntiGrav() ? 2.87999988f : -2.87999988f;
+          this.Speed.Y = IsReverseGrav() ? 2.87999988f : -2.87999988f;
         } else {
-          this.Speed.Y = IsAntiGrav() ? 2.24f : -2.24f;
+          this.Speed.Y = IsReverseGrav() ? 2.24f : -2.24f;
         }
         if (this.input.MoveX != 0) {
           this.Speed.X += (float)this.input.MoveX * 0.3f;
@@ -1267,12 +1267,12 @@ namespace TowerFall
     public void patch_WingsJump ()
     {
       orig_WingsJump();
-      this.Speed.Y = IsAntiGrav() ? 1.4f : -1.4f;
+      this.Speed.Y = IsReverseGrav() ? 1.4f : -1.4f;
     }
 
     public void patch_OnCollideV (Platform platform)
     {
-      if (IsAntiGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f) {
+      if (IsReverseGrav() ? this.Speed.Y < 0f : this.Speed.Y > 0f) {
         this.ArcherData.SFX.Land.Play (base.X, 1f);
         this.bodySprite.Scale.X = 1f + this.Speed.Y / GetMaxFall() * 0.5f;
         this.bodySprite.Scale.Y = 1f - this.Speed.Y / GetMaxFall() * 0.5f;
@@ -1281,15 +1281,15 @@ namespace TowerFall
           base.Level.Particles.Emit (this.DustParticleType, 5, base.Position + new Vector2 (-4f, 8f), Vector2.One * 3f);
           base.Level.Particles.Emit (this.DustParticleType, 5, base.Position + new Vector2 (4f, 8f), Vector2.One * 3f);
         }
-        if (IsAntiGrav() ? this.Speed.Y <= -1f : this.Speed.Y >= 1f) {
+        if (IsReverseGrav() ? this.Speed.Y <= -1f : this.Speed.Y >= 1f) {
           this.ColdBreath ();
         }
       } else if (
-        IsAntiGrav()
+        IsReverseGrav()
           ? (this.flapGravity > -1f && this.Speed.Y > 0f)
           : (this.flapGravity < 1f && this.Speed.Y < 0f)
         ) {
-        this.Speed.Y = IsAntiGrav() ? -1.5f : 1.5f;
+        this.Speed.Y = IsReverseGrav() ? -1.5f : 1.5f;
         this.flapBounceCounter.Set (4);
         return;
       }
@@ -1308,10 +1308,10 @@ namespace TowerFall
 
     public static void PlayerOnPlayer (patch_Player a, patch_Player b)
     {
-      bool isAntiGrav = a.IsAntiGrav() && b.IsAntiGrav();
+      bool IsReverseGrav = a.IsReverseGrav() && b.IsReverseGrav();
       a.InvisOpacity = (b.InvisOpacity = 1f);
-      float num = (isAntiGrav ? a.Bottom + a.Speed.Y : a.Top - a.Speed.Y);
-      float num2 = (isAntiGrav ? b.Bottom + b.Speed.Y : b.Top - b.Speed.Y);
+      float num = (IsReverseGrav ? a.Bottom + a.Speed.Y : a.Top - a.Speed.Y);
+      float num2 = (IsReverseGrav ? b.Bottom + b.Speed.Y : b.Top - b.Speed.Y);
       if (Math.Abs (num - num2) > 200f) {
         if (num > num2) {
           num -= 240f;
@@ -1322,7 +1322,7 @@ namespace TowerFall
       if (Math.Abs (num - num2) >= 10f) {
         patch_Player player;
         patch_Player player2;
-        if (isAntiGrav ? num > num2 : num < num2) {
+        if (IsReverseGrav ? num > num2 : num < num2) {
           player = a;
           player2 = b;
         } else {
@@ -1330,10 +1330,10 @@ namespace TowerFall
           player2 = a;
         }
         if (
-          (isAntiGrav
+          (IsReverseGrav
             ? player.Speed.Y <= 0f
             : player.Speed.Y >= 0f
-          ) || (isAntiGrav
+          ) || (IsReverseGrav
             ? player2.Speed.Y > 0f
             : player2.Speed.Y < 0f
           )
@@ -1370,43 +1370,43 @@ namespace TowerFall
 
     public override bool InputDucking {
       get {
-        return this.OnGround && this.moveAxis.X == 0f && (IsAntiGrav() ? this.moveAxis.Y == -1f : this.moveAxis.Y == 1f);
+        return this.OnGround && this.moveAxis.X == 0f && (IsReverseGrav() ? this.moveAxis.Y == -1f : this.moveAxis.Y == 1f);
       }
     }
 
-    public bool IsAntiGrav()
+    public bool IsReverseGrav()
     {
-      return patch_Level.IsAntiGrav();
+      return patch_Level.IsReverseGrav();
     }
 
     public float GetGravity()
     {
-      return IsAntiGrav() ? -0.3f : 0.3f;
+      return IsReverseGrav() ? -0.3f : 0.3f;
     }
 
     public float GetJump()
     {
-      return IsAntiGrav() ? 3.2f : -3.2f;
+      return IsReverseGrav() ? 3.2f : -3.2f;
     }
 
     public float GetJumpOnPad()
     {
-      return IsAntiGrav() ? 4.3f : -4.3f;
+      return IsReverseGrav() ? 4.3f : -4.3f;
     }
 
     public float GetMaxFall()
     {
-      return IsAntiGrav() ? -2.8f : 2.8f;
+      return IsReverseGrav() ? -2.8f : 2.8f;
     }
 
     public float GetFastFall()
     {
-      return IsAntiGrav() ? -3.5f : 3.5f;
+      return IsReverseGrav() ? -3.5f : 3.5f;
     }
 
     public float GetWingsMaxFall()
     {
-      return IsAntiGrav() ? -0.8f : 0.8f;
+      return IsReverseGrav() ? -0.8f : 0.8f;
     }
   }
 }

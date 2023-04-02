@@ -23,7 +23,7 @@ namespace TowerFall
     {
       base_Update();
       if (this.falling) {
-        if (patch_Level.IsAntiGrav()) {
+        if (patch_Level.IsReverseGrav()) {
           this.vSpeed = Math.Max(this.vSpeed + GetGravity() * Engine.TimeMult, GetMaxFall());
         } else {
           this.vSpeed = Math.Min(this.vSpeed + GetGravity() * Engine.TimeMult, GetMaxFall());
@@ -70,12 +70,12 @@ namespace TowerFall
 
     private float GetGravity()
     {
-      return patch_Level.IsAntiGrav() ? -0.2f : 0.2f;
+      return patch_Level.IsReverseGrav() ? -0.2f : 0.2f;
     }
 
     private float GetMaxFall()
     {
-      return patch_Level.IsAntiGrav() ? -4f : 4f;
+      return patch_Level.IsReverseGrav() ? -4f : 4f;
     }
   }
 }
