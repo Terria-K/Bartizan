@@ -197,6 +197,11 @@ namespace TowerFall
         this.duckingHitbox.Top = base.Collider.Top;
 
         this.shield.sprite.Y -= GetYAdjustment();
+
+        while (base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitY)) {
+          // Multiplying by 2 because player was still getting stuck when moved by 1
+          base.Position += (Vector2.UnitY * 2);
+        }
       } else if (!IsReverseGrav() && isRotated) {
         this.bowSprite.FlipY = false;
         if (Calc.HasChild(bowDataXml, "Y")) {
@@ -219,6 +224,10 @@ namespace TowerFall
         this.duckingHitbox.Bottom = base.Collider.Bottom;
 
         this.shield.sprite.Y += GetYAdjustment();
+
+        while (base.CollideCheck(GameTags.Solid, base.Position + Vector2.UnitY)) {
+          base.Position -= (Vector2.UnitY * 2);
+        }
       }
     }
 
