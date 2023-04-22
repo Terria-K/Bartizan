@@ -15,7 +15,8 @@ namespace Mod
     }
 
     public enum Pickups {
-      GhostArrows = 21
+      GhostArrows = 21,
+      ReverseGravityOrb = 22
     }
 
     #if (STAT_TRACKING)

@@ -84,21 +84,25 @@ namespace TowerFall
     [MonoModConstructor]
     public void ctor (Session session, int[] mask, float arrowChance, bool arrowShuffle)
     {
+      List<int> treasureMask = new List<int>(mask);
+      treasureMask.Add(0); // Gems
       if (
-        ((patch_MatchVariants)session.MatchSettings.Variants).EnableGhostArrows
+        ((patch_MatchVariants)session.MatchSettings.Variants).EnableGhostArrows &&
+        session.MatchSettings.LevelSystem.Theme.Name == "THE AMARANTH"
       ) {
-        List<int> treasureMask = new List<int>(mask);
-        treasureMask.Add(0); // Gems
-        if (session.MatchSettings.LevelSystem.Theme.Name == "THE AMARANTH") {
-          treasureMask.Add(1); // Ghost Arrows
-        } else {
-          treasureMask.Add(0); // Ghost Arrows
-        }
-        mask = treasureMask.ToArray();
-        OriginalConstructorHandleModdedMask(session, mask, arrowChance, arrowShuffle);
+        treasureMask.Add(1);
       } else {
-        orig_ctor(session, mask, arrowChance, arrowShuffle);
+        treasureMask.Add(0);
       }
+
+      if (((patch_MatchVariants)(session.MatchSettings.Variants)).EnableReverseGravityOrb) {
+        treasureMask.Add(1);
+      } else {
+        treasureMask.Add(0);
+      }
+
+      mask = treasureMask.ToArray();
+      OriginalConstructorHandleModdedMask(session, mask, arrowChance, arrowShuffle);
     }
 
     public static float[] GetDefaultTreasureChances()
@@ -106,6 +110,7 @@ namespace TowerFall
       List<float> treasureChances = new List<float>(TreasureSpawner.DefaultTreasureChances);
       treasureChances.Add(0f); // Gems
       treasureChances.Add(1f); // Ghost Arrows
+      treasureChances.Add(0.15f); // Reverse Gravity Orb
       return treasureChances.ToArray();
     }
 

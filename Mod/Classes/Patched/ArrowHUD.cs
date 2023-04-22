@@ -51,16 +51,40 @@ namespace TowerFall
         if ((bool)this.showCounter || this.player.Aiming || !flag) {
           float x = -4f * ((float)arrowCountIncludingActiveTriggerArrows * 0.5f);
           for (int i = 0; i < amountOfTriggerArrowsActive; i++) {
-            Draw.Texture (this.triggerImage, Calc.Floor (this.player.Position + new Vector2 (x, -20f) + new Vector2 ((float)(4 * i), 0f)), this.triggerColor);
+            Draw.Texture (
+              this.triggerImage,
+              Calc.Floor(
+                this.player.Position +
+                new Vector2(x, patch_Level.IsReverseGrav() ? 12f : -20f) +
+                new Vector2 ((float)(4 * i), 0f)
+              ),
+              this.triggerColor
+            );
           }
           for (int i = 0; i < this.player.Arrows.Count; i++) {
             int arrowTypeInt = (int)this.player.Arrows.Arrows[i];
             // ...here where we use Arrow.GetColor instead of Arrow.Colors
-            Draw.Texture(this.images[arrowTypeInt], Calc.Floor(this.player.Position + new Vector2 (x, -22f) + new Vector2((float)(4 * (i + amountOfTriggerArrowsActive)), 0f)), patch_Arrow.GetColor(arrowTypeInt));
+            Draw.Texture(
+              this.images[arrowTypeInt],
+              Calc.Floor(
+                this.player.Position +
+                new Vector2 (x, patch_Level.IsReverseGrav() ? 10f : -22f) +
+                new Vector2((float)(4 * (i + amountOfTriggerArrowsActive)), 0f)
+              ),
+              patch_Arrow.GetColor(arrowTypeInt),
+              patch_Level.IsReverseGrav() ? new Vector2(5f, 11f) : Vector2.Zero, // Origin
+              1f, // Scale
+              patch_Level.IsReverseGrav() ? 3.1415926536f : 0f //Rotation
+            );
           }
         }
       } else if ((bool)this.showCounter) {
-        Draw.TextureCentered (this.emptyImage, this.player.Position + new Vector2 (0f, -18f), Arrow.NoneColors [(int)this.player.Level.FrameCounter / 6 % Arrow.NoneColors.Length]);
+        Draw.TextureCentered(
+          this.emptyImage,
+          this.player.Position +
+          new Vector2 (0f, patch_Level.IsReverseGrav() ? 16f : -18f),
+          Arrow.NoneColors[(int)this.player.Level.FrameCounter / 6 % Arrow.NoneColors.Length]
+        );
       }
     }
   }

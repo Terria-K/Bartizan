@@ -102,6 +102,7 @@
     <Compile Include="Classes\New\GhostArrow.cs" />
     <Compile Include="Classes\New\GhostDeathInterface.cs" />
     <Compile Include="Classes\New\MobRoundLogic.cs" />
+    <Compile Include="Classes\New\MyDraw.cs" />
     <Compile Include="Classes\New\MyGlobals.cs" />
     <Compile Include="Classes\New\MyMatchStats.cs" />
     <Compile Include="Classes\New\PlayerGhostShield.cs" />
@@ -110,24 +111,34 @@
     <Compile Include="Classes\New\RosterButtonCreator.cs" />
     <Compile Include="Classes\New\RosterPlayerButton.cs" />
     <Compile Include="Classes\New\TrackerApiClient.cs" />
+    <Compile Include="Classes\Patched\Actor.cs" />
     <Compile Include="Classes\Patched\Arrow.cs" />
     <Compile Include="Classes\Patched\ArrowHUD.cs" />
     <Compile Include="Classes\Patched\ArrowTypePickup.cs" />
     <Compile Include="Classes\Patched\ChaliceGhost.cs" />
+    <Compile Include="Classes\Patched\Crown.cs" />
+    <Compile Include="Classes\Patched\DefaultHat.cs" />
     <Compile Include="Classes\Patched\HeadhuntersRoundLogic.cs" />
+    <Compile Include="Classes\Patched\Lantern.cs" />
     <Compile Include="Classes\Patched\LastManStandingRoundLogic.cs" />
+    <Compile Include="Classes\Patched\Level.cs" />
     <Compile Include="Classes\Patched\MainMenu.cs" />
     <Compile Include="Classes\Patched\MapScene.cs" />
     <Compile Include="Classes\Patched\MatchSettings.cs" />
     <Compile Include="Classes\Patched\MatchVariants.cs" />
     <Compile Include="Classes\Patched\MirrorPickup.cs" />
     <Compile Include="Classes\Patched\OptionsButton.cs" />
+    <Compile Include="Classes\Patched\Orb.cs" />
+    <Compile Include="Classes\Patched\OrbLogic.cs" />
     <Compile Include="Classes\Patched\OrbPickup.cs" />
     <Compile Include="Classes\Patched\Pickup.cs" />
     <Compile Include="Classes\Patched\Player.cs" />
     <Compile Include="Classes\Patched\PlayerCorpse.cs" />
     <Compile Include="Classes\Patched\PlayerGhost.cs" />
+    <Compile Include="Classes\Patched\PlayerHair.cs" />
     <Compile Include="Classes\Patched\PlayerIndicator.cs" />
+    <Compile Include="Classes\Patched\PlayerShield.cs" />
+    <Compile Include="Classes\Patched\PlayerWings.cs" />
     <Compile Include="Classes\Patched\QuestSpawnPortal.cs" />
     <Compile Include="Classes\Patched\ReplayFrame.cs" />
     <Compile Include="Classes\Patched\RollcallElement.cs" />
@@ -137,6 +148,7 @@
     <Compile Include="Classes\Patched\Session.cs" />
     <Compile Include="Classes\Patched\ShieldPickup.cs" />
     <Compile Include="Classes\Patched\SpeedBootsPickup.cs" />
+    <Compile Include="Classes\Patched\SteelHat.cs" />
     <Compile Include="Classes\Patched\TeamDeathmatchRoundLogic.cs" />
     <Compile Include="Classes\Patched\TeamReviver.cs" />
     <Compile Include="Classes\Patched\TFGame.cs" />
@@ -147,6 +159,7 @@
     <Compile Include="Classes\Patched\VersusModeButton.cs" />
     <Compile Include="Classes\Patched\VersusPlayerMatchResults.cs" />
     <Compile Include="Classes\Patched\VersusRoundResults.cs" />
+    <Compile Include="Classes\Patched\WoodenHat.cs" />
     <Compile Include="Classes\Patched\XGamepadData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -240,6 +253,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Atlas\modAtlas\pickups\ghostArrows.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\pickups\reverseGravityOrb.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Atlas\modAtlas\variants\enableReverseGravityOrb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
