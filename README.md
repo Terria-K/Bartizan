@@ -6,8 +6,9 @@ didn't work on mac, but I've exclusively been using this on the mac version
 with no problem.
 
 ## General changes
-
-- Modified to work with 8-player by default, although 4-player is still supported by removing EIGHT_PLAYER from the preprocessor constants.
+- Created an easy-to-use GUI patcher
+- Support for 8-player and 4-player versions
+- Support for Steam and Itch versions
 - Fixed glitched replay gifs by removing screen shake from replays
 - Fixed asymmetrical treasure spawning when symmetrical treasure is enabled
 - Fixed bug where the game starts with rumble on even when the setting is set to off
@@ -58,8 +59,7 @@ Enemies other than bats and green slimes will come out of dark portals.
 
 ## How to Patch your game
 
-1. Download the release for the version of TowerFall you wish to patch
-1. Follow the instructions in the README
+Download the latest version of the patcher from the [releases page](https://github.com/zpchavez/Bartizan/releases)
 
 ## How to work on your own mods
 
