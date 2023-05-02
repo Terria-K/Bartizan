@@ -27,7 +27,10 @@ namespace TowerFall
       orig_ctor(enemyCorpse, position, facing, killerIndex);
 
       this.sprite.FlipX = (this.Facing == Facing.Left) && !IsReverseGrav();
-      this.flashSprite.FlipX = (this.Facing == Facing.Left) && !IsReverseGrav();
+      if (this.flashSprite != null) 
+      {
+        this.flashSprite.FlipX = (this.Facing == Facing.Left) && !IsReverseGrav();
+      }
     }
 
     public extern void orig_DoWrapRender();
